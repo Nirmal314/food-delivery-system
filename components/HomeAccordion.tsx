@@ -6,11 +6,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-const HomeAccordion = () => {
+const HomeAccordion = ({ className }: any) => {
   return (
     <>
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion type="single" collapsible className={cn("w-full", className)}>
         <AccordionItem value="item-1">
           <AccordionTrigger>Popular restaurant types near me</AccordionTrigger>
           <AccordionContent>

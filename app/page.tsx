@@ -49,43 +49,6 @@ export default function Home() {
     resolver: zodResolver(formSchema),
   });
 
-  const selectFoodUI = (
-    field: ControllerRenderProps<
-      {
-        foodItem:
-          | "pizza"
-          | "burger"
-          | "north indian"
-          | "punjabi"
-          | "south indian"
-          | "gujarati thalis"
-          | "pasta"
-          | "chinese";
-      },
-      "foodItem"
-    >
-  ) => (
-    <FormItem>
-      <FormControl>
-        <Select onValueChange={field.onChange}>
-          <SelectTrigger className="text-gray-900 w-[275px]">
-            <SelectValue placeholder="What are you having today?" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="pizza">Pizza</SelectItem>
-            <SelectItem value="burger">Burger</SelectItem>
-            <SelectItem value="north indian">North Indian</SelectItem>
-            <SelectItem value="punjabi">Punjabi</SelectItem>
-            <SelectItem value="south indian">South Indian</SelectItem>
-            <SelectItem value="gujarati thalis">Gujarati Thalis</SelectItem>
-            <SelectItem value="pasta">Pasta</SelectItem>
-            <SelectItem value="chinese">Chinese</SelectItem>
-          </SelectContent>
-        </Select>
-      </FormControl>
-    </FormItem>
-  );
-
   const handleSubmit = ({ foodItem }: z.infer<typeof formSchema>) => {
     router.push(`/searchfood?q=${foodItem}`);
   };
@@ -97,7 +60,7 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
-          className="absolute space-y-8 inset-0 flex flex-col items-center justify-center text-white z-50"
+          className="absolute space-y-8 inset-0 flex flex-col items-center justify-center text-white z-25"
         >
           <div>
             <p className="text-center text-6xl font-bold text-primary">
@@ -115,7 +78,33 @@ export default function Home() {
               <FormField
                 control={form.control}
                 name="foodItem"
-                render={({ field }) => selectFoodUI(field)}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Select onValueChange={field.onChange}>
+                        <SelectTrigger className="text-gray-900 w-[275px]">
+                          <SelectValue placeholder="What are you having today?" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pizza">Pizza</SelectItem>
+                          <SelectItem value="burger">Burger</SelectItem>
+                          <SelectItem value="north indian">
+                            North Indian
+                          </SelectItem>
+                          <SelectItem value="punjabi">Punjabi</SelectItem>
+                          <SelectItem value="south indian">
+                            South Indian
+                          </SelectItem>
+                          <SelectItem value="gujarati thalis">
+                            Gujarati Thalis
+                          </SelectItem>
+                          <SelectItem value="pasta">Pasta</SelectItem>
+                          <SelectItem value="chinese">Chinese</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
               />
               <Button className="rounded-md" type="submit">
                 <SearchIcon />
@@ -129,65 +118,79 @@ export default function Home() {
           alt="Welcome spices"
         />
       </div>
-
-      <div className="p-6">
-        <p className="text-4xl text-center text-primary font-bold">
-          The top 3 best sellers of the month
+      <div className="h-screen w-full flex flex-col justify-center items-center space-y-16 p-6">
+        <p className="text-5xl text-center text-primary font-bold">
+          The top 3{" "}
+          <span className="text-secondary px-2 py-1 bg-primary">
+            best sellers
+          </span>{" "}
+          of the month
         </p>
+        <div className="flex justify-center items-center space-x-8">
+          <FoodItemCard
+            image={burger}
+            name="Delicious Burger"
+            price="150"
+            description="A mouthwatering burger with all the fixings. "
+            location="Burger King, Ahmedabad"
+            isBestSeller={true}
+          />
+          <FoodItemCard
+            image={pizza}
+            name="Tasty Pizza"
+            price="250"
+            description="Freshly baked pizza with your favorite toppings."
+            location="Domino's Pizza, Rajkot"
+            isBestSeller={true}
+          />
+          <FoodItemCard
+            image={pasta}
+            name="Classic Spaghetti"
+            price="180"
+            description="Traditional Italian spaghetti with rich tomato sauce."
+            location="Papa Louise Italian Cuisine, Surat"
+            isBestSeller={true}
+          />
+        </div>
       </div>
-      <div className="flex justify-center items-center space-x-8">
-        <FoodItemCard
-          image={burger}
-          name="Delicious Burger"
-          price="150"
-          description="A mouthwatering burger with all the fixings. "
-          location="Burger King, Ahmedabad"
-          isBestSeller={true}
-        />
-        <FoodItemCard
-          image={pizza}
-          name="Tasty Pizza"
-          price="250"
-          description="Freshly baked pizza with your favorite toppings."
-          location="Domino's Pizza, Rajkot"
-          isBestSeller={true}
-        />
-        <FoodItemCard
-          image={pasta}
-          name="Classic Spaghetti"
-          price="180"
-          description="Traditional Italian spaghetti with rich tomato sauce."
-          location="Papa Louise Italian Cuisine, Surat"
-          isBestSeller={true}
-        />
-      </div>
-      <div className="p-6">
-        <p className="text-4xl text-center text-primary font-bold">
-          The top 3 best restaurants of the month
+      <div className="h-screen w-full flex flex-col justify-center items-center space-y-16 p-6">
+        <p className="text-5xl text-center text-primary font-bold">
+          The top 3{" "}
+          <span className="text-secondary px-2 py-1 bg-primary">
+            best restaurants
+          </span>{" "}
+          of the month
         </p>
+        <div className="flex justify-center items-center space-x-8">
+          <RestaurantItemCard
+            image={r1}
+            name="Burger King"
+            description="Home of the flame-grilled Whopper and fast-food classics."
+            location="Ahmedabad, Gujarat"
+          />
+          <RestaurantItemCard
+            image={r2}
+            name="Domino's Pizza"
+            description="Delivering hot, freshly-made pizza right to your door."
+            location="Rajkot, Gujarat"
+          />
+          <RestaurantItemCard
+            image={r3}
+            name="Papa Louise Cuisine"
+            description="A family-owned Italian restaurant serving authentic dishes."
+            location="Surat, Gujarat"
+          />
+        </div>
       </div>
-      <div className="flex justify-center items-center space-x-8">
-        <RestaurantItemCard
-          image={r1}
-          name="Burger King"
-          description="A mouthwatering burger with all the fixings. "
-          location="Ahmedabad, Gujarat"
-        />
-        <RestaurantItemCard
-          image={r2}
-          name="Domino's Pizza"
-          description="Freshly baked pizza with your favorite toppings."
-          location="Rajkot, Gujarat"
-        />
-        <RestaurantItemCard
-          image={r3}
-          name="Papa Louise Italian Cuisine "
-          description="Traditional Italian spaghetti with rich tomato sauce."
-          location="Surat, Gujarat"
-        />
-      </div>
-      <div className="p-6">
-        <HomeAccordion />
+      <div className="w-full flex flex-col justify-center items-center space-y-16 p-6">
+        <div className="w-1/2 space-y-8">
+          <p className="text-5xl text-center text-primary font-bold">
+            Explore options near me
+          </p>
+          <div className="flex justify-center items-center">
+            <HomeAccordion className="border p-4 rounded-lg" />
+          </div>
+        </div>
       </div>
     </>
   );
