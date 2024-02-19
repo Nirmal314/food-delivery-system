@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { FoodItem } from "@/typings";
+import { MapPinIcon } from "lucide-react";
 
 const FoodItemCard = ({
   image,
@@ -45,7 +46,10 @@ const FoodItemCard = ({
       <p className="text-lg font-semibold text-gray-800">₹{price}</p>
     </CardContent>
     <CardFooter>
-      <p className="text-sm text-gray-600">{location}</p>
+      <p className="text-sm text-gray-600 flex space-x-1 items-center">
+        <MapPinIcon />
+        <span>{location}</span>
+      </p>
     </CardFooter>
   </Card>
 );

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import { Restaurant } from "@/typings";
+import { MapPinIcon } from "lucide-react";
 const RestaurantCard = ({ image, name, description, location }: Restaurant) => (
   <Card className="w-80 overflow-hidden">
     <div className="relative overflow-hidden">
@@ -25,7 +26,10 @@ const RestaurantCard = ({ image, name, description, location }: Restaurant) => (
     </CardHeader>
     <CardContent>
       <CardFooter>
-        <p className="text-sm text-gray-600">{location}</p>
+        <p className="text-sm text-gray-600 flex space-x-1 items-center">
+          <MapPinIcon />
+          <span>{location}</span>
+        </p>
       </CardFooter>
     </CardContent>
   </Card>
