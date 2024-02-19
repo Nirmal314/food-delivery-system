@@ -5,18 +5,16 @@ import React from "react";
 import logo from "@/public/logo.png";
 import Link from "next/link";
 
-import { Input } from "@/components/ui/input";
 import {
   HomeIcon,
   LogInIcon,
-  SearchIcon,
   UserRoundPlusIcon,
   UtensilsCrossedIcon,
 } from "lucide-react";
 
 const Header = () => {
   return (
-    <div className=" py-3 px-20 fixed  flex justify-between items-center top-0 w-full z-50 backdrop-blur-xl">
+    <div className=" py-3 px-20 fixed  flex justify-between items-center top-0 w-full z-[100] backdrop-blur-xl">
       <div className="flex items-center">
         <Image src={logo} alt="Logo" height={75} width={75} />
         <p className="text-3xl font-bold text-primary">EatsEase</p>
