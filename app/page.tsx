@@ -8,7 +8,6 @@ import burger from "@/public/home-burger.jpg";
 import r1 from "@/public/home-r1.jpg";
 import r2 from "@/public/home-r2.jpg";
 import r3 from "@/public/home-r3.jpg";
-import { motion } from "framer-motion";
 import { SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -28,6 +27,8 @@ import { ControllerRenderProps, useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import FoodItemCard from "@/components/FoodItemCard";
 import RestaurantItemCard from "@/components/RestaurantItemCard";
+import { useEffect } from "react";
+import { auth } from "../auth";
 
 const formSchema = z.object({
   foodItem: z.enum([
@@ -56,12 +57,7 @@ export default function Home() {
     <>
       <div className="relative bg-cover bg-center h-screen w-full">
         <div className="absolute inset-0 bg-black opacity-50"></div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="absolute space-y-8 inset-0 flex flex-col items-center justify-center text-white z-25"
-        >
+        <div className="absolute space-y-8 inset-0 flex flex-col items-center justify-center text-white z-25">
           <div>
             <p className="text-center text-6xl font-bold text-primary">
               Welcome to EatEase
@@ -111,7 +107,7 @@ export default function Home() {
               </Button>
             </form>
           </Form>
-        </motion.div>
+        </div>
         <Image
           src={welcome}
           className="w-full h-full object-cover"
