@@ -3,9 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import google from "@/public/google.png";
 import { Button } from "@/components/ui/button";
-import { useSession, signIn } from "next-auth/react";
 
 import {
   Form,
@@ -16,50 +14,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const formSchema = z
-  .object({
-    emailAddress: z.string().email(),
-    name: z.string().min(2),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters long")
-      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[0-9]/, "Password must contain at least one number"),
-    passwordConfirm: z
-      .string()
-      .min(8, "Password confirmation must be at least 8 characters long"),
-  })
-  .refine(
-    (data) => {
-      return data.password === data.passwordConfirm;
-    },
-    {
-      message: "Passwords do not match",
-      path: ["passwordConfirm"],
-    }
-  );
+import { SignupSchema } from "@/schemas";
+import { signup } from "@/actions/signup";
+import { useState } from "react";
 
 const Signup = () => {
-  // const [errorMessage, dispatch] = useFormState(signInWithGoogle, undefined);
-  const session = useSession();
-  // console.log(session);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [creatingAccount, setCreatingAccount] = useState(false);
+
+  const form = useForm<z.infer<typeof SignupSchema>>({
+    resolver: zodResolver(SignupSchema),
     defaultValues: {
-      emailAddress: "",
+      email: "",
       name: "",
       password: "",
       passwordConfirm: "",
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log({ values });
+  const handleSubmit = (values: z.infer<typeof SignupSchema>) => {
+    setCreatingAccount(true);
+    signup(values);
   };
 
   return (
@@ -81,13 +57,14 @@ const Signup = () => {
               >
                 <FormField
                   control={form.control}
-                  name="emailAddress"
+                  name="email"
                   render={({ field }) => {
                     return (
                       <FormItem>
                         <FormLabel>Email Address</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={creatingAccount ? true : false}
                             placeholder="Enter your email address"
                             type="email"
                             {...field}
@@ -107,6 +84,7 @@ const Signup = () => {
                         <FormLabel>Full Name</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={creatingAccount ? true : false}
                             placeholder="Enter your full name"
                             type="text"
                             {...field}
@@ -126,6 +104,7 @@ const Signup = () => {
                         <FormLabel>Password</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={creatingAccount ? true : false}
                             placeholder="Password"
                             type="password"
                             {...field}
@@ -145,6 +124,7 @@ const Signup = () => {
                         <FormLabel>Password confirm</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={creatingAccount ? true : false}
                             placeholder="Password confirm"
                             type="password"
                             {...field}
@@ -155,8 +135,12 @@ const Signup = () => {
                     );
                   }}
                 />
-                <Button type="submit" className="w-full">
-                  Submit
+                <Button
+                  disabled={creatingAccount ? true : false}
+                  type="submit"
+                  className="w-full"
+                >
+                  {creatingAccount ? "Creating account..." : "Create account"}
                 </Button>
               </form>
             </Form>

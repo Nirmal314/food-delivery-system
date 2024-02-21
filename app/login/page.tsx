@@ -21,33 +21,26 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useState } from "react";
+import { LoginSchema } from "@/schemas";
+import { login } from "@/actions/login";
 
-const formSchema = z.object({
-  emailAddress: z.string().email(),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters long")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
-});
 const Signin = () => {
-  const [logging, setLogging] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [loggingIn, setLoggingIn] = useState(false);
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
-      emailAddress: "",
+      email: "",
       password: "",
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log({ values });
+  const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
+    setLoggingIn(true);
+    login(values);
   };
 
   const handleGoogleLogin = () => {
-    setLogging(true);
+    setLoggingIn(true);
     signIn("google", {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
     });
@@ -72,7 +65,7 @@ const Signin = () => {
               >
                 <FormField
                   control={form.control}
-                  name="emailAddress"
+                  name="email"
                   render={({ field }) => {
                     return (
                       <FormItem>
@@ -81,7 +74,7 @@ const Signin = () => {
                           <Input
                             placeholder="example@mail.com"
                             type="email"
-                            disabled={logging ? true : false}
+                            disabled={loggingIn ? true : false}
                             {...field}
                           />
                         </FormControl>
@@ -101,7 +94,7 @@ const Signin = () => {
                           <Input
                             placeholder="********"
                             type="password"
-                            disabled={logging ? true : false}
+                            disabled={loggingIn ? true : false}
                             {...field}
                           />
                         </FormControl>
@@ -111,7 +104,7 @@ const Signin = () => {
                   }}
                 />
                 <Button
-                  disabled={logging ? true : false}
+                  disabled={loggingIn ? true : false}
                   type="submit"
                   className="w-full"
                 >
@@ -129,13 +122,14 @@ const Signin = () => {
                 </div>
                 <Button
                   type="button"
+                  disabled={loggingIn ? true : false}
                   onClick={() => handleGoogleLogin()}
                   variant={"outline"}
                   className="w-full flex space-x-3"
                 >
                   <Image src={google} width={30} height={30} alt="google" />
                   <span>
-                    {!logging ? "Continue with Google" : "Logging in..."}
+                    {!loggingIn ? "Continue with Google" : "Logging in..."}
                   </span>
                 </Button>
               </form>
