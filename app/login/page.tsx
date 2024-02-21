@@ -23,9 +23,15 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useState } from "react";
 import { LoginSchema } from "@/schemas";
 import { login } from "@/actions/login";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const Signin = () => {
-  const [loggingIn, setLoggingIn] = useState(false);
+  const [credentialsLoggingIn, setCredentialsLoggingIn] = useState(false);
+  const [googleLoggingIn, setGoogleLoggingIn] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -34,13 +40,30 @@ const Signin = () => {
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof LoginSchema>) => {
-    setLoggingIn(true);
-    login(values);
+  const handleSubmit = async (values: z.infer<typeof LoginSchema>) => {
+    setCredentialsLoggingIn(true);
+    const response = await login(values);
+    if (response.success) {
+      toast({
+        description: response.success,
+      });
+      setTimeout(() => {
+        router.push(DEFAULT_LOGIN_REDIRECT);
+      }, 3000);
+    } else {
+      toast({
+        description: response.error,
+        variant: "destructive",
+      });
+
+      setCredentialsLoggingIn(false);
+    }
   };
 
   const handleGoogleLogin = () => {
-    setLoggingIn(true);
+    setGoogleLoggingIn(true);
+    setCredentialsLoggingIn(true);
+
     signIn("google", {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
     });
@@ -74,7 +97,7 @@ const Signin = () => {
                           <Input
                             placeholder="example@mail.com"
                             type="email"
-                            disabled={loggingIn ? true : false}
+                            disabled={credentialsLoggingIn ? true : false}
                             {...field}
                           />
                         </FormControl>
@@ -94,7 +117,7 @@ const Signin = () => {
                           <Input
                             placeholder="********"
                             type="password"
-                            disabled={loggingIn ? true : false}
+                            disabled={credentialsLoggingIn ? true : false}
                             {...field}
                           />
                         </FormControl>
@@ -104,7 +127,7 @@ const Signin = () => {
                   }}
                 />
                 <Button
-                  disabled={loggingIn ? true : false}
+                  disabled={credentialsLoggingIn ? true : false}
                   type="submit"
                   className="w-full"
                 >
@@ -122,14 +145,16 @@ const Signin = () => {
                 </div>
                 <Button
                   type="button"
-                  disabled={loggingIn ? true : false}
+                  disabled={googleLoggingIn ? true : false}
                   onClick={() => handleGoogleLogin()}
                   variant={"outline"}
                   className="w-full flex space-x-3"
                 >
                   <Image src={google} width={30} height={30} alt="google" />
                   <span>
-                    {!loggingIn ? "Continue with Google" : "Logging in..."}
+                    {!googleLoggingIn
+                      ? "Continue with Google"
+                      : "Logging in..."}
                   </span>
                 </Button>
               </form>

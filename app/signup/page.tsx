@@ -19,10 +19,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignupSchema } from "@/schemas";
 import { signup } from "@/actions/signup";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const Signup = () => {
+  const router = useRouter();
+  const { toast } = useToast();
   const [creatingAccount, setCreatingAccount] = useState(false);
-
   const form = useForm<z.infer<typeof SignupSchema>>({
     resolver: zodResolver(SignupSchema),
     defaultValues: {
@@ -33,9 +36,25 @@ const Signup = () => {
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof SignupSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof SignupSchema>) => {
     setCreatingAccount(true);
-    signup(values);
+    const response = await signup(values);
+    console.log(response);
+    if (response.success) {
+      toast({
+        description: response.success,
+      });
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
+    } else {
+      toast({
+        // @ts-ignore
+        description: response.error,
+        variant: "destructive",
+      });
+      setCreatingAccount(false);
+    }
   };
 
   return (
