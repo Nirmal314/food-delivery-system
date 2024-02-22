@@ -20,17 +20,29 @@ import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LoginSchema } from "@/schemas";
 import { login } from "@/actions/login";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Signin = () => {
   const [credentialsLoggingIn, setCredentialsLoggingIn] = useState(false);
   const [googleLoggingIn, setGoogleLoggingIn] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlError = () => {
+    if (searchParams.get("error")) {
+      switch (searchParams.get("error")) {
+        case "OAuthAccountNotLinked":
+          return "Another account already exists with the same email address.";
+
+        default:
+          return "Unexpected OAuth error occured, Please try again.";
+      }
+    }
+  };
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -62,7 +74,6 @@ const Signin = () => {
 
   const handleGoogleLogin = () => {
     setGoogleLoggingIn(true);
-    setCredentialsLoggingIn(true);
 
     signIn("google", {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
@@ -97,7 +108,11 @@ const Signin = () => {
                           <Input
                             placeholder="example@mail.com"
                             type="email"
-                            disabled={credentialsLoggingIn ? true : false}
+                            disabled={
+                              googleLoggingIn || credentialsLoggingIn
+                                ? true
+                                : false
+                            }
                             {...field}
                           />
                         </FormControl>
@@ -117,7 +132,11 @@ const Signin = () => {
                           <Input
                             placeholder="********"
                             type="password"
-                            disabled={credentialsLoggingIn ? true : false}
+                            disabled={
+                              googleLoggingIn || credentialsLoggingIn
+                                ? true
+                                : false
+                            }
                             {...field}
                           />
                         </FormControl>
@@ -126,12 +145,19 @@ const Signin = () => {
                     );
                   }}
                 />
+                {urlError() && (
+                  <p className="text-md text-gray-50 bg-red-500 rounded-md p-5">
+                    {urlError()}
+                  </p>
+                )}
                 <Button
-                  disabled={credentialsLoggingIn ? true : false}
+                  disabled={
+                    googleLoggingIn || credentialsLoggingIn ? true : false
+                  }
                   type="submit"
                   className="w-full"
                 >
-                  Submit
+                  {credentialsLoggingIn ? "Logging in..." : "Login"}
                 </Button>
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -145,7 +171,9 @@ const Signin = () => {
                 </div>
                 <Button
                   type="button"
-                  disabled={googleLoggingIn ? true : false}
+                  disabled={
+                    googleLoggingIn || credentialsLoggingIn ? true : false
+                  }
                   onClick={() => handleGoogleLogin()}
                   variant={"outline"}
                   className="w-full flex space-x-3"

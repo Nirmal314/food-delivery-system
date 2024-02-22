@@ -62,7 +62,7 @@ const Header = ({ session, isLoggedIn }: any) => {
                       </Avatar>
                     </Button>
                   </HoverCardTrigger>
-                  <HoverCardContent className="w-80">
+                  <HoverCardContent className="w-auto">
                     <div className="flex justify-evenly space-x-4">
                       <Avatar>
                         <AvatarImage src={session.user.image} />

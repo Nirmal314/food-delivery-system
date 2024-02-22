@@ -22,7 +22,10 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
 
     // ! if user [email] does not exist, create user
 
-    if (existingUser) return { error: "Email already in use." };
+    if (existingUser)
+      return {
+        error: "Another account already exists with the same email address.",
+      };
 
     await db.user.create({
       data: {
