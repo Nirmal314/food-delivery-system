@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { FoodItem } from "@/typings";
 import { MapPinIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const FoodItemCard = ({
   image,
@@ -18,8 +19,9 @@ const FoodItemCard = ({
   description,
   location,
   isBestSeller,
+  className,
 }: FoodItem) => (
-  <Card className="w-80 overflow-hidden">
+  <Card className={cn("w-80 overflow-hidden", className)}>
     <div className="relative overflow-hidden">
       <Image
         src={image}

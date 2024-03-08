@@ -9,5 +9,4 @@ const ImageLoading = () => {
     </div>
   );
 };
-
 export default ImageLoading;

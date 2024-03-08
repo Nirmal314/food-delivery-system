@@ -1,3 +1,4 @@
+import { type ClassValue } from "clsx";
 import { StaticImageData } from "next/image";
 
 export type FoodItem = {
@@ -7,6 +8,7 @@ export type FoodItem = {
   description: string;
   location: string;
   isBestSeller: boolean;
+  className?: ClassValue[];
 };
 
 export type FoodItems = {
