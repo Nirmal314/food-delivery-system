@@ -6,6 +6,7 @@ import logo from "@/public/logo.png";
 import Link from "next/link";
 
 import {
+  HandPlatterIcon,
   HomeIcon,
   LogInIcon,
   UserRoundPlusIcon,
@@ -82,11 +83,6 @@ const Header = ({ session, isLoggedIn }: any) => {
                     </div>
                   </HoverCardContent>
                 </HoverCard>
-
-                {/* <p className="text-lg text-gray-900">{session!.user!.name}</p>
-                <Button variant={"default"}>
-                  <Link href={"/api/auth/signout"}>Logout</Link>
-                </Button> */}
               </div>
             </div>
           </>
@@ -108,6 +104,10 @@ const Header = ({ session, isLoggedIn }: any) => {
               <Link className="nav-link" href={"/signup"}>
                 <UserRoundPlusIcon />
                 <span className="hidden xl:block">Signup</span>
+              </Link>
+              <Link className="nav-link" href={"/adminsignup"}>
+                <HandPlatterIcon />
+                <span className="hidden xl:block">Register restaurant</span>
               </Link>
             </div>
           </>

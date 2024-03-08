@@ -33,15 +33,33 @@ The EatEase Food Delivery System is a cutting-edge web application designed for 
 
 ## Technologies Used
 
-- **Frontend:**
+> **Frontend**
 
-  - Next.js 14
-  - Tailwind CSS
-  - Shadcn
+- Next.js 14
+- Tailwind CSS
+- Shadcn
 
-- **Backend:**
+> **Backend**
 
-  - Next.js's server actions
+- Next.js's server actions
 
-- **Database:**
-  - PostgreSQL with Prisma ORM
+> **Database**
+
+- PostgreSQL with Prisma ORM
+
+## Authentication
+
+> **It supports two authentication methods**
+
+1. **Google Authentication:**
+2. **Credentials Authentication:**
+
+The `auth.config.ts` file contains the configuration for these authentication providers.
+
+## Data Access and Persistence
+
+The application utilizes PostgreSQL as the database management system and Prisma ORM for interacting with the database. The db.ts file in the lib directory sets up the Prisma instance, and the data/user.ts file contains functions for fetching and manipulating user data.
+
+## Middleware
+
+The middleware.ts file handles authentication middleware for the application. It checks if a user is logged in, redirects unauthenticated users to the login page for protected routes, and allows access to public routes without authentication. The **apiAuthPrefix**, **authRoutes**, **publicRoutes**, and **DEFAULT_LOGIN_REDIRECT** constants are imported from the `routes.ts`

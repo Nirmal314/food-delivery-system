@@ -29,6 +29,7 @@ import FoodItemCard from "@/components/FoodItemCard";
 import RestaurantItemCard from "@/components/RestaurantItemCard";
 import { useEffect } from "react";
 import { auth } from "../auth";
+import { Item } from "@radix-ui/react-accordion";
 
 const formSchema = z.object({
   foodItem: z.enum([
@@ -45,6 +46,16 @@ const formSchema = z.object({
 
 export default function Home() {
   const router = useRouter();
+  const SearchableFoodItems = [
+    "pizza",
+    "burger",
+    "north indian",
+    "punjabi",
+    "south indian",
+    "gujarati thalis",
+    "pasta",
+    "chinese",
+  ];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,20 +93,9 @@ export default function Home() {
                           <SelectValue placeholder="What are you having today?" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="pizza">Pizza</SelectItem>
-                          <SelectItem value="burger">Burger</SelectItem>
-                          <SelectItem value="north indian">
-                            North Indian
-                          </SelectItem>
-                          <SelectItem value="punjabi">Punjabi</SelectItem>
-                          <SelectItem value="south indian">
-                            South Indian
-                          </SelectItem>
-                          <SelectItem value="gujarati thalis">
-                            Gujarati Thalis
-                          </SelectItem>
-                          <SelectItem value="pasta">Pasta</SelectItem>
-                          <SelectItem value="chinese">Chinese</SelectItem>
+                          {SearchableFoodItems.map((item) => (
+                            <SelectItem value={item}>{item}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
