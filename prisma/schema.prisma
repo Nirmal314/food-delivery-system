@@ -8,9 +8,23 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum Cuisine {
+  ITALIAN
+  NORTH_INDIAN
+  PUNJABI
+  SOUTH_INDIAN
+  GUJARATI
+  CHINESE
+}
+
 model Account {
   id                String  @id @default(cuid())
-  userId            String
+  userId            String  @unique
   type              String
   provider          String
   providerAccountId String
@@ -21,18 +35,31 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
+model Restaurant {
+  id          String  @id @default(cuid())
+  adminId     String  @unique
+  name        String
+  cuisine     Cuisine
+  address     String
+  phone       String
+  description String?
+  admin       User?   @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  accounts      Account[]
+  role          UserRole    @default(USER)
+  // ? there might not be a related record in the associated model. In database terms, it translates to a nullable foreign key.
+  accounts      Account? // ! one user can have a google account 
+  restaurant    Restaurant? // ! one admin can have one restaurant 
 }
