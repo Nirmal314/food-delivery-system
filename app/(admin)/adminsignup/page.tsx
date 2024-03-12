@@ -17,10 +17,10 @@ import { Input } from "@/components/ui/input";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminSignupSchema } from "@/schemas";
-import { signup } from "@/actions/signup";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { adminSignup } from "@/actions/adminsignup";
 
 const Signup = () => {
   const router = useRouter();
@@ -33,12 +33,14 @@ const Signup = () => {
       name: "",
       password: "",
       passwordConfirm: "",
+      contactNumber: "",
     },
   });
 
   const handleSubmit = async (values: z.infer<typeof AdminSignupSchema>) => {
     setCreatingAccount(true);
-    const response = await signup(values);
+    console.log(values);
+    const response = await adminSignup(values);
     console.log(response);
     if (response.success) {
       toast({
@@ -64,7 +66,7 @@ const Signup = () => {
           <CardHeader>
             <CardTitle>
               <p className="text-center text-4xl font-bold text-primary">
-                Create an account
+                Create your admin account
               </p>
             </CardTitle>
           </CardHeader>
@@ -74,6 +76,26 @@ const Signup = () => {
                 onSubmit={form.handleSubmit(handleSubmit)}
                 className="max-w-md w-full flex flex-col gap-4"
               >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={creatingAccount ? true : false}
+                            placeholder="Enter your full name"
+                            type="text"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
+                      </FormItem>
+                    );
+                  }}
+                />
                 <FormField
                   control={form.control}
                   name="email"
@@ -96,16 +118,16 @@ const Signup = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="contactNumber"
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Full Name</FormLabel>
+                        <FormLabel>Contact Number</FormLabel>
                         <FormControl>
                           <Input
                             disabled={creatingAccount ? true : false}
-                            placeholder="Enter your full name"
-                            type="text"
+                            placeholder="Enter your contact number"
+                            type="tele"
                             {...field}
                           />
                         </FormControl>

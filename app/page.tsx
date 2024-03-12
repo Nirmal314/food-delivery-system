@@ -93,8 +93,10 @@ export default function Home() {
                           <SelectValue placeholder="What are you having today?" />
                         </SelectTrigger>
                         <SelectContent>
-                          {SearchableFoodItems.map((item) => (
-                            <SelectItem value={item}>{item}</SelectItem>
+                          {SearchableFoodItems.map((item, i) => (
+                            <SelectItem key={i} value={item}>
+                              {item}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>

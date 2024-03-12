@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "contactNumber" TEXT NOT NULL DEFAULT 1234567890;
