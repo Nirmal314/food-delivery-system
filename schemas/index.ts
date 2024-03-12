@@ -52,8 +52,6 @@ export const AdminSignupSchema = z
         /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
         "Enter a valid phone number."
       ),
-    restaurantName: z.string().min(3),
-    cuisineType: z.string(),
   })
   .refine(
     (data) => {

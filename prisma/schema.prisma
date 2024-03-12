@@ -59,6 +59,7 @@ model User {
   image         String?
   password      String?
   role          UserRole    @default(USER)
+  contactNumber String      @default(dbgenerated("1234567890"))
   // ? there might not be a related record in the associated model. In database terms, it translates to a nullable foreign key.
   accounts      Account? // ! one user can have a google account 
   restaurant    Restaurant? // ! one admin can have one restaurant 
