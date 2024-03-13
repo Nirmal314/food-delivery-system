@@ -33,6 +33,7 @@ const Signup = () => {
       name: "",
       password: "",
       passwordConfirm: "",
+      contactNumber: "",
     },
   });
 
@@ -106,6 +107,26 @@ const Signup = () => {
                             disabled={creatingAccount ? true : false}
                             placeholder="Enter your full name"
                             type="text"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="contactNumber"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Contact Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={creatingAccount ? true : false}
+                            placeholder="Enter your contact number"
+                            type="tele"
                             {...field}
                           />
                         </FormControl>

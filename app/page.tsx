@@ -23,13 +23,10 @@ import {
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ControllerRenderProps, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import FoodItemCard from "@/components/FoodItemCard";
 import RestaurantItemCard from "@/components/RestaurantItemCard";
-import { useEffect } from "react";
-import { auth } from "../auth";
-import { Item } from "@radix-ui/react-accordion";
 
 const formSchema = z.object({
   foodItem: z.enum([
