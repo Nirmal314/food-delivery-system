@@ -5,6 +5,24 @@ import { AdminSignupSchema } from "@/schemas";
 import { db } from "@/lib/db";
 import bcrypt from "bcrypt";
 import { getUserByEmail } from "@/data/user";
+import { Cuisine, UserRole } from "@prisma/client";
+
+const getCuisine = (cuisineType: string) => {
+  switch (cuisineType) {
+    case "ITALIAN":
+      return Cuisine.ITALIAN;
+    case "NORTH_INDIAN":
+      return Cuisine.NORTH_INDIAN;
+    case "PUNJABI":
+      return Cuisine.PUNJABI;
+    case "SOUTH_INDIAN":
+      return Cuisine.SOUTH_INDIAN;
+    case "GUJARATI":
+      return Cuisine.GUJARATI;
+    case "CHINESE":
+      return Cuisine.CHINESE;
+  }
+};
 
 export const adminSignup = async (
   values: z.infer<typeof AdminSignupSchema>
@@ -15,9 +33,19 @@ export const adminSignup = async (
 
   // ? get validated values
 
-  const { email, password, name, contactNumber } = validatedFields.data;
+  const {
+    email,
+    password,
+    name,
+    contactNumber,
+    restaurantName,
+    restaurantPhone,
+    cuisine,
+    address,
+    description,
+  } = validatedFields.data;
 
-  const hashedPassword = await bcrypt.hash(password, 20);
+  const hashedPassword = await bcrypt.hash(password, 13);
 
   try {
     const existingUser = await getUserByEmail(email);
@@ -28,21 +56,32 @@ export const adminSignup = async (
       return {
         error: "Another account already exists with the same email address.",
       };
-
-    await db.user.create({
+    const createdUser = await db.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-        role: "ADMIN",
+        role: UserRole.ADMIN,
         contactNumber,
       },
     });
+
+    await db.restaurant.create({
+      data: {
+        name: restaurantName,
+        cuisine: Cuisine[getCuisine(cuisine)!],
+        address,
+        phone: restaurantPhone,
+        description,
+        admin: { connect: { id: createdUser.id } },
+      },
+    });
   } catch (e) {
-    return { error: e };
+    console.log(e);
+    return { error: "Something went wrong." };
   }
 
   // TODO: send verification mail
 
-  return { success: "Your account has been created." };
+  return { success: "Your admin account has been created." };
 };

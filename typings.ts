@@ -20,6 +20,7 @@ export type Restaurant = {
   name: string;
   description: string;
   location: string;
+  className?: ClassValue[];
 };
 
 export type Restaurants = {

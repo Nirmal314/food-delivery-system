@@ -13,9 +13,9 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
 
   // ? get validated values
 
-  const { email, password, name } = validatedFields.data;
+  const { email, password, name, contactNumber } = validatedFields.data;
 
-  const hashedPassword = await bcrypt.hash(password, 15);
+  const hashedPassword = await bcrypt.hash(password, 11);
 
   try {
     const existingUser = await getUserByEmail(email);
@@ -32,10 +32,12 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
         name,
         email,
         password: hashedPassword,
+        contactNumber,
       },
     });
   } catch (e) {
-    return { error: e };
+    console.log(e);
+    return { error: "Something went wrong." };
   }
 
   // TODO: send verification mail

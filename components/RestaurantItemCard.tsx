@@ -9,8 +9,15 @@ import {
 import Image from "next/image";
 import { Restaurant } from "@/typings";
 import { MapPinIcon } from "lucide-react";
-const RestaurantCard = ({ image, name, description, location }: Restaurant) => (
-  <Card className="w-80 overflow-hidden">
+import { cn } from "@/lib/utils";
+const RestaurantCard = ({
+  image,
+  name,
+  description,
+  location,
+  className,
+}: Restaurant) => (
+  <Card className={cn("w-80 overflow-hidden", className)}>
     <div className="relative overflow-hidden">
       <Image
         src={image}
