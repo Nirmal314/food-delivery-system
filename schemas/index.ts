@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const phoneRegex = /^\+(?:\d{1,3})\d{1,15}(?:x\d+)?$/;
+const phoneRegex = /^(?:6|7|8|9)\d{9}(?:x\d+)?$/;
 
 const emailError = "Enter a valid email.";
 const pass1Error = "Password must be at least 8 characters long";

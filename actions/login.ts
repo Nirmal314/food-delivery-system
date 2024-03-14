@@ -3,11 +3,9 @@
 import * as z from "zod";
 import { LoginSchema } from "@/schemas";
 import { signIn } from "@/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
-  console.log(values);
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) return { error: "Invalid fields." };
@@ -18,7 +16,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn("credentials", {
       email,
       password,
-      // redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: "/",
     });
   } catch (e) {
     if (e instanceof AuthError) {
@@ -27,12 +25,13 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
           return { error: "Invalid Credentials." };
 
         default:
-          break;
+          return { error: "Something went wrong." };
       }
     }
 
     throw e;
   }
 
-  return { success: "Success" };
+  return { success: "You have been logged in." };
+  // ! won't work because of redirect
 };

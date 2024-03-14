@@ -183,7 +183,7 @@ export default function Home() {
             Explore options near me
           </p>
           <div className="flex justify-center items-center">
-            <HomeAccordion className="border p-4 rounded-lg" />
+            <HomeAccordion className="border p-4 rounded-lg mb-28" />
           </div>
         </div>
       </div>
