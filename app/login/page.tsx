@@ -55,14 +55,8 @@ const Signin = () => {
   const handleSubmit = async (values: z.infer<typeof LoginSchema>) => {
     setCredentialsLoggingIn(true);
     const response = await login(values);
-    if (response.success) {
-      toast({
-        description: response.success,
-      });
-      setTimeout(() => {
-        router.push(DEFAULT_LOGIN_REDIRECT);
-      }, 3000);
-    } else {
+
+    if (response.error) {
       toast({
         description: response.error,
         variant: "destructive",
@@ -70,6 +64,14 @@ const Signin = () => {
 
       setCredentialsLoggingIn(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    setGoogleLoggingIn(true);
+
+    signIn("google", {
+      callbackUrl: "/",
+    });
   };
 
   return (
@@ -150,6 +152,32 @@ const Signin = () => {
                   className="w-full"
                 >
                   {credentialsLoggingIn ? "Logging in..." : "Login"}
+                </Button>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t"></span>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  disabled={
+                    googleLoggingIn || credentialsLoggingIn ? true : false
+                  }
+                  onClick={() => handleGoogleLogin()}
+                  variant={"outline"}
+                  className="w-full flex space-x-3"
+                >
+                  <Image src={google} width={30} height={30} alt="google" />
+                  <span>
+                    {!googleLoggingIn
+                      ? "Continue with Google"
+                      : "Logging in..."}
+                  </span>
                 </Button>
               </form>
             </Form>
