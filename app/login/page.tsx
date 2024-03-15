@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { USER_REDIRECT_ROUTE } from "@/routes";
 import { useEffect, useState } from "react";
 import { LoginSchema } from "@/schemas";
 import { login } from "@/actions/login";
