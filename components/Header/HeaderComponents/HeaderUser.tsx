@@ -7,7 +7,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { HomeIcon, UtensilsCrossedIcon } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  HomeIcon,
+  ListFilterIcon,
+  ListOrdered,
+  ListOrderedIcon,
+  ShoppingCartIcon,
+  UtensilsCrossedIcon,
+} from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -42,38 +57,26 @@ const HeaderUser = ({ session }: any) => {
           <UtensilsCrossedIcon />
           <span className="hidden xl:block">Restaurants</span>
         </Link>
+        <Link className="nav-link" href={"/orders"}>
+          <ListOrderedIcon />
+          <span className="hidden xl:block">Orders</span>
+        </Link>
+        <Sheet>
+          <SheetTrigger className="nav-link">
+            <ShoppingCartIcon />
+            <span className="hidden xl:block">Cart</span>
+          </SheetTrigger>
+          <SheetContent side={"left"} className="z-[100]">
+            <SheetHeader>
+              <SheetTitle>Are you absolutely sure?</SheetTitle>
+              <SheetDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
         <div className="flex items-center justify-center space-x-2">
-          {/* <HoverCard>
-            <HoverCardTrigger asChild className="hover:bg-transparent">
-              <Button variant="ghost">
-                <Avatar>
-                  <AvatarImage src={session.user.image} />
-                  <AvatarFallback>
-                    {getInitials(session.user.name)}
-                  </AvatarFallback>
-                </Avatar>
-              </Button>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-auto">
-              <div className="flex justify-evenly space-x-4">
-                <Avatar>
-                  <AvatarImage src={session.user.image} />
-                  <AvatarFallback>
-                    {getInitials(session.user.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="space-y-1">
-                  <h4 className="text-sm font-semibold">{session.user.name}</h4>
-                  <p className="text-sm">{session.user.email}</p>
-                  <p className="text-sm">{session.user.role}</p>
-
-                  <div className="flex items-center pt-2">
-                    <LogoutButton />
-                  </div>
-                </div>
-              </div>
-            </HoverCardContent>
-          </HoverCard> */}
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -93,12 +96,12 @@ const HeaderUser = ({ session }: any) => {
               align="end"
             >
               <div className="flex items-center space-x-4 p-2 rounded-lg bg-white">
-                <Avatar className="w-18 h-18">
+                <Avatar className="w-16 h-18">
                   <AvatarImage
                     src={session.user.image}
                     alt={session.user.name}
                   />
-                  <AvatarFallback className="flex items-center justify-center bg-gray-300 rounded-full w-full h-full text-lg font-semibold text-gray-800">
+                  <AvatarFallback className="p-4 text-xl">
                     {getInitials(session.user.name)}
                   </AvatarFallback>
                 </Avatar>

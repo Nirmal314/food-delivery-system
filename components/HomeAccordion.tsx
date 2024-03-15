@@ -193,7 +193,7 @@ const HomeAccordion = ({ className }: any) => {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
-          <AccordionTrigger>Top Restaurant Chains</AccordionTrigger>
+          <AccordionTrigger>Cities We Deliver To</AccordionTrigger>
           <AccordionContent>
             <ul className="grid grid-cols-4 gap-4">
               <li>

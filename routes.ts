@@ -1,6 +1,6 @@
-export const publicRoutes = ["/", "/restaurants", "/Provider"];
+export const publicRoutes = ["/", "/restaurants", "/searchfood"];
 
-export const authRoutes = ["/login", "/signup", "/adminsignup", "/adminlogin"];
+export const authRoutes = ["/login", "/signup", "/adminsignup"];
 
 export const apiAuthPrefix = "/api/auth";
 

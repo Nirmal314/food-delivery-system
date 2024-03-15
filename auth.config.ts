@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schemas";
 import { getUserByEmail } from "./data/user";
 import bcrypt from "bcryptjs";
+import { z } from "zod";
 
 export default {
   providers: [
@@ -14,13 +15,17 @@ export default {
     Credentials({
       async authorize(credentials) {
         const validatedFields = LoginSchema.safeParse(credentials);
-        console.log(validatedFields);
-        // @ts-ignore
-        const { email, password } = validatedFields.data;
+
+        if (!validatedFields.success) return null; 
+
+        const { email, password } = validatedFields.data as z.infer<typeof LoginSchema>;
+
         const user = await getUserByEmail(email);
         if (!user || !user.password) return null;
+
         const passwordsMatch = await bcrypt.compare(password, user.password);
         if (passwordsMatch) return user;
+        
         return null;
       },
     }),
