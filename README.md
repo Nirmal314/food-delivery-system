@@ -62,4 +62,4 @@ The application utilizes PostgreSQL as the database management system and Prisma
 
 ## Middleware
 
-The middleware.ts file handles authentication middleware for the application. It checks if a user is logged in, redirects unauthenticated users to the login page for protected routes, and allows access to public routes without authentication. The **apiAuthPrefix**, **authRoutes**, **publicRoutes**, and **DEFAULT_LOGIN_REDIRECT** constants are imported from the `routes.ts`
+The middleware.ts file handles authentication middleware for the application. It checks if a user is logged in, redirects unauthenticated users to the login page for protected routes, and allows access to public routes without authentication. The **apiAuthPrefix**, **authRoutes**, **publicRoutes**, and **USER_REDIRECT_ROUTE** constants are imported from the `routes.ts`

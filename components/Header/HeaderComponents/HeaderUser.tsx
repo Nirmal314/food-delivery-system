@@ -57,9 +57,9 @@ const HeaderUser = ({ session }: any) => {
           <UtensilsCrossedIcon />
           <span className="hidden xl:block">Restaurants</span>
         </Link>
-        <Link className="nav-link" href={"/orders"}>
+        <Link className="nav-link" href={"/yourorders"}>
           <ListOrderedIcon />
-          <span className="hidden xl:block">Orders</span>
+          <span className="hidden xl:block">Your Orders</span>
         </Link>
         <Sheet>
           <SheetTrigger className="nav-link">
