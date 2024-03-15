@@ -30,7 +30,6 @@ const Signin = () => {
   const [credentialsLoggingIn, setCredentialsLoggingIn] = useState(false);
   const [googleLoggingIn, setGoogleLoggingIn] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const urlError = () => {
     if (searchParams.get("error")) {
@@ -56,13 +55,19 @@ const Signin = () => {
     setCredentialsLoggingIn(true);
     const response = await login(values);
 
-    if (response.error) {
-      toast({
-        description: response.error,
-        variant: "destructive",
-      });
+    if (response) {
+      if (response.success) {
+        toast({
+          description: response.success,
+        });
+      } else if (response.error) {
+        toast({
+          description: response.error,
+          variant: "destructive",
+        });
 
-      setCredentialsLoggingIn(false);
+        setCredentialsLoggingIn(false);
+      }
     }
   };
 

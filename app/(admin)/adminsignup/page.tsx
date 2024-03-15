@@ -61,7 +61,7 @@ const Signup = () => {
         description: response.success,
       });
       setTimeout(() => {
-        router.push("/adminlogin");
+        router.push("/login");
       }, 3000);
     } else {
       toast({
@@ -269,7 +269,7 @@ const Signup = () => {
                               ))}
                             </SelectContent>
                           </Select>
-                          <FormMessage />
+                          <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
                         </FormItem>
                       )}
                     />

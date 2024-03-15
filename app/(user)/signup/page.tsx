@@ -40,7 +40,6 @@ const Signup = () => {
   const handleSubmit = async (values: z.infer<typeof SignupSchema>) => {
     setCreatingAccount(true);
     const response = await signup(values);
-    console.log(response);
     if (response.success) {
       toast({
         description: response.success,

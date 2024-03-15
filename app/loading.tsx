@@ -2,7 +2,7 @@
 
 import Next13ProgressBar from "next13-progressbar";
 
-export default function Loaading() {
+export default function Loading() {
   return (
     <>
       <Next13ProgressBar
