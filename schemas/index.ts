@@ -1,6 +1,7 @@
 import * as z from "zod";
 
 const phoneRegex = /^(?:6|7|8|9)\d{9}(?:x\d+)?$/;
+const nameRegex = /^[a-zA-Z\s']+$/;
 
 const emailError = "Enter a valid email.";
 const pass1Error = "Password must be at least 8 characters long";
@@ -24,10 +25,7 @@ export const LoginSchema = z.object({
 export const SignupSchema = z
   .object({
     email: z.string().email(emailError),
-    name: z
-      .string()
-      .min(2)
-      .regex(/^[a-zA-Z]+$/, nameError),
+    name: z.string().min(2).regex(nameRegex, nameError),
     password: z
       .string()
       .min(8, pass1Error)
@@ -48,10 +46,7 @@ export const SignupSchema = z
   );
 export const AdminSignupSchema = z
   .object({
-    name: z
-      .string()
-      .min(2)
-      .regex(/^[a-zA-Z]+$/, nameError),
+    name: z.string().min(2).regex(nameRegex, nameError),
     email: z.string().email(emailError),
     password: z
       .string()
@@ -61,10 +56,7 @@ export const AdminSignupSchema = z
       .regex(/[0-9]/, pass4Error),
     passwordConfirm: z.string().min(8, cPassError),
     contactNumber: z.string().regex(phoneRegex, phoneError),
-    restaurantName: z
-      .string()
-      .min(2)
-      .regex(/^[a-zA-Z]+$/, nameError),
+    restaurantName: z.string().min(2).regex(nameRegex, nameError),
     restaurantPhone: z.string().regex(phoneRegex, phoneError),
     cuisine: z.string().min(1, "Required field."),
     address: z
