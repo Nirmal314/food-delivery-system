@@ -1,14 +1,11 @@
-"use client";
+// "use client";
 
-// import RestaurantItemCard from "@/components/RestaurantItemCard";
+import RestaurantItemCard from "@/components/RestaurantItemCard";
 import React, { Suspense } from "react";
 import r1 from "@/public/home-r1.jpg";
 import r2 from "@/public/home-r2.jpg";
 import r3 from "@/public/home-r3.jpg";
 import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
-const RestaurantItemCard = React.lazy(
-  () => import("@/components/RestaurantItemCard")
-); // ! load lazy to visualize animation
 const Restaurants = () => {
   const restaurantData = [
     {

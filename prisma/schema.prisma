@@ -22,35 +22,6 @@ enum Cuisine {
   CHINESE
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String  @unique
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Restaurant {
-  id          String  @id @default(cuid())
-  adminId     String  @unique
-  name        String
-  cuisine     Cuisine
-  address     String
-  phone       String
-  description String?
-  admin       User?   @relation(fields: [adminId], references: [id], onDelete: Cascade)
-}
-
 model User {
   id            String      @id @default(cuid())
   name          String?
@@ -64,3 +35,55 @@ model User {
   accounts      Account? // ! one user can have a google account 
   restaurant    Restaurant? // ! one admin can have one restaurant 
 }
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Restaurant {
+  id          String  @id @default(cuid())
+  adminId     String  @unique
+  name        String
+  cuisine     Cuisine
+  address     String
+  phone       String
+  description String?
+  admin       User?   @relation(fields: [adminId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  menu        Menu?
+}
+
+model Menu {
+  id           String     @id @default(cuid())
+  restaurantId String     @unique
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  items        MenuItem[]
+}
+
+model MenuItem {
+  id          String  @id @default(cuid())
+  menuId      String
+  menu        Menu    @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  name        String
+  description String?
+  price       Float
+}
+
+// ? make changes in .prisma
+// ! npx prisma migrate reset
+// ! npx prisma migrate dev
+// ! npx prisma db push
+// ? reset the server
