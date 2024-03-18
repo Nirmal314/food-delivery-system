@@ -76,3 +76,14 @@ export const AdminSignupSchema = z
       path: ["passwordConfirm"],
     }
   );
+
+export const MenuItemSchema = z.object({
+  name: z
+    .string()
+    .min(2)
+    .regex(/^[a-zA-Z0-9\s']+$/, "Please enter a valid dish name"),
+  description: z.string().max(30, "Description must not exceed 30 characters."),
+  price: z
+    .number()
+    .multipleOf(0.01, "Invalid price, enter only 2 digits after the '.'"),
+});

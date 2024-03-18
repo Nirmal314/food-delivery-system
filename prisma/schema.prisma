@@ -8,6 +8,65 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id            String      @id @default(cuid())
+  name          String?
+  email         String?     @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole    @default(USER)
+  contactNumber String?
+  accounts      Account?
+  restaurant    Restaurant?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Restaurant {
+  id          String  @id @default(cuid())
+  adminId     String  @unique
+  name        String
+  cuisine     Cuisine
+  address     String
+  phone       String
+  description String?
+  menu        Menu?
+  admin       User    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+model Menu {
+  id           String     @id @default(cuid())
+  restaurantId String     @unique
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  items        MenuItem[]
+}
+
+model MenuItem {
+  id          String  @id @default(cuid())
+  menuId      String
+  name        String
+  description String?
+  price       Float
+  menu        Menu    @relation(fields: [menuId], references: [id], onDelete: Cascade)
+}
+
 enum UserRole {
   USER
   ADMIN
@@ -21,69 +80,3 @@ enum Cuisine {
   GUJARATI
   CHINESE
 }
-
-model User {
-  id            String      @id @default(cuid())
-  name          String?
-  email         String?     @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole    @default(USER)
-  contactNumber String?
-  // ? there might not be a related record in the associated model. In database terms, it translates to a nullable foreign key.
-  accounts      Account? // ! one user can have a google account 
-  restaurant    Restaurant? // ! one admin can have one restaurant 
-}
-
-model Account {
-  id                String  @id @default(cuid())
-  userId            String  @unique
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Restaurant {
-  id          String  @id @default(cuid())
-  adminId     String  @unique
-  name        String
-  cuisine     Cuisine
-  address     String
-  phone       String
-  description String?
-  admin       User?   @relation(fields: [adminId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  menu        Menu?
-}
-
-model Menu {
-  id           String     @id @default(cuid())
-  restaurantId String     @unique
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  items        MenuItem[]
-}
-
-model MenuItem {
-  id          String  @id @default(cuid())
-  menuId      String
-  menu        Menu    @relation(fields: [menuId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  name        String
-  description String?
-  price       Float
-}
-
-// ? make changes in .prisma
-// ! npx prisma migrate reset
-// ! npx prisma migrate dev
-// ! npx prisma db push
-// ? reset the server
