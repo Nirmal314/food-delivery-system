@@ -32,6 +32,7 @@ export type MenuItem = {
   name: String;
   description?: String;
   price: number;
+  image: File;
 };
 
 export type Menu = {

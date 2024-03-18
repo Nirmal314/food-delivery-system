@@ -12,6 +12,14 @@ const phoneError = "Enter a valid phone number.";
 const nameError = "Please enter a valid name.";
 const cPassError = "Password confirmation must be at least 8 characters long.";
 
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
 export const LoginSchema = z.object({
   email: z.string().email(emailError),
   password: z
@@ -86,4 +94,10 @@ export const MenuItemSchema = z.object({
   price: z
     .number()
     .multipleOf(0.01, "Invalid price, enter only 2 digits after the '.'"),
+  image: z.any(),
+  // .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+  // .refine(
+  //   (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+  //   "Only .jpg, .jpeg, .png and .webp formats are supported."
+  // ),
 });
