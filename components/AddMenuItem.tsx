@@ -1,37 +1,152 @@
-import React from "react";
+"use client";
+
+import React, { useRef, useState } from "react";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { ClassValue } from "clsx";
-import { cn } from "@/lib/utils";
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { useToast } from "./ui/use-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MenuItemSchema } from "@/schemas";
+import { z } from "zod";
+import { addMenuItem } from "@/actions/admin/addmenuitem";
+import FormInput from "./FormInput";
+import { Textarea } from "./ui/textarea";
+import { Button } from "./ui/button";
 const AddMenuItem = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const sheetTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const form = useForm<z.infer<typeof MenuItemSchema>>({
+    resolver: zodResolver(MenuItemSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
+
+  const handleSubmit = async (values: z.infer<typeof MenuItemSchema>) => {
+    setIsSubmitting(true);
+    const response = await addMenuItem(values);
+    console.log(response.success);
+    if (response.success) {
+      sheetTriggerRef.current?.click();
+
+      toast({
+        description: response.success,
+      });
+
+      setIsSubmitting(false);
+      form.reset();
+    } else {
+      toast({
+        // @ts-ignore
+        description: response.error,
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+    }
+  };
   return (
     <>
-      <Drawer>
-        <DrawerTrigger>Open</DrawerTrigger>
-        <DrawerContent className="absolute bottom-10 right-10">
-          <DrawerHeader>
-            <DrawerTitle className="text-center">
-              Are you absolutely sure?
-            </DrawerTitle>
-            <DrawerDescription>This action cannot be undone.</DrawerDescription>
-          </DrawerHeader>
-          <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+      <Sheet>
+        <SheetTrigger ref={sheetTriggerRef} className="nav-link border-primary">
+          Add a new dish
+        </SheetTrigger>
+        <SheetContent side={"left"} className="z-[100]">
+          <SheetHeader>
+            <SheetTitle className="mb-3">Details of the new recipe</SheetTitle>
+            <SheetDescription>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(handleSubmit)}
+                  className="max-w-md w-full flex flex-col gap-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => {
+                      return (
+                        <FormInput
+                          formLabel="Name of the dish"
+                          isRequired={true}
+                          inputTsx={
+                            <Input
+                              disabled={isSubmitting ? true : false}
+                              placeholder="Name of the dish"
+                              type="text"
+                              {...field}
+                            />
+                          }
+                        />
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormInput
+                        formLabel="Dish Description"
+                        isRequired={false}
+                        inputTsx={
+                          <Textarea
+                            placeholder="Tell us somthing about your new dish"
+                            disabled={isSubmitting ? true : false}
+                            {...field}
+                          />
+                        }
+                      />
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="price"
+                    render={({ field }) => (
+                      <FormInput
+                        formLabel="Price"
+                        isRequired={true}
+                        inputTsx={
+                          <Input
+                            disabled={isSubmitting ? true : false}
+                            placeholder="Price of dish"
+                            type="number"
+                            {...field}
+                            onChange={(e) => field.onChange(+e.target.value)}
+                          />
+                        }
+                      />
+                    )}
+                  />
+                  <Button
+                    disabled={isSubmitting ? true : false}
+                    type="submit"
+                    className="w-1/2 px-4"
+                  >
+                    {isSubmitting ? "Adding your new dish..." : "Add to menu"}
+                  </Button>
+                </form>
+              </Form>
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
     </>
   );
 };

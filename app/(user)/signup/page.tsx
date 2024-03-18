@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignupSchema } from "@/schemas";
-import { signup } from "@/actions/signup";
+import { signup } from "@/actions/auth/signup";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";

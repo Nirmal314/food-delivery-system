@@ -20,7 +20,7 @@ import { AdminSignupSchema } from "@/schemas";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { adminSignup } from "@/actions/adminsignup";
+import { adminSignup } from "@/actions/auth/adminsignup";
 
 import { Cuisine } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";

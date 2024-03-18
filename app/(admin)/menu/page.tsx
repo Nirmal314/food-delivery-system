@@ -2,21 +2,26 @@ import { MenuItem } from "@/typings";
 import React from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import getData from "./dummy-items";
-import { redirect } from "next/navigation";
 import AddMenuItem from "@/components/AddMenuItem";
+import { getMenuItemsByMenuId } from "@/data/admin";
+import { auth } from "@/auth";
 
-const Menu = async () => {
-  const data: MenuItem[] = await getData();
+const RestaurantMenu = async () => {
+  const session = await auth();
 
+  const data = (await getMenuItemsByMenuId(
+    session?.user.menuId!
+  )) as MenuItem[];
   return (
     <>
       <div className="flex w-full h-screen justify-center">
         <DataTable columns={columns} data={data} />
-        <AddMenuItem />
+        <div className="fixed bottom-10 right-10">
+          <AddMenuItem />
+        </div>
       </div>
     </>
   );
 };
 
-export default Menu;
+export default RestaurantMenu;

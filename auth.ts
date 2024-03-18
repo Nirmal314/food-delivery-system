@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "./lib/db";
 import { getUserById } from "./data/user";
 import { UserRole } from "@prisma/client";
+import { getMenuByRestaurantId, getRestaurantByAdminId } from "./data/admin";
 
 export const {
   handlers: { GET, POST },
@@ -31,6 +32,11 @@ export const {
       if (token.role && session.user)
         session.user.role = token.role as UserRole;
 
+      if (token.role === UserRole.ADMIN) {
+        session.user.restaurantId = token.restaurantId as string;
+        session.user.menuId = token.menuId as string;
+      }
+
       // ! accesible from all over the website
       // console.log({ sessionToken: token });
 
@@ -47,6 +53,14 @@ export const {
       // ? assign role from db to token to use it [role] further
 
       token.role = existingUser.role;
+
+      if (existingUser.role === UserRole.ADMIN) {
+        const restaurant = await getRestaurantByAdminId(token.sub);
+        token.restaurantId = restaurant?.id;
+
+        const menu = await getMenuByRestaurantId(restaurant?.id as string);
+        token.menuId = menu?.id;
+      }
 
       return token;
     },

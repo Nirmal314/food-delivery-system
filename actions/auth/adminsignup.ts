@@ -66,7 +66,7 @@ export const adminSignup = async (
       },
     });
 
-    await db.restaurant.create({
+    const createdRestaurant = await db.restaurant.create({
       data: {
         name: restaurantName,
         cuisine: Cuisine[getCuisine(cuisine)!],
@@ -74,6 +74,13 @@ export const adminSignup = async (
         phone: restaurantPhone,
         description,
         admin: { connect: { id: createdUser.id } },
+      },
+    });
+
+    await db.menu.create({
+      data: {
+        restaurantId: createdRestaurant.id,
+        items: { create: [] },
       },
     });
   } catch (e) {

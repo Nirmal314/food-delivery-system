@@ -22,7 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { USER_REDIRECT_ROUTE } from "@/routes";
 import { useEffect, useState } from "react";
 import { LoginSchema } from "@/schemas";
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 
