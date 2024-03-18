@@ -28,10 +28,13 @@ import { addMenuItem } from "@/actions/admin/addmenuitem";
 import FormInput from "./FormInput";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+
 const AddMenuItem = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const sheetTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof MenuItemSchema>>({
     resolver: zodResolver(MenuItemSchema),
@@ -41,6 +44,7 @@ const AddMenuItem = () => {
     },
   });
 
+  const fileRef = form.register("image");
   const handleSubmit = async (values: z.infer<typeof MenuItemSchema>) => {
     setIsSubmitting(true);
     const response = await addMenuItem(values);
@@ -129,6 +133,38 @@ const AddMenuItem = () => {
                             type="number"
                             {...field}
                             onChange={(e) => field.onChange(+e.target.value)}
+                          />
+                        }
+                      />
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormInput
+                        formLabel="Dish image"
+                        isRequired={true}
+                        inputTsx={
+                          <Input
+                            disabled={isSubmitting ? true : false}
+                            type="file"
+                            // {...field}
+
+                            {...fileRef}
+                            // {...form.register("image")}
+                            // onChange={(e) => {
+                            //   field.onChange(e.target.files?.[0]);
+                            // }}
+                            // ref={field.ref}
+
+                            // ref={imageRef}
+                            // onChange={() => {
+                            //   form.setValue(
+                            //     "image",
+                            //     imageRef.current?.files?.[0]
+                            //   );
+                            // }}
                           />
                         }
                       />
