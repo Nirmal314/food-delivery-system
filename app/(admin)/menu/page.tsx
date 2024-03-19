@@ -9,9 +9,10 @@ import { auth } from "@/auth";
 const RestaurantMenu = async () => {
   const session = await auth();
 
-  const data = (await getMenuItemsByMenuId(
+  const data: MenuItem[] = (await getMenuItemsByMenuId(
     session?.user.menuId!
   )) as MenuItem[];
+
   return (
     <>
       <div className="flex w-full h-screen justify-center">

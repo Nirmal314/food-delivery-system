@@ -29,10 +29,10 @@ export type Restaurants = {
 };
 
 export type MenuItem = {
-  name: String;
-  description?: String;
+  name: string;
+  description?: string | null;
   price: number;
-  image: File;
+  image: string;
 };
 
 export type Menu = {

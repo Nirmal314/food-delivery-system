@@ -22,15 +22,15 @@ export const addMenuItem = async (values: z.infer<typeof MenuItemSchema>) => {
 
     const menu = await getMenuByRestaurantId(restaurantId!);
 
-    console.log({ name, description, price, image });
-    // await db.menuItem.create({
-    //   data: {
-    //     name: name as string,
-    //     description: description as string,
-    //     price,
-    //     menuId: menu?.id as string,
-    //   },
-    // });
+    await db.menuItem.create({
+      data: {
+        name: name as string,
+        description: description as string,
+        price,
+        menuId: menu?.id as string,
+        image: image as string,
+      },
+    });
 
     revalidatePath("/menu");
   } catch (e) {

@@ -27,6 +27,10 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import FoodItemCard from "@/components/FoodItemCard";
 import RestaurantItemCard from "@/components/RestaurantItemCard";
+import { db } from "@/lib/db";
+import { getMenuItemsByMenuId } from "@/data/admin";
+import { use, useState } from "react";
+import { MenuItem } from "@/typings";
 
 const formSchema = z.object({
   foodItem: z.enum([
@@ -53,6 +57,8 @@ export default function Home() {
     "pasta",
     "chinese",
   ];
+
+  const [images, setImages] = useState([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
