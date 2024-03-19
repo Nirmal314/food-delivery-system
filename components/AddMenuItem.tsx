@@ -81,7 +81,6 @@ const AddMenuItem = () => {
       form.reset();
     } else {
       toast({
-        // @ts-ignore
         description: addMenuItemResponse.error,
         variant: "destructive",
       });

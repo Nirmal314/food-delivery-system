@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -30,13 +30,16 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
+import { toast } from "@/components/ui/use-toast";
+import cloudinary from "@/lib/cloudinary";
+import { json } from "stream/consumers";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
-
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string; image: string }, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -44,6 +47,9 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [isDeleteing, setIsDeleting] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
   const table = useReactTable({
     data,
@@ -69,6 +75,57 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+
+  const extractPublicId = (url: string): string => {
+    const urlParts = url.split("/");
+
+    const fileName = urlParts[urlParts.length - 1];
+
+    return fileName.split(".")[0];
+  };
+
+  useEffect(() => {
+    const newSelectedRows = Object.entries(rowSelection).reduce(
+      (acc, [key, value]) => {
+        const row = data[parseInt(key)];
+
+        if (row && "id" in row && "image" in row) {
+          acc.push({ id: row.id, image: extractPublicId(row.image) });
+        }
+
+        return acc;
+      },
+      [] as { id: string; image: string }[]
+    );
+    setSelectedImages(newSelectedRows.map(({ image }) => image));
+    setSelectedRows(newSelectedRows.map(({ id }) => id));
+  }, [rowSelection, data]);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+
+    const res = await deleteMenuItems(selectedRows);
+    const cres = await fetch("/api/deletecloudinary", {
+      method: "POST",
+      body: JSON.stringify({ selectedImages }),
+    });
+
+    const data = await cres.json();
+    console.log(data);
+
+    if (res.success) {
+      toast({
+        description: res.success,
+      });
+      setIsDeleting(false);
+    } else {
+      toast({
+        description: res.error,
+        variant: "destructive",
+      });
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="w-3/4">
@@ -162,8 +219,18 @@ export function DataTable<TData, TValue>({
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length !== 0 && (
             <>
-              {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
+              <span>
+                {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} row(s) selected.
+              </span>
+              <Button
+                disabled={isDeleteing ?? true}
+                className="ml-4"
+                variant={"destructive"}
+                onClick={handleDelete}
+              >
+                {isDeleteing ? "Deleting..." : "Delete selected rows"}
+              </Button>
             </>
           )}
         </div>

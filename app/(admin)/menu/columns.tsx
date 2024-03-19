@@ -1,10 +1,13 @@
 "use client";
 
+import MenuItemLoading from "@/components/LoadingSkeletons/MenuItemLoading";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Menu, MenuItem } from "@/typings";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDownIcon } from "lucide-react";
+import Image from "next/image";
+import { Suspense, useState } from "react";
 
 export const columns: ColumnDef<MenuItem>[] = [
   {
@@ -71,6 +74,30 @@ export const columns: ColumnDef<MenuItem>[] = [
       }).format(amount);
 
       return <div className="text-left">{formatted}</div>;
+    },
+  },
+  {
+    accessorKey: "image",
+    header: "Image",
+    cell: ({ row }) => {
+      const imageUrl: string = row.getValue("image");
+      const [isLoading, setIsLoading] = useState(true);
+
+      return (
+        <div className="rounded-lg w-72 h-48 relative">
+          {isLoading && <MenuItemLoading />}
+          <Image
+            src={imageUrl}
+            alt="food-image"
+            className={`object-cover rounded-lg ${
+              isLoading ? "hidden" : "block"
+            }`}
+            width={288}
+            height={192}
+            onLoad={() => setIsLoading(false)}
+          />
+        </div>
+      );
     },
   },
 ];
