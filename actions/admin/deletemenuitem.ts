@@ -13,6 +13,8 @@ export const deleteMenuItems = async (values: string[]) => {
       },
     });
 
+    console.log(values);
+
     revalidatePath("/menu");
   } catch (e) {
     console.log(e);

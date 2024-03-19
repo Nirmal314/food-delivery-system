@@ -1,13 +1,24 @@
 "use client";
 
+import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
 import MenuItemLoading from "@/components/LoadingSkeletons/MenuItemLoading";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "@/components/ui/use-toast";
 import { Menu, MenuItem } from "@/typings";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDownIcon } from "lucide-react";
+import {
+  ArrowUpDownIcon,
+  DeleteIcon,
+  Edit,
+  Edit2Icon,
+  EditIcon,
+  PencilIcon,
+  Trash2Icon,
+} from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { Suspense, useState } from "react";
+import { MouseEvent, Suspense, useState } from "react";
 
 export const columns: ColumnDef<MenuItem>[] = [
   {
@@ -96,6 +107,70 @@ export const columns: ColumnDef<MenuItem>[] = [
             height={192}
             onLoad={() => setIsLoading(false)}
           />
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const extractPublicId = (url: string): string => {
+        const urlParts = url.split("/");
+
+        const fileName = urlParts[urlParts.length - 1];
+
+        return fileName.split(".")[0];
+      };
+
+      const handleDelete = async (id: string, public_id: string) => {
+        console.log({ id, public_id });
+        // parseInt(id)
+        // const res = await deleteMenuItems([id]);
+        // const cres = await fetch("/api/deletecloudinary", {
+        //   method: "POST",
+        //   body: JSON.stringify({ selectedImages: public_id }),
+        // });
+
+        // const data = await cres.json();
+        // console.log(data);
+
+        // if (res.success) {
+        //   toast({
+        //     description: res.success,
+        //   });
+        // } else {
+        //   toast({
+        //     description: res.error,
+        //     variant: "destructive",
+        //   });
+        // }
+      };
+
+      return (
+        <div className="space-y-3 w-28">
+          <Button
+            onClick={(e) =>
+              console.log({
+                rowId: row.id,
+                rowImage: extractPublicId(row.getValue("image")),
+              })
+            }
+            className="bg-transparent hover:bg-transparent flex justify-start items-center space-x-1 text-primary px-2 py-1 border-2 border-transparent transition-all duration-300 rounded-none hover:rounded-sm cursor-pointer hover:border-primary"
+          >
+            <Edit />
+            <span>Edit</span>
+          </Button>
+          <Button
+            onClick={() =>
+              handleDelete(row.id, extractPublicId(row.getValue("image")))
+            }
+            className="bg-transparent hover:bg-transparent flex justify-start items-center space-x-1 text-destructive px-2 py-1 border-2 border-transparent transition-all duration-300 rounded-none hover:rounded-sm cursor-pointer hover:border-destructive"
+          >
+            <Trash2Icon />
+            <span>Delete</span>
+          </Button>
         </div>
       );
     },
