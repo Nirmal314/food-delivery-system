@@ -95,9 +95,4 @@ export const MenuItemSchema = z.object({
     .number()
     .multipleOf(0.01, "Invalid price, enter only 2 digits after the '.'"),
   image: z.any(),
-  // .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-  // .refine(
-  //   (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-  //   "Only .jpg, .jpeg, .png and .webp formats are supported."
-  // ),
 });

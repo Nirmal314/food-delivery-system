@@ -47,21 +47,42 @@ const AddMenuItem = () => {
   const fileRef = form.register("image");
   const handleSubmit = async (values: z.infer<typeof MenuItemSchema>) => {
     setIsSubmitting(true);
-    const response = await addMenuItem(values);
-    console.log(response.success);
-    if (response.success) {
+
+    const formImage = values.image[0];
+
+    const formData = new FormData();
+    formData.append("file", formImage);
+    formData.append(
+      "upload_preset",
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string
+    );
+
+    const cloudinaryResponse = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const imageData = await cloudinaryResponse.json();
+    const image = imageData.url as string;
+
+    values.image = image;
+
+    const addMenuItemResponse = await addMenuItem(values);
+
+    if (addMenuItemResponse.success) {
       sheetTriggerRef.current?.click();
-
       toast({
-        description: response.success,
+        description: addMenuItemResponse.success,
       });
-
       setIsSubmitting(false);
       form.reset();
     } else {
       toast({
         // @ts-ignore
-        description: response.error,
+        description: addMenuItemResponse.error,
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -141,7 +162,7 @@ const AddMenuItem = () => {
                   <FormField
                     control={form.control}
                     name="image"
-                    render={({ field }) => (
+                    render={() => (
                       <FormInput
                         formLabel="Dish image"
                         isRequired={true}
@@ -149,22 +170,7 @@ const AddMenuItem = () => {
                           <Input
                             disabled={isSubmitting ? true : false}
                             type="file"
-                            // {...field}
-
                             {...fileRef}
-                            // {...form.register("image")}
-                            // onChange={(e) => {
-                            //   field.onChange(e.target.files?.[0]);
-                            // }}
-                            // ref={field.ref}
-
-                            // ref={imageRef}
-                            // onChange={() => {
-                            //   form.setValue(
-                            //     "image",
-                            //     imageRef.current?.files?.[0]
-                            //   );
-                            // }}
                           />
                         }
                       />

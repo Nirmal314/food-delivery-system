@@ -64,6 +64,7 @@ model MenuItem {
   name        String
   description String?
   price       Float
+  image       String
   menu        Menu    @relation(fields: [menuId], references: [id], onDelete: Cascade)
 }
 

@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { MenuItem } from "@/typings";
 
 export const getRestaurantByAdminId = async (id: string) => {
   try {
@@ -24,13 +25,16 @@ export const getMenuByRestaurantId = async (id: string) => {
   }
 };
 
-export const getMenuItemsByMenuId = async (id: string) => {
+export const getMenuItemsByMenuId = async (
+  id: string
+): Promise<MenuItem[] | null> => {
   try {
     const menuItems = await db.menuItem.findMany({
       where: { menuId: id },
     });
     return menuItems;
   } catch (error) {
+    console.log(error);
     return null;
   }
 };

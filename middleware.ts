@@ -11,6 +11,7 @@ import {
 } from "@/routes";
 import { UserRole } from "@prisma/client";
 import { auth } from "./auth";
+import { NextRequest, NextResponse } from "next/server";
 
 // @ts-ignore
 export default auth(async (req) => {
