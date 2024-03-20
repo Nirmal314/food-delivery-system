@@ -18,7 +18,13 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { MouseEvent, Suspense, useState } from "react";
+import {
+  MouseEvent,
+  Suspense,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 
 export const columns: ColumnDef<MenuItem>[] = [
   {
@@ -94,18 +100,21 @@ export const columns: ColumnDef<MenuItem>[] = [
       const imageUrl: string = row.getValue("image");
       const [isLoading, setIsLoading] = useState(true);
 
+      const handleLoad = () => {
+        setIsLoading(false);
+        console.log("set loading = false");
+      };
+
       return (
         <div className="rounded-lg w-72 h-48 relative">
           {isLoading && <MenuItemLoading />}
           <Image
             src={imageUrl}
             alt="food-image"
-            className={`object-cover rounded-lg ${
-              isLoading ? "hidden" : "block"
-            }`}
+            className={`absolute object-cover rounded-lg`}
             width={288}
             height={192}
-            onLoad={() => setIsLoading(false)}
+            onLoad={handleLoad}
           />
         </div>
       );
@@ -125,7 +134,7 @@ export const columns: ColumnDef<MenuItem>[] = [
       };
 
       const handleDelete = async (id: string, public_id: string) => {
-        console.log({ id, public_id });
+        console.log({ id: parseInt(id), public_id });
         // parseInt(id)
         // const res = await deleteMenuItems([id]);
         // const cres = await fetch("/api/deletecloudinary", {

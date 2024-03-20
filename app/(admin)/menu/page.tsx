@@ -5,6 +5,12 @@ import { columns } from "./columns";
 import AddMenuItem from "@/components/AddMenuItem";
 import { getMenuItemsByMenuId } from "@/data/admin";
 import { auth } from "@/auth";
+import { ColumnDef } from "@tanstack/react-table";
+
+interface AdditionalProps {
+  id: string;
+  image: string;
+}
 
 const RestaurantMenu = async () => {
   const session = await auth();
@@ -16,7 +22,10 @@ const RestaurantMenu = async () => {
   return (
     <>
       <div className="flex w-full h-screen justify-center">
-        <DataTable columns={columns} data={data} />
+        <DataTable<any, ColumnDef<AdditionalProps>[]>
+          columns={columns}
+          data={data}
+        />
         <div className="fixed bottom-10 right-10">
           <AddMenuItem />
         </div>
