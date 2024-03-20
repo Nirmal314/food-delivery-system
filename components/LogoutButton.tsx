@@ -31,7 +31,6 @@ const LogoutButton = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            {/* <Link href={"/api/auth/signout"}> */}
             <Button
               variant={"ghost"}
               className="hover:bg-transparent"
@@ -39,7 +38,6 @@ const LogoutButton = () => {
             >
               <AlertDialogAction>Yes</AlertDialogAction>
             </Button>
-            {/* </Link> */}
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

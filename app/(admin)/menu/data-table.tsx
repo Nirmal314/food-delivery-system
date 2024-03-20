@@ -32,8 +32,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
 import { toast } from "@/components/ui/use-toast";
-import cloudinary from "@/lib/cloudinary";
-import { json } from "stream/consumers";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import AddMenuItem from "@/components/AddMenuItem";
 
 interface AdditionalProps {
   id: string;
@@ -81,6 +91,8 @@ export function DataTable<TData extends AdditionalProps, TValue>({
     },
   });
 
+  table.getState().pagination.pageSize = 3;
+
   const extractPublicId = (url: string): string => {
     const urlParts = url.split("/");
 
@@ -114,13 +126,11 @@ export function DataTable<TData extends AdditionalProps, TValue>({
     setIsDeleting(true);
 
     const res = await deleteMenuItems(selectedRows);
+
     const cres = await fetch("/api/deletecloudinary", {
       method: "POST",
       body: JSON.stringify({ selectedImages }),
     });
-
-    const data = await cres.json();
-    console.log(data);
 
     if (res.success) {
       toast({
@@ -138,7 +148,9 @@ export function DataTable<TData extends AdditionalProps, TValue>({
 
   return (
     <div className="w-3/4">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
+        <AddMenuItem />
+
         <Input
           placeholder="Filter dishes..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -147,32 +159,34 @@ export function DataTable<TData extends AdditionalProps, TValue>({
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -227,24 +241,44 @@ export function DataTable<TData extends AdditionalProps, TValue>({
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length !== 0 && (
-            <>
-              <span>
+            <div className="flex items-center space-x-4">
+              <div>
                 {table.getFilteredSelectedRowModel().rows.length} of{" "}
                 {table.getFilteredRowModel().rows.length} row(s) selected.
-              </span>
-              <Button
-                disabled={isDeleteing ?? true}
-                className="ml-4"
-                variant={"destructive"}
-                onClick={handleDelete}
-              >
-                {isDeleteing ? "Deleting..." : "Delete selected rows"}
-              </Button>
-            </>
+              </div>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <Button variant={"destructive"}>
+                    {isDeleteing ? "Deleting..." : "Delete selected rows"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to delete selected items?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Deletion will be reflected to all the customers
+                      immediately.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button
+                      disabled={isDeleteing ?? true}
+                      className="bg-transparent hover:bg-transparent"
+                      onClick={handleDelete}
+                    >
+                      <AlertDialogAction>Yes</AlertDialogAction>
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           )}
         </div>
 
-        <div>
+        <div className="space-x-2">
           <Button
             variant="outline"
             size="sm"

@@ -1,30 +1,14 @@
 "use client";
 
-import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
 import MenuItemLoading from "@/components/LoadingSkeletons/MenuItemLoading";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/components/ui/use-toast";
-import { Menu, MenuItem } from "@/typings";
+import { MenuItem } from "@/typings";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  ArrowUpDownIcon,
-  DeleteIcon,
-  Edit,
-  Edit2Icon,
-  EditIcon,
-  PencilIcon,
-  Trash2Icon,
-} from "lucide-react";
-import { useSession } from "next-auth/react";
+import { ArrowUpDownIcon } from "lucide-react";
 import Image from "next/image";
-import {
-  MouseEvent,
-  Suspense,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
+import { useState } from "react";
+import Action from "./components/Action";
 
 export const columns: ColumnDef<MenuItem>[] = [
   {
@@ -102,7 +86,6 @@ export const columns: ColumnDef<MenuItem>[] = [
 
       const handleLoad = () => {
         setIsLoading(false);
-        console.log("set loading = false");
       };
 
       return (
@@ -124,74 +107,6 @@ export const columns: ColumnDef<MenuItem>[] = [
   {
     accessorKey: "action",
     header: "Action",
-    cell: ({ row }) => {
-      const extractPublicId = (url: string): string => {
-        const urlParts = url.split("/");
-
-        const fileName = urlParts[urlParts.length - 1];
-
-        return fileName.split(".")[0];
-      };
-
-      const { data: session } = useSession();
-
-      const handleDelete = async (id: string, public_id: string) => {
-        const index = parseInt(id);
-        console.log({ index, public_id });
-
-        try {
-          const response = await fetch(
-            `/api/menuitems/${session?.user.menuId}`
-          );
-          const menuItems = await response.json();
-          const menuItemToDelete = menuItems.menuItems[index].id;
-
-          const res = await deleteMenuItems([menuItemToDelete]);
-          const cres = await fetch("/api/deletecloudinary", {
-            method: "POST",
-            body: JSON.stringify({ selectedImages: public_id }),
-          });
-
-          if (res.success) {
-            toast({
-              description: "Item deleted.",
-            });
-          } else {
-            toast({
-              description: res.error,
-              variant: "destructive",
-            });
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      return (
-        <div className="space-y-3 w-28">
-          <Button
-            onClick={(e) =>
-              console.log({
-                rowId: row.id,
-                rowImage: extractPublicId(row.getValue("image")),
-              })
-            }
-            className="bg-transparent hover:bg-transparent flex justify-start items-center space-x-1 text-primary px-2 py-1 border-2 border-transparent transition-all duration-300 rounded-none hover:rounded-sm cursor-pointer hover:border-primary"
-          >
-            <Edit />
-            <span>Edit</span>
-          </Button>
-          <Button
-            onClick={() =>
-              handleDelete(row.id, extractPublicId(row.getValue("image")))
-            }
-            className="bg-transparent hover:bg-transparent flex justify-start items-center space-x-1 text-destructive px-2 py-1 border-2 border-transparent transition-all duration-300 rounded-none hover:rounded-sm cursor-pointer hover:border-destructive"
-          >
-            <Trash2Icon />
-            <span>Delete</span>
-          </Button>
-        </div>
-      );
-    },
+    cell: ({ row }) => <Action row={row} />,
   },
 ];
