@@ -56,35 +56,38 @@ const AddMenuItem = () => {
       "upload_preset",
       process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string
     );
+    try {
+      const cloudinaryResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
-    const cloudinaryResponse = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: formData,
+      const imageData = await cloudinaryResponse.json();
+      const image = imageData.url as string;
+
+      values.image = image;
+
+      const addMenuItemResponse = await addMenuItem(values);
+
+      if (addMenuItemResponse.success) {
+        sheetTriggerRef.current?.click();
+        toast({
+          description: addMenuItemResponse.success,
+        });
+        setIsSubmitting(false);
+        form.reset();
+      } else {
+        toast({
+          description: addMenuItemResponse.error,
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
       }
-    );
-
-    const imageData = await cloudinaryResponse.json();
-    const image = imageData.url as string;
-
-    values.image = image;
-
-    const addMenuItemResponse = await addMenuItem(values);
-
-    if (addMenuItemResponse.success) {
-      sheetTriggerRef.current?.click();
-      toast({
-        description: addMenuItemResponse.success,
-      });
-      setIsSubmitting(false);
-      form.reset();
-    } else {
-      toast({
-        description: addMenuItemResponse.error,
-        variant: "destructive",
-      });
-      setIsSubmitting(false);
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

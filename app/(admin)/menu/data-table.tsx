@@ -41,7 +41,7 @@ interface AdditionalProps {
 }
 
 interface DataTableProps<TData extends AdditionalProps, TValue> {
-  columns: ColumnDef<TData, TValue>[]; // Update constraint to accept types extending AdditionalProps
+  columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 export function DataTable<TData extends AdditionalProps, TValue>({
@@ -94,9 +94,13 @@ export function DataTable<TData extends AdditionalProps, TValue>({
       (acc, [key, value]) => {
         const row = data[parseInt(key)];
 
-        // if (row && typeof row.id === 'string' && typeof row.image === 'string') {
-        acc.push({ id: row.id, image: extractPublicId(row.image) });
-        // }
+        if (
+          row &&
+          typeof row.id === "string" &&
+          typeof row.image === "string"
+        ) {
+          acc.push({ id: row.id, image: extractPublicId(row.image) });
+        }
 
         return acc;
       },
