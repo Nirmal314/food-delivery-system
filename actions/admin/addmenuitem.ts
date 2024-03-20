@@ -3,9 +3,8 @@
 import * as z from "zod";
 import { MenuItemSchema } from "@/schemas";
 import { db } from "@/lib/db";
-import { MenuItem } from "@/typings";
 import { auth } from "@/auth";
-import { getMenuByRestaurantId, getRestaurantByAdminId } from "@/data/admin";
+import { getMenuByRestaurantId } from "@/data/admin";
 import { revalidatePath } from "next/cache";
 
 export const addMenuItem = async (values: z.infer<typeof MenuItemSchema>) => {
@@ -17,10 +16,7 @@ export const addMenuItem = async (values: z.infer<typeof MenuItemSchema>) => {
   const { name, description, price, image } = validatedFields.data;
 
   try {
-    const restaurant = await getRestaurantByAdminId(session?.user.id!);
-    const restaurantId = restaurant?.id;
-
-    const menu = await getMenuByRestaurantId(restaurantId!);
+    const menu = await getMenuByRestaurantId(session?.user.restaurantId!);
 
     await db.menuItem.create({
       data: {
@@ -38,5 +34,5 @@ export const addMenuItem = async (values: z.infer<typeof MenuItemSchema>) => {
     return { error: "Something went wrong." };
   }
 
-  return { success: "Your new recipe is added successfully!" };
+  return { success: "Your new dish is added successfully!" };
 };

@@ -73,7 +73,10 @@ const AddMenuItem = () => {
       const addMenuItemResponse = await addMenuItem(values);
 
       if (addMenuItemResponse.success) {
-        sheetTriggerRef.current?.click();
+        if (sheetTriggerRef.current?.attributes[4].nodeValue === "open") {
+          sheetTriggerRef.current?.click();
+        }
+        console.log(sheetTriggerRef.current?.attributes[4].nodeValue);
         toast({
           description: addMenuItemResponse.success,
         });
@@ -93,10 +96,13 @@ const AddMenuItem = () => {
   return (
     <>
       <Sheet>
-        <SheetTrigger ref={sheetTriggerRef} className="nav-link border-primary">
+        <SheetTrigger
+          ref={sheetTriggerRef}
+          className="bg-transparent hover:bg-[#16a34a27] rounded-sm flex justify-start items-center space-x-1 text-primary px-4 py-2 border-2 border-primary transition-all duration-300 cursor-pointer"
+        >
           Add a new dish
         </SheetTrigger>
-        <SheetContent side={"left"} className="z-[100]">
+        <SheetContent side={"right"} className="z-[100]">
           <SheetHeader>
             <SheetTitle className="mb-3">Details of the new recipe</SheetTitle>
             <SheetDescription>
@@ -183,7 +189,7 @@ const AddMenuItem = () => {
                     type="submit"
                     className="w-1/2 px-4"
                   >
-                    {isSubmitting ? "Adding your new dish..." : "Add to menu"}
+                    {isSubmitting ? "Adding..." : "Add to menu"}
                   </Button>
                 </form>
               </Form>

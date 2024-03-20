@@ -2,7 +2,6 @@ import { MenuItem } from "@/typings";
 import React from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import AddMenuItem from "@/components/AddMenuItem";
 import { getMenuItemsByMenuId } from "@/data/admin";
 import { auth } from "@/auth";
 import { ColumnDef } from "@tanstack/react-table";
@@ -26,9 +25,6 @@ const RestaurantMenu = async () => {
           columns={columns}
           data={data}
         />
-        <div className="fixed bottom-10 right-10">
-          <AddMenuItem />
-        </div>
       </div>
     </>
   );

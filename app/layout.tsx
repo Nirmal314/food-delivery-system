@@ -5,7 +5,7 @@ import Header from "@/components/Header/Header";
 import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
 const inter = Inter({ subsets: ["latin"] });
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "EatEase",
