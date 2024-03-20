@@ -35,11 +35,16 @@ import { toast } from "@/components/ui/use-toast";
 import cloudinary from "@/lib/cloudinary";
 import { json } from "stream/consumers";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface AdditionalProps {
+  id: string;
+  image: string;
+}
+
+interface DataTableProps<TData extends AdditionalProps, TValue> {
+  columns: ColumnDef<TData, TValue>[]; // Update constraint to accept types extending AdditionalProps
   data: TData[];
 }
-export function DataTable<TData extends { id: string; image: string }, TValue>({
+export function DataTable<TData extends AdditionalProps, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -89,9 +94,9 @@ export function DataTable<TData extends { id: string; image: string }, TValue>({
       (acc, [key, value]) => {
         const row = data[parseInt(key)];
 
-        if (row && "id" in row && "image" in row) {
-          acc.push({ id: row.id, image: extractPublicId(row.image) });
-        }
+        // if (row && typeof row.id === 'string' && typeof row.image === 'string') {
+        acc.push({ id: row.id, image: extractPublicId(row.image) });
+        // }
 
         return acc;
       },
