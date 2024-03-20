@@ -111,7 +111,7 @@ export const columns: ColumnDef<MenuItem>[] = [
           <Image
             src={imageUrl}
             alt="food-image"
-            className={`absolute object-cover rounded-lg`}
+            className={`absolute object-cover rounded-lg w-72 h-48`}
             width={288}
             height={192}
             onLoad={handleLoad}
@@ -133,28 +133,38 @@ export const columns: ColumnDef<MenuItem>[] = [
         return fileName.split(".")[0];
       };
 
+      const { data: session } = useSession();
+
       const handleDelete = async (id: string, public_id: string) => {
-        console.log({ id: parseInt(id), public_id });
-        // parseInt(id)
-        // const res = await deleteMenuItems([id]);
-        // const cres = await fetch("/api/deletecloudinary", {
-        //   method: "POST",
-        //   body: JSON.stringify({ selectedImages: public_id }),
-        // });
+        const index = parseInt(id);
+        console.log({ index, public_id });
 
-        // const data = await cres.json();
-        // console.log(data);
+        try {
+          const response = await fetch(
+            `/api/menuitems/${session?.user.menuId}`
+          );
+          const menuItems = await response.json();
+          const menuItemToDelete = menuItems.menuItems[index].id;
 
-        // if (res.success) {
-        //   toast({
-        //     description: res.success,
-        //   });
-        // } else {
-        //   toast({
-        //     description: res.error,
-        //     variant: "destructive",
-        //   });
-        // }
+          const res = await deleteMenuItems([menuItemToDelete]);
+          const cres = await fetch("/api/deletecloudinary", {
+            method: "POST",
+            body: JSON.stringify({ selectedImages: public_id }),
+          });
+
+          if (res.success) {
+            toast({
+              description: "Item deleted.",
+            });
+          } else {
+            toast({
+              description: res.error,
+              variant: "destructive",
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
       };
 
       return (
