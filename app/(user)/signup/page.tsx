@@ -20,11 +20,10 @@ import { SignupSchema } from "@/schemas";
 import { signup } from "@/actions/auth/signup";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const Signup = () => {
   const router = useRouter();
-  const { toast } = useToast();
   const [creatingAccount, setCreatingAccount] = useState(false);
   const form = useForm<z.infer<typeof SignupSchema>>({
     resolver: zodResolver(SignupSchema),
@@ -41,18 +40,12 @@ const Signup = () => {
     setCreatingAccount(true);
     const response = await signup(values);
     if (response.success) {
-      toast({
-        description: response.success,
-      });
+      toast.success(response.success);
       setTimeout(() => {
         router.push("/login");
       }, 3000);
     } else {
-      toast({
-        // @ts-ignore
-        description: response.error,
-        variant: "destructive",
-      });
+      toast.error(response.error);
       setCreatingAccount(false);
     }
   };

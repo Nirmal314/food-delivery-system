@@ -1,15 +1,17 @@
 "use server";
 
 import * as z from "zod";
-import { MenuItemSchema } from "@/schemas";
+import { MenuItemSchemaWithImageString } from "@/schemas";
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
 import { getMenuByRestaurantId } from "@/data/admin";
 import { revalidatePath } from "next/cache";
 
-export const addMenuItem = async (values: z.infer<typeof MenuItemSchema>) => {
+export const addMenuItem = async (
+  values: z.infer<typeof MenuItemSchemaWithImageString>
+) => {
   const session = await auth();
-  const validatedFields = MenuItemSchema.safeParse(values);
+  const validatedFields = MenuItemSchemaWithImageString.safeParse(values);
 
   if (!validatedFields.success) return { error: "Invalid fields." };
 

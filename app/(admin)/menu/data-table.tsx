@@ -31,7 +31,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
-import { toast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,7 +42,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import AddMenuItem from "@/components/AddMenuItem";
+import AddMenuItem from "@/app/(admin)/menu/components/AddMenuItem";
+import { toast } from "sonner";
 
 interface AdditionalProps {
   id: string;
@@ -91,7 +91,7 @@ export function DataTable<TData extends AdditionalProps, TValue>({
     },
   });
 
-  table.getState().pagination.pageSize = 3;
+  table.getState().pagination.pageSize = 5;
 
   const extractPublicId = (url: string): string => {
     const urlParts = url.split("/");
@@ -129,19 +129,19 @@ export function DataTable<TData extends AdditionalProps, TValue>({
 
     const cres = await fetch("/api/deletecloudinary", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ selectedImages }),
     });
 
-    if (res.success) {
-      toast({
-        description: res.success,
-      });
+    const cresponse = await cres.json();
+
+    if (res.success && cresponse.success) {
+      toast.success(res.success);
       setIsDeleting(false);
     } else {
-      toast({
-        description: res.error,
-        variant: "destructive",
-      });
+      toast.error(res.error || cresponse.error);
       setIsDeleting(false);
     }
   };
@@ -216,7 +216,13 @@ export function DataTable<TData extends AdditionalProps, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      className={`${
+                        cell.id.split("_")[cell.id.split("_").length - 1] ===
+                          ("description" || "name") && "text-justify"
+                      }`}
+                      key={cell.id}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -248,7 +254,10 @@ export function DataTable<TData extends AdditionalProps, TValue>({
               </div>
               <AlertDialog>
                 <AlertDialogTrigger>
-                  <Button variant={"destructive"}>
+                  <Button
+                    disabled={isDeleteing ? true : false}
+                    variant={"destructive"}
+                  >
                     {isDeleteing ? "Deleting..." : "Delete selected rows"}
                   </Button>
                 </AlertDialogTrigger>

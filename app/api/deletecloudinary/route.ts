@@ -1,6 +1,6 @@
 import cloudinary from "@/lib/cloudinary";
 
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<Response> {
   const { selectedImages } = await req.json();
 
   try {
@@ -9,9 +9,10 @@ export async function POST(req: Request) {
       resource_type: "image",
     });
 
-    console.log(res.deleted);
+    // console.log("to delete: ", typeof selectedImages);
+
     return Response.json({ success: "Resources deleted." });
   } catch (error) {
-    return Response.json({ success: "Something went wrong." });
+    return Response.json({ error: "Something went wrong." });
   }
 }

@@ -9,32 +9,22 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { useToast } from "./ui/use-toast";
+} from "@/components/ui/sheet";
+import { Form, FormField } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MenuItemSchema } from "@/schemas";
 import { z } from "zod";
 import { addMenuItem } from "@/actions/admin/addmenuitem";
-import FormInput from "./FormInput";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
+import FormInput from "@/components/FormInput";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const AddMenuItem = () => {
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const sheetTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const imageRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof MenuItemSchema>>({
     resolver: zodResolver(MenuItemSchema),
@@ -47,6 +37,11 @@ const AddMenuItem = () => {
   const fileRef = form.register("image");
   const handleSubmit = async (values: z.infer<typeof MenuItemSchema>) => {
     setIsSubmitting(true);
+
+    if (values.description === "")
+      toast.warning("Continuing without description...", {
+        position: "bottom-center",
+      });
 
     const formImage = values.image[0];
 
@@ -70,6 +65,7 @@ const AddMenuItem = () => {
 
       values.image = image;
 
+      // @ts-ignore
       const addMenuItemResponse = await addMenuItem(values);
 
       if (addMenuItemResponse.success) {
@@ -77,15 +73,14 @@ const AddMenuItem = () => {
           sheetTriggerRef.current?.click();
         }
         console.log(sheetTriggerRef.current?.attributes[4].nodeValue);
-        toast({
-          description: addMenuItemResponse.success,
+        toast.success(addMenuItemResponse.success, {
+          position: "bottom-center",
         });
         setIsSubmitting(false);
         form.reset();
       } else {
-        toast({
-          description: addMenuItemResponse.error,
-          variant: "destructive",
+        toast.error(addMenuItemResponse.error, {
+          position: "bottom-center",
         });
         setIsSubmitting(false);
       }

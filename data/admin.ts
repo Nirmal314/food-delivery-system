@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { MenuItem } from "@/typings";
+import { Menu, MenuItem, Restaurant } from "@/typings";
 
 export const getRestaurantByAdminId = async (id: string) => {
   try {
@@ -21,6 +21,23 @@ export const getMenuByRestaurantId = async (id: string) => {
 
     return menu;
   } catch (error) {
+    return null;
+  }
+};
+
+export const getMenuItemByMenuItemId = async (
+  id: string
+): Promise<MenuItem | null> => {
+  try {
+    const menuItem = await db.menuItem.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    console.log("first", menuItem);
+    return menuItem;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 };
