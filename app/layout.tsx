@@ -23,7 +23,13 @@ export default async function RootLayout({
         <SessionProvider>
           <Header session={session!} />
           <main>{children}</main>
-          <Toaster />
+          <Toaster
+            theme="light"
+            richColors
+            position="bottom-right"
+            expand
+            closeButton
+          />
         </SessionProvider>
       </body>
     </html>

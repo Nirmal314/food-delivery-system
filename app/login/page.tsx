@@ -19,17 +19,15 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { USER_REDIRECT_ROUTE } from "@/routes";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LoginSchema } from "@/schemas";
 import { login } from "@/actions/auth/login";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 const Signin = () => {
   const [credentialsLoggingIn, setCredentialsLoggingIn] = useState(false);
   const [googleLoggingIn, setGoogleLoggingIn] = useState(false);
-  const { toast } = useToast();
   const searchParams = useSearchParams();
   const urlError = () => {
     if (searchParams.get("error")) {
@@ -53,19 +51,15 @@ const Signin = () => {
 
   const handleSubmit = async (values: z.infer<typeof LoginSchema>) => {
     setCredentialsLoggingIn(true);
+
     const response = await login(values);
 
     if (response) {
       if (response.success) {
-        toast({
-          description: response.success,
-        });
+        toast.success(response.success);
       } else if (response.error) {
-        toast({
-          description: response.error,
-          variant: "destructive",
-        });
-
+        toast.error(response.error);
+        console.log(response.error);
         setCredentialsLoggingIn(false);
       }
     }

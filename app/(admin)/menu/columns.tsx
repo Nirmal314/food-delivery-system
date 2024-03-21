@@ -7,7 +7,7 @@ import { MenuItem } from "@/typings";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDownIcon } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Action from "./components/Action";
 
 export const columns: ColumnDef<MenuItem>[] = [
@@ -33,6 +33,38 @@ export const columns: ColumnDef<MenuItem>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "image",
+    header: "Image",
+    cell: ({ row }) => {
+      const imageUrl: string = row.getValue("image");
+      const [isLoading, setIsLoading] = useState(true);
+
+      useEffect(() => {
+        setIsLoading(true);
+      }, [imageUrl]);
+
+      const handleLoad = () => {
+        setIsLoading(false);
+      };
+
+      return (
+        <div className="rounded-lg w-20 h-20 relative">
+          {isLoading && <MenuItemLoading />}
+          <Suspense fallback={<MenuItemLoading />}>
+            <Image
+              src={imageUrl}
+              alt="food-image"
+              className={`absolute object-cover rounded-full w-20 h-20`}
+              width={80}
+              height={80}
+              onLoad={handleLoad}
+            />
+          </Suspense>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "name",
@@ -75,32 +107,6 @@ export const columns: ColumnDef<MenuItem>[] = [
       }).format(amount);
 
       return <div className="text-left">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "image",
-    header: "Image",
-    cell: ({ row }) => {
-      const imageUrl: string = row.getValue("image");
-      const [isLoading, setIsLoading] = useState(true);
-
-      const handleLoad = () => {
-        setIsLoading(false);
-      };
-
-      return (
-        <div className="rounded-lg w-72 h-48 relative">
-          {isLoading && <MenuItemLoading />}
-          <Image
-            src={imageUrl}
-            alt="food-image"
-            className={`absolute object-cover rounded-lg w-72 h-48`}
-            width={288}
-            height={192}
-            onLoad={handleLoad}
-          />
-        </div>
-      );
     },
   },
 

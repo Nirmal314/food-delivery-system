@@ -16,7 +16,7 @@ import { Row } from "@tanstack/react-table";
 import { MenuItem } from "@/typings";
 import { Session } from "next-auth";
 import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 type DeleteProps = {
   row: Row<MenuItem>;
@@ -37,6 +37,14 @@ const Delete = ({ row, session, extractPublicId }: DeleteProps) => {
       const menuItems = await response.json();
       const menuItemToDelete = menuItems.menuItems[index].id;
 
+      if (!menuItemToDelete) {
+        toast.warning(
+          "No menu found associated to your restaurant, contact to EatEase"
+        );
+        setIsDeleteing(false);
+        return;
+      }
+
       const res = await deleteMenuItems([menuItemToDelete]);
 
       await fetch("/api/deletecloudinary", {
@@ -45,18 +53,14 @@ const Delete = ({ row, session, extractPublicId }: DeleteProps) => {
       });
 
       if (res.success) {
-        toast({
-          description: "Item deleted.",
-        });
+        toast.success("Food item deleted.");
       } else {
-        toast({
-          description: res.error,
-          variant: "destructive",
-        });
+        toast.error(res.error);
       }
       setIsDeleteing(false);
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 
@@ -65,7 +69,7 @@ const Delete = ({ row, session, extractPublicId }: DeleteProps) => {
       <AlertDialog>
         <Button
           asChild
-          disabled={isDeleteing ?? true}
+          disabled={isDeleteing ? true : false}
           className="bg-transparent w-24 hover:bg-[#ef444431] rounded-sm flex justify-start items-center space-x-1 text-destructive px-2 py-1 border-2 border-destructive transition-all duration-300 cursor-pointer"
         >
           <AlertDialogTrigger>

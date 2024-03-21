@@ -19,7 +19,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminSignupSchema } from "@/schemas";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import { adminSignup } from "@/actions/auth/adminsignup";
 
 import { Cuisine } from "@prisma/client";
@@ -32,10 +31,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import FormInput from "@/components/FormInput";
+import { toast } from "sonner";
 
 const Signup = () => {
   const router = useRouter();
-  const { toast } = useToast();
   const [creatingAccount, setCreatingAccount] = useState(false);
   const form = useForm<z.infer<typeof AdminSignupSchema>>({
     resolver: zodResolver(AdminSignupSchema),
@@ -55,20 +54,21 @@ const Signup = () => {
 
   const handleSubmit = async (values: z.infer<typeof AdminSignupSchema>) => {
     setCreatingAccount(true);
+
+    if (values.description === "") {
+      toast.warning(
+        "Your restaurant description is empty, Continuing anyway..."
+      );
+    }
     const response = await adminSignup(values);
+
     if (response.success) {
-      toast({
-        description: response.success,
-      });
+      toast.success(response.success);
       setTimeout(() => {
         router.push("/login");
       }, 3000);
     } else {
-      toast({
-        // @ts-ignore
-        description: response.error,
-        variant: "destructive",
-      });
+      toast.error(response.error);
       setCreatingAccount(false);
     }
   };
