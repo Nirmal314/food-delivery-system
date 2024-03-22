@@ -34,38 +34,32 @@ import { MenuItem } from "@/typings";
 
 const formSchema = z.object({
   foodItem: z.enum([
-    "pizza",
-    "burger",
-    "north indian",
-    "punjabi",
-    "south indian",
-    "gujarati thalis",
-    "pasta",
-    "chinese",
+    "Italian",
+    "North Indian",
+    "Punjabi",
+    "South Indian",
+    "Gujarati",
+    "Chinese",
   ]),
 });
 
 export default function Home() {
   const router = useRouter();
   const SearchableFoodItems = [
-    "pizza",
-    "burger",
-    "north indian",
-    "punjabi",
-    "south indian",
-    "gujarati thalis",
-    "pasta",
-    "chinese",
+    "Italian",
+    "North Indian",
+    "Punjabi",
+    "South Indian",
+    "Gujarati",
+    "Chinese",
   ];
-
-  const [images, setImages] = useState([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   const handleSubmit = ({ foodItem }: z.infer<typeof formSchema>) => {
-    router.push(`/searchfood?q=${foodItem}`);
+    router.push(`/cuisine/${foodItem}`);
   };
   return (
     <>
