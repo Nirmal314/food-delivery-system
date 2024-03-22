@@ -3,11 +3,11 @@ import { type ClassValue } from "clsx";
 import { StaticImageData } from "next/image";
 
 export type FoodItem = {
-  image: StaticImageData;
+  id?: string;
+  imageUrl?: string;
   name: string;
-  price: string;
+  price: number;
   description?: string;
-  location: string;
   isBestSeller: boolean;
   className?: ClassValue[];
 };
@@ -16,11 +16,20 @@ export type FoodItems = {
   foodItems: FoodItem[];
 };
 
+// export type Restaurant = {
+//   image: StaticImageData;
+//   name: string;
+//   description?: string;
+//   location: string;
+//   className?: ClassValue[];
+// };
 export type Restaurant = {
-  image: StaticImageData;
+  id?: string;
+  image?: StaticImageData;
   name: string;
   description?: string;
-  location: string;
+  address: string;
+  phone: string;
   className?: ClassValue[];
 };
 
