@@ -1,0 +1,49 @@
+import FoodItemCard from "@/components/FoodItemCard";
+import React, { Suspense } from "react";
+import pizza from "@/public/home-pizza.jpg";
+import pasta from "@/public/home-pasta.jpg";
+import burger from "@/public/home-burger.jpg";
+import { useSearchParams } from "next/navigation";
+import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
+
+type PageProps = {
+  params: {
+    type: string;
+  };
+};
+
+const CuisinePage = ({ params: { type } }: PageProps) => {
+  const cuisine = type.split("%20").join(" ");
+  const cuisineDb = cuisine.toUpperCase().split(" ").join("_");
+
+  console.log(cuisineDb);
+  return (
+    <>
+      <div className="mt-10 min-h-screen w-full flex flex-col space-y-8 justify-center items-center">
+        <p className="text-5xl text-center text-primary font-bold">
+          You searched for{" "}
+          <span className="text-secondary px-2 py-1 bg-primary">{cuisine}</span>
+        </p>
+        <div className="grid justify-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-8 gap-x-4 w-full p-4">
+          {/* {menuItems?.map((item, i) => (
+          <>
+            <Suspense fallback={<RestaurantLoading />} key={i}>
+              <FoodItemCard
+                imageUrl={item.image}
+                // id={item.id}
+                name={item.name}
+                description={item.description!!}
+                price={item.price}
+                isBestSeller={Math.round(Math.random()) === 0}
+                className={["space-y-0 w-96"]}
+              />
+            </Suspense>
+          </>
+        ))} */}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CuisinePage;
