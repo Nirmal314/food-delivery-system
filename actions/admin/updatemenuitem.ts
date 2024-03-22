@@ -38,25 +38,20 @@ export const updateMenuItem = async (id: string, values: EditMenuItem) => {
   }
 
   try {
-    // if (data.image) {
-    //   const oldImage = await db.menuItem.findUnique({
-    //     where: {
-    //       id: id,
-    //     },
-    //   });
+    if (data.image) {
+      const oldImage = await db.menuItem.findUnique({
+        where: {
+          id: id,
+        },
+      });
 
-    //   const oldImagePublicId = extractPublicId(oldImage?.image!);
+      const oldImagePublicId = extractPublicId(oldImage?.image!);
 
-    //   const cres = await fetch("/api/deletecloudinary", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ selectedImages: oldImagePublicId }),
-    //   });
-
-    //   console.log(JSON.stringify({ selectedImages: oldImagePublicId }));
-    // }
+      const cres = await fetch("http://localhost:3000/api/deletecloudinary", {
+        method: "POST",
+        body: JSON.stringify({ selectedImages: oldImagePublicId }),
+      });
+    }
 
     const updatedMenuitem = await db.menuItem.update({
       where: {
