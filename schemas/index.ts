@@ -12,7 +12,6 @@ const phoneError = "Enter a valid phone number.";
 const nameError = "Please enter a valid name.";
 const cPassError = "Password confirmation must be at least 8 characters long.";
 
-// const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -21,10 +20,6 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 const MAX_FILE_SIZE = 2.5 * 1000000; //2.5 MB
-
-const validFileExtensions = {
-  image: ["jpg", "png", "jpeg", "webp"],
-};
 
 export const LoginSchema = z.object({
   email: z.string().email(emailError),
@@ -76,10 +71,10 @@ export const AdminSignupSchema = z
     address: z
       .string()
       .min(5, "Address must be at least 5 characters long.")
-      .max(40, "Address must not exceed 40 characters."),
+      .max(100, "Address must not exceed 100 characters."),
     description: z
       .string()
-      .max(100, "Description must not exceed 100 characters."),
+      .max(400, "Description must not exceed 400 characters."),
   })
   .refine(
     (data) => {
@@ -127,4 +122,16 @@ export const MenuItemSchemaWithImageString = z.object({
     .number()
     .multipleOf(0.01, "Invalid price, enter only 2 digits after the '.'"),
   image: z.any(),
+  // image: z
+  //   .any()
+  //   .nullable() // Allow null or undefined values
+  //   .optional() // Make the field optional
+  //   .refine(
+  //     (file) => file === null || file?.size <= MAX_FILE_SIZE,
+  //     "Max image size is 2.5MB."
+  //   )
+  //   .refine(
+  //     (file) => file === null || ACCEPTED_IMAGE_TYPES.includes(file?.type),
+  //     "Only .jpg, .jpeg, .png and .webp formats are supported."
+  //   ),
 });

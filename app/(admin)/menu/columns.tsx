@@ -41,10 +41,6 @@ export const columns: ColumnDef<MenuItem>[] = [
       const imageUrl: string = row.getValue("image");
       const [isLoading, setIsLoading] = useState(true);
 
-      useEffect(() => {
-        setIsLoading(true);
-      }, [imageUrl]);
-
       const handleLoad = () => {
         setIsLoading(false);
       };

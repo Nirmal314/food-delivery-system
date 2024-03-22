@@ -129,27 +129,27 @@ export default function Home() {
         </p>
         <div className="flex justify-center items-center space-x-8">
           <FoodItemCard
-            image={burger}
+            // image={burger}
             name="Delicious Burger"
-            price="150"
+            price={150}
             description="A mouthwatering burger with all the fixings. "
-            location="Burger King, Ahmedabad"
+            // address="Burger King, Ahmedabad"
             isBestSeller={true}
           />
           <FoodItemCard
-            image={pizza}
+            // image={pizza}
             name="Tasty Pizza"
-            price="250"
+            price={250}
             description="Freshly baked pizza with your favorite toppings."
-            location="Domino's Pizza, Rajkot"
+            // address="Domino's Pizza, Rajkot"
             isBestSeller={true}
           />
           <FoodItemCard
-            image={pasta}
+            // image={pasta}
             name="Classic Spaghetti"
-            price="180"
+            price={180}
             description="Traditional Italian spaghetti with rich tomato sauce."
-            location="Papa Louise Italian Cuisine, Surat"
+            // address="Papa Louise Italian Cuisine, Surat"
             isBestSeller={true}
           />
         </div>
@@ -167,19 +167,22 @@ export default function Home() {
             image={r1}
             name="Burger King"
             description="Home of the flame-grilled Whopper and fast-food classics."
-            location="Ahmedabad, Gujarat"
+            address="Ahmedabad, Gujarat"
+            phone="8899855874"
           />
           <RestaurantItemCard
             image={r2}
             name="Domino's Pizza"
             description="Delivering hot, freshly-made pizza right to your door."
-            location="Rajkot, Gujarat"
+            address="Rajkot, Gujarat"
+            phone="8899855874"
           />
           <RestaurantItemCard
             image={r3}
             name="Papa Louise Cuisine"
             description="A family-owned Italian restaurant serving authentic dishes."
-            location="Surat, Gujarat"
+            address="Surat, Gujarat"
+            phone="8899855874"
           />
         </div>
       </div>

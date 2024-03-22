@@ -30,13 +30,13 @@ import { updateMenuItem } from "@/actions/admin/updatemenuitem";
 
 const Action = ({ row }: { row: Row<MenuItem> }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const sheetTriggerRef = useRef<HTMLButtonElement | null>(null);
   const form = useForm<z.infer<typeof MenuItemSchemaWithImageString>>({
     resolver: zodResolver(MenuItemSchemaWithImageString),
     defaultValues: {
       name: "",
       description: "",
+      image: null,
     },
   });
 
@@ -53,12 +53,9 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
   const { data: session } = useSession();
 
   const setPrevMenuItem = async () => {
-    // const index = parseInt(row.id);
-
     form.setValue("name", row.getValue("name"));
     form.setValue("description", row.getValue("description"));
     form.setValue("price", row.getValue("price"));
-    // const image: string = row.getValue("image");
   };
 
   const [isImgLoading, setIsImgLoading] = useState(true);
@@ -237,10 +234,7 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
                           isRequired={false}
                           inputTsx={
                             <Input
-                              disabled={
-                                isSubmitting || isLoading ? true : false
-                              }
-                              placeholder={`${isLoading ? "Loading..." : ""}`}
+                              disabled={isSubmitting ? true : false}
                               type="text"
                               {...field}
                             />
@@ -258,8 +252,7 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
                         isRequired={false}
                         inputTsx={
                           <Textarea
-                            placeholder={`${isLoading ? "Loading..." : ""}`}
-                            disabled={isSubmitting || isLoading ? true : false}
+                            disabled={isSubmitting ? true : false}
                             {...field}
                           />
                         }
@@ -275,8 +268,7 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
                         isRequired={false}
                         inputTsx={
                           <Input
-                            disabled={isSubmitting || isLoading ? true : false}
-                            placeholder={`${isLoading ? "Loading..." : ""}`}
+                            disabled={isSubmitting ? true : false}
                             type="number"
                             {...field}
                             onChange={(e) => field.onChange(+e.target.value)}
@@ -315,7 +307,7 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
                         isRequired={false}
                         inputTsx={
                           <Input
-                            disabled={isSubmitting || isLoading ? true : false}
+                            disabled={isSubmitting ? true : false}
                             type="file"
                             {...fileRef}
                           />

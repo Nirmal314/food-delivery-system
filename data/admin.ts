@@ -13,6 +13,18 @@ export const getRestaurantByAdminId = async (id: string) => {
   }
 };
 
+export const getRestaurantByRestaurantId = async (id: string) => {
+  try {
+    const restaurant = await db.restaurant.findUnique({
+      where: { id: id },
+    });
+
+    return restaurant;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getMenuByRestaurantId = async (id: string) => {
   try {
     const menu = await db.menu.findUnique({
