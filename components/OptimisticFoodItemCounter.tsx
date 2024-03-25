@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useOptimistic } from "react";
+import React, { useEffect, useOptimistic } from "react";
 import { Button } from "./ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { updateCountInDb } from "@/actions/count";
@@ -21,6 +21,11 @@ const OptimisticFoodItemCounter = ({ id, count }: OptimisticProps) => {
     // handle db
     await updateCountInDb(amount);
   };
+
+  useEffect(() => {
+    console.log(id);
+  }, []);
+
   return (
     <>
       <div className="py-5">

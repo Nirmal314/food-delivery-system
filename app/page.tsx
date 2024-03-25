@@ -25,7 +25,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import FoodItemCard from "@/components/FoodItemCard";
+import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
 import RestaurantItemCard from "@/components/RestaurantItemCard";
 import { db } from "@/lib/db";
 import { getMenuItemsByMenuId } from "@/data/admin";

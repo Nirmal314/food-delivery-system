@@ -8,10 +8,14 @@ import r3 from "@/public/home-r3.jpg";
 import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
 import { getRestaurants } from "@/actions/user/getrestauranrts";
 import { Restaurants } from "@/typings";
+import { getCartByUserId } from "@/actions/user/getcartbyuserid";
+import { auth } from "@/auth";
 
 const RestaurantsPage = async () => {
+  const session = await auth();
   const { restaurants } = await getRestaurants();
-  console.log(restaurants);
+  const cart = await getCartByUserId(session?.user.id!);
+
   return (
     <>
       <div className="mt-10 min-h-screen w-full flex flex-col space-y-8 justify-center items-center">

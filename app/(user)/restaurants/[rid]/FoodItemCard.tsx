@@ -9,15 +9,13 @@ import {
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { FoodItem } from "@/typings";
-import { MapPinIcon, ShoppingCartIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import OptimisticFoodItemCounter from "./OptimisticFoodItemCounter";
+import OptimisticFoodItemCounter from "@/components/OptimisticFoodItemCounter";
 import AddToCart from "./AddToCart";
 
 const FoodItemCard = async ({
   id,
+  rid,
   imageUrl,
   name,
   price,
@@ -26,14 +24,9 @@ const FoodItemCard = async ({
   className,
 }: FoodItem) => {
   // let count = 0;
-  const res = await fetch("http://localhost:3000/api/count", {
-    cache: "no-cache",
-    next: {
-      tags: ["count"],
-    },
-  });
 
-  const { count } = await res.json();
+  // const { count } = await res.json();
+
   return (
     <>
       <Card
@@ -73,11 +66,12 @@ const FoodItemCard = async ({
             <span className="text-lg font-bold">₹{price}</span>
             <span className="text-lg font-bold">({(1 / 2) * 100}% off)</span>
           </p>
-          <OptimisticFoodItemCounter id={id!!} count={count} />
+          <OptimisticFoodItemCounter id={id!!} count={0} />
+          {/* <OptimisticFoodItemCounter id={id!!} count={count} /> */}
         </CardContent>
 
         <CardFooter className="flex justify-between pb-8 px-4 h-12">
-          <AddToCart />
+          <AddToCart rid={rid!} id={id!} />
         </CardFooter>
       </Card>
     </>

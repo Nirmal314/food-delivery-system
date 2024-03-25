@@ -1,4 +1,4 @@
-import FoodItemCard from "@/components/FoodItemCard";
+import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
 import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
 import {
   getMenuByRestaurantId,
@@ -33,7 +33,8 @@ const PerticularRestaurant = async ({ params: { rid } }: PageProps) => {
             <Suspense fallback={<RestaurantLoading />} key={i}>
               <FoodItemCard
                 imageUrl={item.image}
-                // id={item.id}
+                id={item.id}
+                rid={restaurant?.id}
                 name={item.name}
                 description={item.description!!}
                 price={item.price}

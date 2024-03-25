@@ -11,8 +11,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { USER_REDIRECT_ROUTE } from "@/routes";
 
 const LogoutButton = () => {
+  const router = useRouter();
   return (
     <div>
       <AlertDialog>
@@ -34,7 +37,10 @@ const LogoutButton = () => {
             <Button
               variant={"ghost"}
               className="hover:bg-transparent"
-              onClick={() => signOut()}
+              onClick={() => {
+                signOut();
+                router.push(USER_REDIRECT_ROUTE);
+              }}
             >
               <AlertDialogAction>Yes</AlertDialogAction>
             </Button>
