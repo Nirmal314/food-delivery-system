@@ -1,4 +1,4 @@
-import FoodItemCard from "@/components/FoodItemCard";
+import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
 import React, { Suspense } from "react";
 import pizza from "@/public/home-pizza.jpg";
 import pasta from "@/public/home-pasta.jpg";

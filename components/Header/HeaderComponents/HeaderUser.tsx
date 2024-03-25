@@ -62,17 +62,15 @@ const HeaderUser = ({ session }: any) => {
           <span className="hidden xl:block">Your Orders</span>
         </Link>
         <Sheet>
-          <SheetTrigger className="nav-link">
+          <SheetTrigger className="nav-link relative">
             <ShoppingCartIcon />
             <span className="hidden xl:block">Cart</span>
+            {/* <div className="absolute w-3 h-3 rounded-full animate-pulse repeat-[4] bg-primary -top-1 right-1"></div> */}
           </SheetTrigger>
-          <SheetContent side={"left"} className="z-[100]">
+          <SheetContent side={"right"} className="z-[100]">
             <SheetHeader>
-              <SheetTitle>Are you absolutely sure?</SheetTitle>
-              <SheetDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </SheetDescription>
+              <SheetTitle>Your cart</SheetTitle>
+              <SheetDescription></SheetDescription>
             </SheetHeader>
           </SheetContent>
         </Sheet>

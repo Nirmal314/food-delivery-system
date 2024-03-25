@@ -4,6 +4,7 @@ import { StaticImageData } from "next/image";
 
 export type FoodItem = {
   id?: string;
+  rid?: string;
   imageUrl?: string;
   name: string;
   price: number;
@@ -38,6 +39,7 @@ export type Restaurants = {
 };
 
 export type MenuItem = {
+  id?: string;
   name: string;
   description?: string | null;
   price: number;
