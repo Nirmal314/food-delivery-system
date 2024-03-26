@@ -18,8 +18,8 @@ model User {
   role          UserRole    @default(USER)
   contactNumber String?
   accounts      Account?
-  restaurant    Restaurant?
   Cart          Cart[]
+  restaurant    Restaurant?
 }
 
 model Account {
@@ -48,9 +48,9 @@ model Restaurant {
   address     String
   phone       String
   description String?
+  Cart        Cart?
   menu        Menu?
   admin       User    @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  Cart        Cart?
 }
 
 model Menu {
@@ -67,15 +67,15 @@ model MenuItem {
   description String?
   price       Float
   image       String
-  menu        Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
   CartItem    CartItem[]
+  menu        Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
 }
 
 model Cart {
   id           String     @id @default(cuid())
+  userId       String
   restaurantId String     @unique @default("default-restaurant-id")
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  userId       String
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   items        CartItem[]
 }
@@ -83,10 +83,10 @@ model Cart {
 model CartItem {
   id         String   @id @default(cuid())
   cartId     String
-  cart       Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
   menuItemId String
-  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
   quantity   Int
+  cart       Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
 }
 
 enum UserRole {

@@ -2,9 +2,6 @@
 
 import Image from "next/image";
 import welcome from "@/public/home-img.jpg";
-import pizza from "@/public/home-pizza.jpg";
-import pasta from "@/public/home-pasta.jpg";
-import burger from "@/public/home-burger.jpg";
 import r1 from "@/public/home-r1.jpg";
 import r2 from "@/public/home-r2.jpg";
 import r3 from "@/public/home-r3.jpg";
@@ -27,10 +24,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
 import RestaurantItemCard from "@/components/RestaurantItemCard";
-import { db } from "@/lib/db";
-import { getMenuItemsByMenuId } from "@/data/admin";
-import { use, useState } from "react";
-import { MenuItem } from "@/typings";
+import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
 
 const formSchema = z.object({
   foodItem: z.enum([
@@ -122,7 +116,10 @@ export default function Home() {
           of the month
         </p>
         <div className="flex justify-center items-center space-x-8">
-          <FoodItemCard
+          <RestaurantLoading />
+          <RestaurantLoading />
+          <RestaurantLoading />
+          {/* <FoodItemCard
             // image={burger}
             name="Delicious Burger"
             price={150}
@@ -145,7 +142,7 @@ export default function Home() {
             description="Traditional Italian spaghetti with rich tomato sauce."
             // address="Papa Louise Italian Cuisine, Surat"
             isBestSeller={true}
-          />
+          /> */}
         </div>
       </div>
       <div className="h-screen w-full flex flex-col justify-center items-center space-y-16 p-6">
@@ -158,21 +155,21 @@ export default function Home() {
         </p>
         <div className="flex justify-center items-center space-x-8">
           <RestaurantItemCard
-            image={r1}
+            // image={r1}
             name="Burger King"
             description="Home of the flame-grilled Whopper and fast-food classics."
             address="Ahmedabad, Gujarat"
             phone="8899855874"
           />
           <RestaurantItemCard
-            image={r2}
+            // image={r2}
             name="Domino's Pizza"
             description="Delivering hot, freshly-made pizza right to your door."
             address="Rajkot, Gujarat"
             phone="8899855874"
           />
           <RestaurantItemCard
-            image={r3}
+            // image={r3}
             name="Papa Louise Cuisine"
             description="A family-owned Italian restaurant serving authentic dishes."
             address="Surat, Gujarat"

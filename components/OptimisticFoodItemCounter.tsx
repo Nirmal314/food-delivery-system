@@ -1,30 +1,49 @@
 "use client";
 
-import React, { useEffect, useOptimistic } from "react";
+import React, { useEffect, useOptimistic, useState } from "react";
 import { Button } from "./ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { updateCountInDb } from "@/actions/count";
+import { updateCartItemCount } from "@/actions/user/updatecartitemcount";
+import { useSession } from "next-auth/react";
+import OptimisticTotalPrice from "./OptimisticTotalPrice";
+import { deleteCartItem } from "@/actions/user/deletecartitem";
 
 type OptimisticProps = {
   id: string;
   count: number;
+  price: number;
+  total: number;
 };
 
-const OptimisticFoodItemCounter = ({ id, count }: OptimisticProps) => {
+const OptimisticFoodItemCounter = ({
+  id,
+  count,
+  price,
+  total,
+}: OptimisticProps) => {
   const [optimisticCount, addOptimisticCount] = useOptimistic(
     count,
     (state, amount) => state + Number(amount)
   );
+  const [optimisticTotalAmount, setOptimisticTotalAmount] = useState(
+    count * price
+  );
+  const [optimisticOverallTotal, setOptimisticOverallTotal] = useState(total);
 
   const updateCount = async (amount: number) => {
-    addOptimisticCount(amount);
-    // handle db
-    await updateCountInDb(amount);
+    if (optimisticCount + amount >= 0) {
+      addOptimisticCount(amount);
+      setOptimisticTotalAmount(optimisticTotalAmount + price);
+      setOptimisticOverallTotal(optimisticOverallTotal + price);
+      // handle db
+      const res = await updateCartItemCount(id, amount);
+      console.log(res);
+      if (res.quantity === 0) {
+        await deleteCartItem(res.id);
+      }
+    }
   };
-
-  useEffect(() => {
-    console.log(id);
-  }, []);
 
   return (
     <>
@@ -38,6 +57,8 @@ const OptimisticFoodItemCounter = ({ id, count }: OptimisticProps) => {
             <MinusIcon className="w-4 h-4" />
           </Button>
           <div>{optimisticCount}</div>
+          {/* <div>{optimisticTotalAmount}</div> */}
+          {/* <div>{optimisticOverallTotal}</div> */}
           <Button
             variant={"ghost"}
             className="hover:bg-transparent"

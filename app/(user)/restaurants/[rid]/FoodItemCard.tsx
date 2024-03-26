@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -10,10 +12,13 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { FoodItem } from "@/typings";
 import { cn } from "@/lib/utils";
-import OptimisticFoodItemCounter from "@/components/OptimisticFoodItemCounter";
-import AddToCart from "./AddToCart";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { MinusIcon, PlusIcon, ShoppingCartIcon } from "lucide-react";
+import addToCart from "@/actions/user/addtocart";
+import { toast } from "sonner";
 
-const FoodItemCard = async ({
+const FoodItemCard = ({
   id,
   rid,
   imageUrl,
@@ -23,9 +28,29 @@ const FoodItemCard = async ({
   isBestSeller,
   className,
 }: FoodItem) => {
-  // let count = 0;
+  const [quantity, setQuantity] = useState(0);
+  const [isAdding, setIsAdding] = useState(false);
 
-  // const { count } = await res.json();
+  const handleAddToCart = async () => {
+    if (quantity !== 0) {
+      setIsAdding(true);
+      const res = await addToCart(id!, rid!, quantity);
+
+      if (res?.success) {
+        toast.success(res.success);
+      } else {
+        toast.error(res?.error as string);
+      }
+      setQuantity(0);
+      setIsAdding(false);
+    }
+  };
+
+  const updateCount = async (amount: number) => {
+    if (quantity + amount >= 0) {
+      setQuantity(quantity + Number(amount));
+    }
+  };
 
   return (
     <>
@@ -62,16 +87,42 @@ const FoodItemCard = async ({
 
         <CardContent className="p-4 h-36">
           <p className="text-lg space-x-2 text-gray-800">
-            <span className="text-sm line-through">₹{price * 2}</span>
-            <span className="text-lg font-bold">₹{price}</span>
+            <span className="text-sm line-through">₹ {price * 2}</span>
+            <span className="text-lg font-bold">₹ {price}</span>
             <span className="text-lg font-bold">({(1 / 2) * 100}% off)</span>
           </p>
-          <OptimisticFoodItemCounter id={id!!} count={0} />
-          {/* <OptimisticFoodItemCounter id={id!!} count={count} /> */}
+          <div className="py-5">
+            <div className="border flex items-center justify-between w-[40%] rounded-md space-x-2">
+              <Button
+                variant={"ghost"}
+                className="hover:bg-transparent"
+                onClick={() => updateCount(-1)}
+              >
+                <MinusIcon className="w-4 h-4" />
+              </Button>
+              <div>{quantity}</div>
+              <Button
+                variant={"ghost"}
+                className="hover:bg-transparent"
+                onClick={() => updateCount(1)}
+              >
+                <PlusIcon className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
         </CardContent>
 
         <CardFooter className="flex justify-between pb-8 px-4 h-12">
-          <AddToCart rid={rid!} id={id!} />
+          <div>
+            <Button
+              disabled={isAdding ?? false}
+              onClick={() => handleAddToCart()}
+              className="flex space-x-1 items-center"
+            >
+              <ShoppingCartIcon className="w-4 h-4" />
+              <span>{isAdding ? "Adding..." : "Add to cart"}</span>
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </>

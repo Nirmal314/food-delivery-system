@@ -46,7 +46,7 @@ export const getMenuItemByMenuItemId = async (
         id: id,
       },
     });
-    console.log("first", menuItem);
+
     return menuItem;
   } catch (error) {
     console.log(error);
