@@ -6,6 +6,8 @@ import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
 const inter = Inter({ subsets: ["latin"] });
 import { Toaster } from "@/components/ui/sonner";
+import { getCartByUserId } from "@/actions/user/getcartbyuserid";
+import { getCartItemsByCartId } from "@/actions/user/getcartitemsbycartid";
 
 export const metadata: Metadata = {
   title: "EatEase",
@@ -17,6 +19,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
   return (
     <html lang="en">
       <body className={inter.className}>

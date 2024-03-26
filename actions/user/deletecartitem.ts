@@ -1,0 +1,15 @@
+"use server";
+
+import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
+
+export const deleteCartItem = async (id: string) => {
+  const deletedItem = await db.cartItem.delete({
+    where: {
+      id: id,
+    },
+  });
+  revalidatePath("/cart");
+  revalidatePath("/restaurants/[rid]/page.tsx", "page");
+  console.log(deletedItem);
+};

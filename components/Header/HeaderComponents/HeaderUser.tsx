@@ -1,7 +1,19 @@
+import { getCartByUserId } from "@/actions/user/getcartbyuserid";
+import { getCartItemsByCartId } from "@/actions/user/getcartitemsbycartid";
 import LogoutButton from "@/components/LogoutButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import {
   Popover,
   PopoverContent,
@@ -15,6 +27,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { getMenuItemByMenuItemId } from "@/data/admin";
 import {
   HomeIcon,
   ListFilterIcon,
@@ -24,7 +37,17 @@ import {
   UtensilsCrossedIcon,
 } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 const HeaderUser = ({ session }: any) => {
   const getInitials = (name: string) => {
@@ -61,19 +84,11 @@ const HeaderUser = ({ session }: any) => {
           <ListOrderedIcon />
           <span className="hidden xl:block">Your Orders</span>
         </Link>
-        <Sheet>
-          <SheetTrigger className="nav-link relative">
-            <ShoppingCartIcon />
-            <span className="hidden xl:block">Cart</span>
-            {/* <div className="absolute w-3 h-3 rounded-full animate-pulse repeat-[4] bg-primary -top-1 right-1"></div> */}
-          </SheetTrigger>
-          <SheetContent side={"right"} className="z-[100]">
-            <SheetHeader>
-              <SheetTitle>Your cart</SheetTitle>
-              <SheetDescription></SheetDescription>
-            </SheetHeader>
-          </SheetContent>
-        </Sheet>
+        <Link className="nav-link" href={"/cart"}>
+          <ShoppingCartIcon />
+          <span className="hidden xl:block">Cart</span>
+        </Link>
+
         <div className="flex items-center justify-center space-x-2">
           <Popover>
             <PopoverTrigger asChild>

@@ -1,8 +1,12 @@
 "use server";
 
 import { auth } from "@/auth";
-import { getMenuItemByMenuItemId } from "@/data/admin";
+import {
+  getMenuItemByMenuItemId,
+  getRestaurantByRestaurantId,
+} from "@/data/admin";
 import { db } from "@/lib/db";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export default async function addToCart(
   menuItemId: string,
@@ -13,7 +17,6 @@ export default async function addToCart(
   const userId = session?.user?.id;
   const menuItem = await getMenuItemByMenuItemId(menuItemId);
 
-  // Validate the restaurantId
   const restaurant = await db.restaurant.findUnique({
     where: { id: restaurantId },
   });
@@ -42,23 +45,53 @@ export default async function addToCart(
     console.log("no cart");
   }
 
-  if (cart?.restaurantId !== restaurantId)
+  if (cart?.restaurantId !== restaurantId) {
+    const restaurantInCart = await getRestaurantByRestaurantId(
+      cart.restaurantId
+    );
     return {
-      error: `You can choose your dish from the ${restaurant.name}.`,
+      error: `You can choose your dish from the ${restaurantInCart?.name}. or discard their items to proceed from ${restaurant.name}`,
     };
+  }
 
   try {
-    const add = await db.cartItem.create({
-      data: {
-        cartId: cart?.id as string,
+    const existingItem = await db.cartItem.findFirst({
+      where: {
         menuItemId: menuItemId,
-        quantity: quantity,
       },
     });
 
-    console.log(add);
-    return { success: `Added ${menuItem?.name} to your cart.` };
+    if (existingItem) {
+      const newQuantity = existingItem.quantity + Number(quantity);
+
+      const updateExistingItem = await db.cartItem.update({
+        where: {
+          id: existingItem.id,
+        },
+        data: {
+          quantity: newQuantity,
+        },
+      });
+      revalidatePath("/cart");
+
+      return {
+        success: `Updated quantity of ${menuItem?.name} from ${
+          newQuantity - quantity
+        } to ${newQuantity}.`,
+      };
+    } else {
+      const add = await db.cartItem.create({
+        data: {
+          cartId: cart?.id as string,
+          menuItemId: menuItemId,
+          quantity: quantity,
+        },
+      });
+      revalidatePath("/cart");
+      return { success: `Added ${quantity} ${menuItem?.name} to your cart.` };
+    }
   } catch (error) {
     console.log(error);
+    return { error };
   }
 }
