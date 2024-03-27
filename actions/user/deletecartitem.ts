@@ -9,6 +9,7 @@ export const deleteCartItem = async (id: string) => {
       id: id,
     },
   });
+
   revalidatePath("/cart");
   revalidatePath("/restaurants/[rid]/page.tsx", "page");
   return { success: "Item deleted." };

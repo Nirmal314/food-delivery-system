@@ -5,6 +5,7 @@ import { StaticImageData } from "next/image";
 export type FoodItem = {
   id?: string;
   rid?: string;
+  cid?: string;
   imageUrl?: string;
   name: string;
   price: number;

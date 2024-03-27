@@ -21,6 +21,7 @@ import { toast } from "sonner";
 const FoodItemCard = ({
   id,
   rid,
+  cid,
   imageUrl,
   name,
   price,
@@ -38,8 +39,8 @@ const FoodItemCard = ({
 
       if (res?.success) {
         toast.success(res.success);
-      } else {
-        toast.error(res?.error as string);
+      } else if (res?.error) {
+        toast.error(res.error as string);
       }
       setQuantity(0);
       setIsAdding(false);

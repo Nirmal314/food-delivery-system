@@ -22,13 +22,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { LoginSchema } from "@/schemas";
 import { login } from "@/actions/auth/login";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 const Signin = () => {
   const [credentialsLoggingIn, setCredentialsLoggingIn] = useState(false);
   const [googleLoggingIn, setGoogleLoggingIn] = useState(false);
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const urlError = () => {
     if (searchParams.get("error")) {
       switch (searchParams.get("error")) {
@@ -68,9 +70,11 @@ const Signin = () => {
   const handleGoogleLogin = () => {
     setGoogleLoggingIn(true);
 
-    signIn("google", {
-      callbackUrl: "/",
-    });
+    router.push("/login/googlelogin");
+
+    // signIn("google", {
+    //   callbackUrl: "/",
+    // });
   };
 
   return (

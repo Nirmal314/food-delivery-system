@@ -17,6 +17,7 @@ import CartRowLoading from "@/components/LoadingSkeletons/CartRowLoading";
 import Link from "next/link";
 import CartTotalLoading from "@/components/LoadingSkeletons/CartTotalLoading";
 import CartItem from "./components/CartItem";
+import { getCartByUserId } from "@/actions/user/getcartbyuserid";
 
 type MenuItem = {
   id: string;
@@ -54,7 +55,7 @@ const Cart = async () => {
   let totalAmount = 0;
   let restaurant = null;
 
-  if (cartItems.cartItems.length !== 0) {
+  if (cartItems && cartItems.cartItems.length !== 0) {
     for (const item of cartItems.cartItems) {
       const itemRes = await fetch(
         `http://localhost:3000/api/menuitem/${item.menuItemId}`
@@ -62,13 +63,14 @@ const Cart = async () => {
       const { menuItem } = await itemRes.json();
       cart.push({ ...item, menuItem });
     }
-    console.log(cart);
     totalAmount = getTotalAmount(cart);
 
     restaurant = await getRestaurantByMenuId(cart[0].menuItem.menuId);
   } else {
     await deleteCartByUserId(session?.user.id!);
   }
+
+  const cartData = await getCartByUserId(session?.user.id!);
 
   return (
     <>
@@ -104,7 +106,12 @@ const Cart = async () => {
                   }
                 >
                   {cart.map((item, i) => (
-                    <CartItem key={i} item={item} totalAmount={totalAmount} />
+                    <CartItem
+                      key={i}
+                      cid={cartData.cart?.id!}
+                      item={item}
+                      totalAmount={totalAmount}
+                    />
                   ))}
                 </Suspense>
               </TableBody>
@@ -122,7 +129,7 @@ const Cart = async () => {
             </Table>
           </div>
 
-          <div className="mt-12 bg-gray-100 p-6 rounded-lg shadow-md">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h2 className="text-xl font-bold mb-2">Order Summary</h2>
@@ -139,23 +146,30 @@ const Cart = async () => {
               <h3 className="text-lg font-bold mb-2">Delivery Details</h3>
               <p className="text-gray-600 mb-2">
                 Address:{" "}
-                <span className="font-bold">123 Main Street, City</span>
+                <span className="font-bold">{session?.user.address}</span>
               </p>
             </div>
           </div>
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <h1 className="text-4xl font-bold text-primary mt-8">
-            Your cart is empty
-          </h1>
-          <p className="text-gray-600 text-center">
-            Looks like you haven't added any items to your cart yet. Explore our
-            wide range of restaurants and cuisines to find something delicious!
-          </p>
-          <Link href="/restaurants">
-            <Button>Explore restaurants</Button>
-          </Link>
+        <div className="w-full h-screen flex justify-center items-center">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <h1 className="text-4xl font-bold text-primary">
+                Your cart is empty
+              </h1>
+              <p className="text-gray-600 text-center">
+                Looks like you haven't added any items to your cart yet. Explore
+                our wide range of restaurants and cuisines to find something
+                delicious!
+              </p>
+              <div className="flex items-center space-x-4">
+                <Link href="/restaurants">
+                  <Button>Explore restaurants</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </>

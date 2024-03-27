@@ -11,32 +11,45 @@ import { Restaurants } from "@/typings";
 import { getCartByUserId } from "@/actions/user/getcartbyuserid";
 import { auth } from "@/auth";
 
+const getGridColumns = (length: number) => {
+  switch (true) {
+    case length === 1:
+      return "grid-cols-1";
+    case length === 2:
+      return "grid-cols-2";
+    case length === 3:
+      return "grid-cols-3";
+    default:
+      return "grid-cols-4";
+  }
+};
+
 const RestaurantsPage = async () => {
-  const session = await auth();
   const { restaurants } = await getRestaurants();
-  const cart = await getCartByUserId(session?.user.id!);
 
   return (
     <>
-      <div className="mt-10 min-h-screen w-full flex flex-col space-y-8 justify-center items-center">
-        <p className="text-5xl text-center text-primary font-bold">
+      <div className="h-screen w-full flex flex-col space-y-8 justify-center items-center">
+        <p className="text-5xl mt-10 text-center text-primary font-bold">
           Restaurants available
         </p>
-        <div className="grid justify-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-8 gap-x-4 w-full p-4">
+        <div
+          className={`w-full grid justify-items-center gap-y-8 gap-x-4 justify-center ${getGridColumns(
+            restaurants?.length!
+          )}`}
+        >
           {restaurants?.map((restaurant, i) => (
-            <>
-              <Suspense fallback={<RestaurantLoading />} key={i}>
+            <div key={i} className="max-w-[24rem]">
+              <Suspense fallback={<RestaurantLoading />}>
                 <RestaurantItemCard
-                  // image={restaurant.image}
                   id={restaurant.id}
                   name={restaurant.name}
                   description={restaurant.description!!}
                   address={restaurant.address}
                   phone={restaurant.phone}
-                  className={["space-y-0 w-96"]}
                 />
               </Suspense>
-            </>
+            </div>
           ))}
         </div>
       </div>

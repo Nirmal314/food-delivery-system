@@ -45,7 +45,6 @@ const Signup = () => {
       passwordConfirm: "",
       contactNumber: "",
       restaurantName: "",
-      restaurantPhone: "",
       cuisine: "",
       address: "",
       description: "",
@@ -98,7 +97,7 @@ const Signup = () => {
                 className="w-full h-3/4 flex flex-col gap-4"
               >
                 <div className="flex justify-evenly p-4 w-full">
-                  <div className="w-1/3 flex flex-col space-y-7">
+                  <div className="w-1/3 flex flex-col space-y-3.5">
                     <FormField
                       control={form.control}
                       name="name"
@@ -200,7 +199,7 @@ const Signup = () => {
                       }}
                     />
                   </div>
-                  <div className="w-1/3 flex flex-col space-y-2">
+                  <div className="w-1/3 flex flex-col space-y-4">
                     <FormField
                       control={form.control}
                       name="restaurantName"
@@ -221,7 +220,7 @@ const Signup = () => {
                         );
                       }}
                     />
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="restaurantPhone"
                       render={({ field }) => {
@@ -240,7 +239,7 @@ const Signup = () => {
                           />
                         );
                       }}
-                    />
+                    /> */}
 
                     <FormField
                       control={form.control}
