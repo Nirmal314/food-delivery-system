@@ -17,9 +17,11 @@ model User {
   password      String?
   role          UserRole    @default(USER)
   contactNumber String?
+  address       String?
   accounts      Account?
   Cart          Cart[]
   restaurant    Restaurant?
+  Order         Order[]
 }
 
 model Account {
@@ -51,6 +53,8 @@ model Restaurant {
   Cart        Cart?
   menu        Menu?
   admin       User    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([cuisine, id])
 }
 
 model Menu {
@@ -58,6 +62,8 @@ model Menu {
   restaurantId String     @unique
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   items        MenuItem[]
+
+  @@index([restaurantId])
 }
 
 model MenuItem {
@@ -69,6 +75,8 @@ model MenuItem {
   image       String
   CartItem    CartItem[]
   menu        Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
+
+  @@index([menuId])
 }
 
 model Cart {
@@ -78,6 +86,9 @@ model Cart {
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   items        CartItem[]
+  Order        Order[]
+
+  @@index([userId])
 }
 
 model CartItem {
@@ -87,6 +98,21 @@ model CartItem {
   quantity   Int
   cart       Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@index([cartId])
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  cartId      String
+  cart        Cart        @relation(fields: [cartId], references: [id])
+  status      OrderStatus
+  totalAmount Float
+  createdAt   DateTime    @default(now())
+
+  @@index([userId])
 }
 
 enum UserRole {
@@ -101,4 +127,11 @@ enum Cuisine {
   SOUTH_INDIAN
   GUJARATI
   CHINESE
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
 }
