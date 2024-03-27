@@ -57,6 +57,7 @@ const OptimisticFoodItemCounter = ({
             <MinusIcon className="w-4 h-4" />
           </Button>
           <div>{optimisticCount}</div>
+          {/* TODO: figure out how to use these optimistic values */}
           {/* <div>{optimisticTotalAmount}</div> */}
           {/* <div>{optimisticOverallTotal}</div> */}
           <Button

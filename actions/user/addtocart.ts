@@ -41,8 +41,6 @@ export default async function addToCart(
         },
       },
     });
-
-    console.log("no cart");
   }
 
   if (cart?.restaurantId !== restaurantId) {
