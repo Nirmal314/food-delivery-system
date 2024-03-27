@@ -31,6 +31,14 @@ export const LoginSchema = z.object({
     .regex(/[0-9]/, pass4Error),
 });
 
+export const GoogleLoginSchema = z.object({
+  address: z
+    .string()
+    .min(5, "Address must be at least 5 characters long.")
+    .max(100, "Address must not exceed 100 characters."),
+  contactNumber: z.string().regex(phoneRegex, phoneError),
+});
+
 export const SignupSchema = z
   .object({
     email: z.string().email(emailError),
@@ -43,6 +51,10 @@ export const SignupSchema = z
       .regex(/[0-9]/, pass4Error),
     passwordConfirm: z.string().min(8, cPassError),
     contactNumber: z.string().regex(phoneRegex, phoneError),
+    address: z
+      .string()
+      .min(5, "Address must be at least 5 characters long.")
+      .max(100, "Address must not exceed 100 characters."),
   })
   .refine(
     (data) => {
@@ -66,7 +78,6 @@ export const AdminSignupSchema = z
     passwordConfirm: z.string().min(8, cPassError),
     contactNumber: z.string().regex(phoneRegex, phoneError),
     restaurantName: z.string().min(2).regex(nameRegex, nameError),
-    restaurantPhone: z.string().regex(phoneRegex, phoneError),
     cuisine: z.string().min(1, "Required field."),
     address: z
       .string()

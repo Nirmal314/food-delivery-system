@@ -12,10 +12,12 @@ import {
 import { UserRole } from "@prisma/client";
 import { auth } from "./auth";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 // @ts-ignore
 export default auth(async (req) => {
   const session = await auth();
+  const currentCookies = cookies();
 
   const isLoggedIn = !!req.auth;
   const isAdmin = session?.user?.role === UserRole.ADMIN;
@@ -64,6 +66,12 @@ export default auth(async (req) => {
 
   if (!isLoggedIn && isUserRoute) {
     return Response.redirect(new URL("/login", nextUrl));
+  }
+
+  if (isLoggedIn) {
+    if (currentCookies.get("address")) currentCookies.delete("address");
+    if (currentCookies.get("contactNumber"))
+      currentCookies.delete("contactNumber");
   }
 
   return null;

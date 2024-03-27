@@ -10,7 +10,8 @@ export const getCartByUserId = async (userId: string) => {
       },
     });
 
-    return { cart };
+    if (cart) return { cart };
+    return { error: "Cart not found." };
   } catch (e) {
     console.log(e);
     return { error: "Something went wrong." };

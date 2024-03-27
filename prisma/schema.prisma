@@ -50,7 +50,7 @@ model Restaurant {
   address     String
   phone       String
   description String?
-  Cart        Cart?
+  carts       Cart[]
   menu        Menu?
   admin       User    @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
@@ -82,9 +82,9 @@ model MenuItem {
 model Cart {
   id           String     @id @default(cuid())
   userId       String
-  restaurantId String     @unique @default("default-restaurant-id")
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   items        CartItem[]
   Order        Order[]
 

@@ -5,10 +5,11 @@ import { revalidatePath } from "next/cache";
 
 export const updateCartItemCount = async (
   menuItemId: string,
+  cartId: string,
   amount: number
 ) => {
   const cartItem = await db.cartItem.findFirst({
-    where: { menuItemId: menuItemId },
+    where: { menuItemId: menuItemId, cartId: cartId },
   });
 
   if (!cartItem) {

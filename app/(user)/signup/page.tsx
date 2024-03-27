@@ -21,6 +21,8 @@ import { signup } from "@/actions/auth/signup";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import FormInput from "@/components/FormInput";
+import { Textarea } from "@/components/ui/textarea";
 
 const Signup = () => {
   const router = useRouter();
@@ -31,6 +33,7 @@ const Signup = () => {
       email: "",
       name: "",
       password: "",
+      address: "",
       passwordConfirm: "",
       contactNumber: "",
     },
@@ -53,7 +56,7 @@ const Signup = () => {
   return (
     <>
       <div className="w-full h-screen flex flex-col justify-center items-center space-y-10">
-        <Card className="w-[30%]">
+        <Card className="w-[60%]">
           <CardHeader>
             <CardTitle>
               <p className="text-center text-4xl font-bold text-primary">
@@ -61,119 +64,144 @@ const Signup = () => {
               </p>
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-center items-center">
+          <CardContent className="flex w-full justify-center items-center">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleSubmit)}
-                className="max-w-md w-full flex flex-col gap-4"
+                className="w-full h-3/4 flex flex-col gap-4"
               >
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Email Address</FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled={creatingAccount ? true : false}
-                            placeholder="Enter your email address"
-                            type="email"
-                            {...field}
+                <div className="flex justify-evenly p-4 w-full">
+                  <div className="w-1/3 flex flex-col space-y-3.5">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => {
+                        return (
+                          <FormInput
+                            formLabel="Full Name"
+                            isRequired={true}
+                            inputTsx={
+                              <Input
+                                disabled={creatingAccount ? true : false}
+                                placeholder="Enter your full name"
+                                type="text"
+                                {...field}
+                              />
+                            }
                           />
-                        </FormControl>
-                        <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled={creatingAccount ? true : false}
-                            placeholder="Enter your full name"
-                            type="text"
-                            {...field}
+                        );
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => {
+                        return (
+                          <FormInput
+                            formLabel="Email Address"
+                            isRequired={true}
+                            inputTsx={
+                              <Input
+                                disabled={creatingAccount ? true : false}
+                                placeholder="Enter your email address"
+                                type="email"
+                                {...field}
+                              />
+                            }
                           />
-                        </FormControl>
-                        <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="contactNumber"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Contact Number</FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled={creatingAccount ? true : false}
-                            placeholder="Enter your contact number"
-                            type="tele"
-                            {...field}
+                        );
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormInput
+                          formLabel="Address"
+                          isRequired={true}
+                          inputTsx={
+                            <Textarea
+                              placeholder="Enter your full address"
+                              disabled={creatingAccount ? true : false}
+                              {...field}
+                            />
+                          }
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="w-1/3 flex flex-col space-y-8">
+                    <FormField
+                      control={form.control}
+                      name="contactNumber"
+                      render={({ field }) => {
+                        return (
+                          <FormInput
+                            formLabel="Contact Number"
+                            isRequired={true}
+                            inputTsx={
+                              <Input
+                                disabled={creatingAccount ? true : false}
+                                placeholder="Enter your contact number"
+                                type="tele"
+                                {...field}
+                              />
+                            }
                           />
-                        </FormControl>
-                        <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled={creatingAccount ? true : false}
-                            placeholder="Password"
-                            type="password"
-                            {...field}
+                        );
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => {
+                        return (
+                          <FormInput
+                            formLabel="Password"
+                            isRequired={true}
+                            inputTsx={
+                              <Input
+                                disabled={creatingAccount ? true : false}
+                                placeholder="Password"
+                                type="password"
+                                {...field}
+                              />
+                            }
                           />
-                        </FormControl>
-                        <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="passwordConfirm"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Password confirm</FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled={creatingAccount ? true : false}
-                            placeholder="Password confirm"
-                            type="password"
-                            {...field}
+                        );
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="passwordConfirm"
+                      render={({ field }) => {
+                        return (
+                          <FormInput
+                            formLabel="Password confirm"
+                            isRequired={true}
+                            inputTsx={
+                              <Input
+                                disabled={creatingAccount ? true : false}
+                                placeholder="Confirm password"
+                                type="password"
+                                {...field}
+                              />
+                            }
                           />
-                        </FormControl>
-                        <FormMessage className="px-3 py-2 text-gray-50 bg-red-500 rounded-md" />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <Button
-                  disabled={creatingAccount ? true : false}
-                  type="submit"
-                  className="w-full"
-                >
-                  {creatingAccount ? "Creating account..." : "Create account"}
-                </Button>
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-center w-full">
+                  <Button
+                    disabled={creatingAccount ? true : false}
+                    type="submit"
+                    className="w-1/2"
+                  >
+                    {creatingAccount ? "Creating account..." : "Create account"}
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>

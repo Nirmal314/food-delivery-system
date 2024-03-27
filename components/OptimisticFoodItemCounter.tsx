@@ -11,6 +11,7 @@ import { deleteCartItem } from "@/actions/user/deletecartitem";
 
 type OptimisticProps = {
   id: string;
+  cid: string;
   count: number;
   price: number;
   total: number;
@@ -19,6 +20,7 @@ type OptimisticProps = {
 const OptimisticFoodItemCounter = ({
   id,
   count,
+  cid,
   price,
   total,
 }: OptimisticProps) => {
@@ -36,11 +38,12 @@ const OptimisticFoodItemCounter = ({
       addOptimisticCount(amount);
       setOptimisticTotalAmount(optimisticTotalAmount + price);
       setOptimisticOverallTotal(optimisticOverallTotal + price);
-      // handle db
-      const res = await updateCartItemCount(id, amount);
-      console.log(res);
+
+      // ! handle db
+      const res = await updateCartItemCount(id, cid, amount);
       if (res.quantity === 0) {
-        await deleteCartItem(res.id);
+        const resp = await deleteCartItem(res.id);
+        console.log(resp);
       }
     }
   };

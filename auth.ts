@@ -3,9 +3,10 @@ import NextAuth from "next-auth";
 import authConfig from "./auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "./lib/db";
-import { getUserById } from "./data/user";
+import { getUserByEmail, getUserById } from "./data/user";
 import { UserRole } from "@prisma/client";
 import { getMenuByRestaurantId, getRestaurantByAdminId } from "./data/admin";
+import { cookies } from "next/headers";
 
 export const {
   handlers: { GET, POST },
@@ -32,6 +33,9 @@ export const {
       if (token.role && session.user)
         session.user.role = token.role as UserRole;
 
+      if (token.role === UserRole.USER)
+        session.user.address = token.address as string;
+
       if (token.role === UserRole.ADMIN) {
         session.user.restaurantId = token.restaurantId as string;
         session.user.menuId = token.menuId as string;
@@ -54,6 +58,9 @@ export const {
 
       token.role = existingUser.role;
 
+      if (existingUser.role === UserRole.USER)
+        token.address = existingUser.address;
+
       if (existingUser.role === UserRole.ADMIN) {
         const restaurant = await getRestaurantByAdminId(token.sub);
         token.restaurantId = restaurant?.id;
@@ -66,12 +73,42 @@ export const {
     },
     //TODO: email verification
 
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user.id);
+    async signIn({ user, credentials, account, email, profile }) {
+      // TODO: try to figure out how to use { credentials }
+      // console.log("credentials: ", credentials);
+      // const { address, contactNumber } = credentials || {};
+      // console.log({ address, contactNumber });
 
-    //   if (!existingUser || !existingUser.emailVerified) return false;
-    //   return true;
-    // },
+      // const { address, contactNumber } = credentials as {
+      //   address: string;
+      //   contactNumber: string;
+      // };
+
+      const currentCookies = cookies();
+      const address = currentCookies.get("address")?.value;
+      const contactNumber = currentCookies.get("contactNumber")?.value;
+
+      const existingUser = await getUserByEmail(user?.email as string);
+      if (!existingUser) {
+        const res = await db.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            address,
+            contactNumber,
+          },
+        });
+        console.log(res);
+        // TODO: somehow add address and contactNumber to google account
+        console.log("new user");
+
+        if (currentCookies.get("address")) currentCookies.delete("address");
+        if (currentCookies.get("contactNumber"))
+          currentCookies.delete("contactNumber");
+      }
+      return true;
+    },
   },
   ...authConfig,
   adapter: PrismaAdapter(db),

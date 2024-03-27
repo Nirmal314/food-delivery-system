@@ -13,7 +13,8 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
 
   // ? get validated values
 
-  const { email, password, name, contactNumber } = validatedFields.data;
+  const { email, password, name, contactNumber, address } =
+    validatedFields.data;
 
   const hashedPassword = await bcrypt.hash(password, 11);
 
@@ -33,6 +34,7 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
         email,
         password: hashedPassword,
         contactNumber,
+        address,
       },
     });
   } catch (e) {

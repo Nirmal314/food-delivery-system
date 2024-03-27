@@ -4,7 +4,7 @@ export const authRoutes = ["/login", "/signup", "/adminsignup"];
 
 export const adminRoutes = ["/dashboard", "/menu", "/orders"];
 
-export const userRoutes = ["/yourorders"];
+export const userRoutes = ["/yourorders", "/cart"];
 
 export const apiAuthPrefix = "/api/auth";
 

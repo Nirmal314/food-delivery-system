@@ -7,6 +7,7 @@ import {
 } from "@/data/admin";
 import { db } from "@/lib/db";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 export default async function addToCart(
   menuItemId: string,
@@ -15,6 +16,11 @@ export default async function addToCart(
 ) {
   const session = await auth();
   const userId = session?.user?.id;
+
+  if (!userId) {
+    redirect("/login");
+  }
+
   const menuItem = await getMenuItemByMenuItemId(menuItemId);
 
   const restaurant = await db.restaurant.findUnique({
@@ -41,6 +47,8 @@ export default async function addToCart(
         },
       },
     });
+
+    console.log("cart created");
   }
 
   if (cart?.restaurantId !== restaurantId) {
@@ -56,8 +64,11 @@ export default async function addToCart(
     const existingItem = await db.cartItem.findFirst({
       where: {
         menuItemId: menuItemId,
+        cartId: cart.id,
       },
     });
+
+    console.log("existingItem", existingItem);
 
     if (existingItem) {
       const newQuantity = existingItem.quantity + Number(quantity);
