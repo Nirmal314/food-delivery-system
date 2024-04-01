@@ -1,0 +1,67 @@
+@startuml
+!theme plain
+
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+
+skinparam linetype ortho
+
+' Define actors
+actor Customer
+actor Admin
+actor "Payment Gateway" as Payment
+
+' Define systems
+rectangle "Frontend (Next.js + Tailwind CSS + Shaden UI)" as Frontend {
+}
+
+rectangle "Backend (Next.js Serverless)" as Backend {
+}
+
+database "PostgreSQL (Serverless)" as Database
+
+' Define interactions
+Customer --> Frontend : Accesses\n1. Landing Page\n2. Restaurant Listings\n3. Menu Details\n4. Cart & Checkout\n5. User Authentication
+Admin --> Frontend : Accesses\n1. Dashboard\n2. Menu Management\n3. Order Management
+
+Frontend --> Backend : Sends User Actions
+Backend --> Database : CRUD Operations
+Backend --> Payment : Processes Payments
+Payment --> Backend : Confirms Transactions
+
+' Additional components and interactions
+rectangle "Prisma ORM" as Prisma {
+  Backend --> Prisma : Utilizes
+  Prisma --> Database : Interfaces
+}
+
+rectangle "Razorpay" as Razorpay {
+  Payment -[hidden]-> Razorpay : Uses
+  Backend --> Razorpay : Integrates
+  Razorpay --> Backend : Confirms Payments
+}
+
+' Notes
+note right of Frontend
+  Built with Next.js 14,\nTailwind CSS, and Shaden UI\nfor dynamic UIs and styling.
+end note
+
+note right of Backend
+  Utilizes serverless functions\nfor data processing and\nbusiness logic.
+end note
+
+note right of Database
+  Serverless PostgreSQL database\nfor scalability and security.
+end note
+
+note right of Prisma
+  ORM for data access\nand management.
+end note
+
+note right of Razorpay
+  For secure payment\nprocessing.
+end note
+
+@enduml

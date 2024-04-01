@@ -1,0 +1,120 @@
+@startuml
+!theme plain
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+left to right direction
+
+entity "User" as User {
+  +id: String
+  name: String
+  email: String
+  emailVerified: DateTime
+  image: String
+  password: String
+  role: UserRole
+  contactNumber: String
+  address: String
+}
+
+entity "Account" as Account {
+  +id: String
+  userId: String
+  type: String
+  provider: String
+  providerAccountId: String
+  refresh_token: String
+  access_token: String
+  expires_at: Int
+  token_type: String
+  scope: String
+  id_token: String
+  session_state: String
+}
+
+entity "Restaurant" as Restaurant {
+  +id: String
+  adminId: String
+  name: String
+  cuisine: Cuisine
+  address: String
+  phone: String
+  description: String
+}
+
+entity "Menu" as Menu {
+  +id: String
+  restaurantId: String
+}
+
+entity "MenuItem" as MenuItem {
+  +id: String
+  menuId: String
+  name: String
+  description: String
+  price: Float
+  image: String
+}
+
+entity "Cart" as Cart {
+  +id: String
+  userId: String
+  restaurantId: String
+}
+
+entity "CartItem" as CartItem {
+  +id: String
+  cartId: String
+  menuItemId: String
+  quantity: Int
+}
+
+entity "Order" as Order {
+  +id: String
+  userId: String
+  cartId: String
+  status: OrderStatus
+  totalAmount: Float
+  createdAt: DateTime
+}
+
+entity "Payment" as Payment {
+  +id: String
+  orderId: String
+  amount: Float
+  status: PaymentStatus
+  method: PaymentMethod
+  razorpayPaymentId: String
+  createdAt: DateTime
+}
+
+entity "Review" as Review {
+  +id: String
+  userId: String
+  restaurantId: String
+  rating: Int
+  comment: String
+  createdAt: DateTime
+}
+
+User ||--o{ Account : ""
+User ||--o{ Cart : ""
+User ||--o{ Order : ""
+User ||--o{ Review : ""
+User ||--|{ Restaurant : "admin"
+
+Restaurant ||--o{ Cart : ""
+Restaurant ||--o{ Menu : ""
+Restaurant ||--o{ Review : ""
+Menu ||--o{ MenuItem : ""
+
+Cart ||--o{ CartItem : ""
+Cart ||--o{ Order : ""
+
+MenuItem ||--o{ CartItem : ""
+
+Order ||--o{ Payment : ""
+@enduml
