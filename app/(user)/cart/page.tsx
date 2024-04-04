@@ -18,6 +18,7 @@ import Link from "next/link";
 import CartTotalLoading from "@/components/LoadingSkeletons/CartTotalLoading";
 import CartItem from "./components/CartItem";
 import { getCartByUserId } from "@/actions/user/getcartbyuserid";
+import CheckOutBtn from "./components/CheckOutBtn";
 
 type MenuItem = {
   id: string;
@@ -121,7 +122,15 @@ const Cart = async () => {
                     <TableCell colSpan={3}></TableCell>
                     <TableCell className="font-bold">Total</TableCell>
                     <TableCell colSpan={2} className="font-bold">
-                      ₹ {totalAmount}
+                      <Suspense
+                        fallback={
+                          <div className="text-xl font-bold">
+                            Loading.......
+                          </div>
+                        }
+                      >
+                        ₹ {totalAmount}
+                      </Suspense>
                     </TableCell>
                   </tr>
                 </Suspense>
@@ -140,7 +149,7 @@ const Cart = async () => {
                   Total cost: <span className="font-bold">₹ {totalAmount}</span>
                 </p>
               </div>
-              <Button>Place Order</Button>
+              <CheckOutBtn />
             </div>
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-lg font-bold mb-2">Delivery Details</h3>

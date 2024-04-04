@@ -53,16 +53,13 @@ const CartItem = ({ item, totalAmount, cid }: CartItemProps) => {
       </TableCell>
       <TableCell>{item.menuItem.name}</TableCell>
       <TableCell>₹ {item.menuItem.price}</TableCell>
-      <TableCell>
-        <OptimisticFoodItemCounter
-          id={item.menuItem.id}
-          cid={cid}
-          count={item.quantity}
-          price={item.menuItem.price}
-          total={totalAmount}
-        />
-      </TableCell>
-      <TableCell>₹ {item.quantity * item.menuItem.price}</TableCell>
+      <OptimisticFoodItemCounter
+        id={item.menuItem.id}
+        cid={cid}
+        count={item.quantity}
+        price={item.menuItem.price}
+        total={totalAmount}
+      />
       <TableCell className="text-center">
         <form action={handleDelete}>
           <Button variant={"destructive"}>
