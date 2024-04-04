@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 
-export const getCartItemsByCartId = async (id: string) => {
+export const getCartItemsById = async (id: string) => {
   const cartItems = await db.cartItem.findMany({
     where: {
       cartId: id,

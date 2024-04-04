@@ -30,7 +30,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
+import { deleteMenuItems } from "@/actions/admin/menu-items/delete";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -127,23 +127,26 @@ export function DataTable<TData extends AdditionalProps, TValue>({
 
     const res = await deleteMenuItems(selectedRows);
 
-    const cres = await fetch("/api/deletecloudinary", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ selectedImages }),
-    });
+    if (res.success) {
+      const cres = await fetch("/api/deletecloudinary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ selectedImages }),
+      });
 
-    const cresponse = await cres.json();
-
-    if (res.success && cresponse.success) {
-      toast.success(res.success);
-      setIsDeleting(false);
+      const cresponse = await cres.json();
+      if (cresponse.success) {
+        toast.success(res.success);
+      } else {
+        toast.error(cresponse.error);
+      }
     } else {
-      toast.error(res.error || cresponse.error);
-      setIsDeleting(false);
+      toast.error(res.error);
     }
+
+    setIsDeleting(false);
   };
 
   return (

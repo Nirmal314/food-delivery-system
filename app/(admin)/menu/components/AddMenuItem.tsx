@@ -16,13 +16,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MenuItemSchema } from "@/schemas";
 import { z } from "zod";
-import { addMenuItem } from "@/actions/admin/addmenuitem";
+import { insertMenuItem } from "@/actions/admin/menu-items/insert";
 import FormInput from "@/components/FormInput";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const AddMenuItem = () => {
+const InsertMenuItem = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const sheetTriggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -66,20 +66,20 @@ const AddMenuItem = () => {
       values.image = image;
 
       // @ts-ignore
-      const addMenuItemResponse = await addMenuItem(values);
+      const insertMenuItemResponse = await insertMenuItem(values);
 
-      if (addMenuItemResponse.success) {
+      if (insertMenuItemResponse.success) {
         if (sheetTriggerRef.current?.attributes[4].nodeValue === "open") {
           sheetTriggerRef.current?.click();
         }
         console.log(sheetTriggerRef.current?.attributes[4].nodeValue);
-        toast.success(addMenuItemResponse.success, {
+        toast.success(insertMenuItemResponse.success, {
           position: "bottom-center",
         });
         setIsSubmitting(false);
         form.reset();
       } else {
-        toast.error(addMenuItemResponse.error, {
+        toast.error(insertMenuItemResponse.error, {
           position: "bottom-center",
         });
         setIsSubmitting(false);
@@ -196,4 +196,4 @@ const AddMenuItem = () => {
   );
 };
 
-export default AddMenuItem;
+export default InsertMenuItem;

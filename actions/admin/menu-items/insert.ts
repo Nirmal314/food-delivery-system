@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 import { getMenuByRestaurantId } from "@/data/admin";
 import { revalidatePath } from "next/cache";
 
-export const addMenuItem = async (
+export const insertMenuItem = async (
   values: z.infer<typeof MenuItemSchemaWithImageString>
 ) => {
   const session = await auth();

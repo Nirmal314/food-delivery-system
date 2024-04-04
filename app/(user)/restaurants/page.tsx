@@ -1,15 +1,7 @@
-// "use client";
-
 import RestaurantItemCard from "@/components/RestaurantItemCard";
 import React, { Suspense } from "react";
-import r1 from "@/public/home-r1.jpg";
-import r2 from "@/public/home-r2.jpg";
-import r3 from "@/public/home-r3.jpg";
 import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
-import { getRestaurants } from "@/actions/user/getrestauranrts";
-import { Restaurants } from "@/typings";
-import { getCartByUserId } from "@/actions/user/getcartbyuserid";
-import { auth } from "@/auth";
+import { getRestaurants } from "@/actions/user/restaurants/get-restaurants";
 
 const getGridColumns = (length: number) => {
   switch (true) {

@@ -1,5 +1,3 @@
-// "use client";
-
 import Image from "next/image";
 import welcome from "@/public/home-img.jpg";
 import { SearchIcon } from "lucide-react";
@@ -18,9 +16,9 @@ import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
 import RestaurantItemCard from "@/components/RestaurantItemCard";
 import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
 import { redirect } from "next/navigation";
-import { getTop3Restaurants } from "@/actions/user/gettop3restaurants";
+import { getTop3Restaurants } from "@/actions/user/restaurants/get-top3-restaurants";
 import { Suspense } from "react";
-import { getTop3MenuItems } from "@/actions/user/gettop3menuitems";
+import { getTop3MenuItems } from "@/actions/user/menu-items/get-top3-menuitems";
 
 export default async function Home() {
   const SearchableFoodItems = [

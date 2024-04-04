@@ -1,13 +1,11 @@
 "use server";
 
 import { auth } from "@/auth";
-import {
-  getMenuItemByMenuItemId,
-  getRestaurantByRestaurantId,
-} from "@/data/admin";
+import { getRestaurantByRestaurantId } from "@/data/admin";
 import { db } from "@/lib/db";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { getMenuItemByMenuItemId } from "../../menu-items/get-menuitem-by-id";
 
 export default async function addToCart(
   menuItemId: string,

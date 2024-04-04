@@ -1,10 +1,10 @@
-import { getCartByUserId } from "@/actions/user/getcartbyuserid";
+import { getCartByUserId } from "@/actions/user/cart/select/get-cart-by-userid";
+import { getMenuItemsByMenuId } from "@/actions/user/menu-items/get-menuitems-by-menuid";
 import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
 import { auth } from "@/auth";
 import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
 import {
   getMenuByRestaurantId,
-  getMenuItemsByMenuId,
   getRestaurantByRestaurantId,
 } from "@/data/admin";
 import React, { Suspense } from "react";

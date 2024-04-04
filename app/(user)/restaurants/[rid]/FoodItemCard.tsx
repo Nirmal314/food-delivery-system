@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MinusIcon, PlusIcon, ShoppingCartIcon } from "lucide-react";
-import addToCart from "@/actions/user/addtocart";
+import addToCart from "@/actions/user/cart/insert/insert";
 import { toast } from "sonner";
 
 const FoodItemCard = ({

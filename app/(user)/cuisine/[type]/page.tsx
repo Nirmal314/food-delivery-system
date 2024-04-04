@@ -1,5 +1,6 @@
 import React from "react";
 import { redirect } from "next/navigation";
+import { getMenuItemsByCuisine } from "@/actions/user/menu-items/get-menuitems-by-cuisine";
 
 type PageProps = {
   params: {
@@ -7,7 +8,7 @@ type PageProps = {
   };
 };
 
-const CuisinePage = ({ params: { type } }: PageProps) => {
+const CuisinePage = async ({ params: { type } }: PageProps) => {
   const cuisine = type.split("%20").join(" ");
   const cuisineDb = cuisine.toUpperCase().split(" ").join("_");
 
@@ -22,7 +23,8 @@ const CuisinePage = ({ params: { type } }: PageProps) => {
 
   if (!SearchableFoodItems.includes(cuisine)) redirect("/cuisine-not-found");
 
-  console.log(cuisine);
+  const { restaurants } = await getMenuItemsByCuisine(cuisineDb);
+  // console.log(menuItems);
   return (
     <>
       <div className="mt-10 min-h-screen w-full flex flex-col space-y-8 justify-center items-center">

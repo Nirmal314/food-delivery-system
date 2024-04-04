@@ -4,10 +4,10 @@ import React, { useEffect, useOptimistic, useState } from "react";
 import { Button } from "./ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { updateCountInDb } from "@/actions/count";
-import { updateCartItemCount } from "@/actions/user/updatecartitemcount";
+import { updateCartItemCount } from "@/actions/user/cart/update/update-cartitem-count";
 import { useSession } from "next-auth/react";
 import OptimisticTotalPrice from "./OptimisticTotalPrice";
-import { deleteCartItem } from "@/actions/user/deletecartitem";
+import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
 import { TableCell } from "./ui/table";
 
 type OptimisticProps = {
@@ -49,7 +49,7 @@ const OptimisticFoodItemCounter = ({
       // ! handle db
       const res = await updateCartItemCount(id, cid, amount);
       if (res.quantity === 0) {
-        const resp = await deleteCartItem(res.id);
+        const resp = await deleteCartItemById(res.id);
         console.log(resp);
       }
     }
