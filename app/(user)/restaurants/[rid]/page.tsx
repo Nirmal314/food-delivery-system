@@ -36,37 +36,39 @@ const PerticularRestaurant = async ({ params: { rid } }: PageProps) => {
   const restaurant = await getRestaurantByRestaurantId(rid);
   const cartData = await getCartByUserId(session?.user.id!);
   return (
-    <div className="mt-10 h-screen w-full flex flex-col space-y-8 justify-center items-center">
-      <p className="text-5xl text-center text-primary font-bold">
+    <>
+      <p className="text-5xl my-10 text-center text-primary font-bold">
         Welcome to{" "}
         <span className="text-secondary px-2 py-1 bg-primary">
           {restaurant?.name}
         </span>
       </p>
-      <div
-        className={`w-full grid justify-items-center gap-y-8 gap-x-4 justify-center ${getGridColumns(
-          menuItems?.length!
-        )}`}
-      >
-        {menuItems?.map((item, i) => (
-          <>
-            <Suspense fallback={<RestaurantLoading />} key={i}>
-              <FoodItemCard
-                imageUrl={item.image}
-                id={item.id}
-                rid={restaurant?.id}
-                cid={cartData.cart?.id}
-                name={item.name}
-                description={item.description!!}
-                price={item.price}
-                isBestSeller={Math.round(Math.random()) === 0}
-                className={["space-y-0 w-96"]}
-              />
-            </Suspense>
-          </>
-        ))}
+      <div className="h-screen w-full flex flex-col space-y-8 items-center">
+        <div
+          className={`w-full grid justify-items-center gap-y-8 gap-x-4 justify-center ${getGridColumns(
+            menuItems?.length!
+          )}`}
+        >
+          {menuItems?.map((item, i) => (
+            <>
+              <Suspense fallback={<RestaurantLoading />} key={i}>
+                <FoodItemCard
+                  imageUrl={item.image}
+                  id={item.id}
+                  rid={restaurant?.id}
+                  cid={cartData.cart?.id}
+                  name={item.name}
+                  description={item.description!}
+                  price={item.price}
+                  isBestSeller={Math.round(Math.random()) === 0}
+                  className={["space-y-0 w-96"]}
+                />
+              </Suspense>
+            </>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

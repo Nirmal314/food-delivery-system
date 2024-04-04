@@ -29,10 +29,10 @@ const RestaurantsPage = async () => {
 
   return (
     <>
-      <div className="h-screen w-full flex flex-col space-y-8 justify-center items-center">
-        <p className="text-5xl mt-10 text-center text-primary font-bold">
-          Restaurants available
-        </p>
+      <p className="text-5xl my-10 text-center text-primary font-bold">
+        Restaurants available
+      </p>
+      <div className="h-screen w-full flex flex-col items-center">
         <div
           className={`w-full grid justify-items-center gap-y-8 gap-x-4 justify-center ${getGridColumns(
             restaurants?.length!
