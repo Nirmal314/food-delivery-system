@@ -1,0 +1,79 @@
+@startuml
+!theme plain
+
+skinparam linetype ortho
+hide circle
+
+top to bottom direction
+
+' User Authentication States
+state "User Authentication" as UserAuth {
+    [*] --> NotAuthenticated : Access Website
+    NotAuthenticated --> Authenticated : Login Success
+    NotAuthenticated -[hidden]-> NotAuthenticated : Login Failed
+    Authenticated --> NotAuthenticated : Logout
+    
+    Authenticated : User is logged in
+    NotAuthenticated : User is not logged in
+}
+
+' Admin Authentication States
+state "Admin Authentication" as AdminAuth {
+    [*] --> AdminNotAuthenticated : Access Admin Panel
+    AdminNotAuthenticated --> AdminAuthenticated : Admin Login Success
+    AdminNotAuthenticated -[hidden]-> AdminNotAuthenticated : Admin Login Failed
+    AdminAuthenticated --> AdminNotAuthenticated : Admin Logout
+    
+    AdminAuthenticated : Admin is logged in
+    AdminNotAuthenticated : Admin is not logged in
+}
+
+' Order Processing States
+state "Order Processing" as OrderProc {
+    [*] --> PENDING : Order Created
+    PENDING --> PROCESSING : Order Accepted 
+    PROCESSING --> COMPLETED  
+    PROCESSING --> CANCELLED 
+    COMPLETED --> [*]
+    CANCELLED --> [*]
+
+    PENDING --> PENDING : Update Order (Add/Remove items)
+    PROCESSING --> PROCESSING : Update Order (Change delivery time)
+
+    state PENDING {
+        [*] --> NOT_PAID : Order Not Paid
+        NOT_PAID --> PENDING_PAYMENT : Awaiting Payment
+        PENDING_PAYMENT --> PAID : Payment Successful
+        PENDING_PAYMENT -[hidden]-> PAYMENT_FAILED : Payment Failed
+        PAID --> [*]
+        PAYMENT_FAILED --> NOT_PAID : Retry Payment
+        NOT_PAID --> [*]
+    }
+}
+
+' Admin Actions on Orders
+state "Admin Order Management" as AdminOrder {
+    [*] --> OrderReview : Review Pending Orders
+    OrderReview --> OrderProcessing : Accept Order
+    OrderReview --> OrderCancelled : Cancel Order
+    OrderProcessing --> OrderCompleted : Mark Order as Delivered
+    OrderCancelled --> [*]
+    OrderCompleted --> [*]
+}
+
+' Link Authentication and Order Processing
+UserAuth --> OrderProc : Authenticated
+AdminAuth --> AdminOrder : AdminAuthenticated
+
+' Additional Descriptions
+note right of UserAuth
+  Users must be authenticated 
+  to place orders.
+end note
+
+note right of AdminAuth
+  Admins manage orders and
+  menu items after authentication.
+end note
+
+@enduml

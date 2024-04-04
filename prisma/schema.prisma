@@ -22,6 +22,7 @@ model User {
   Cart          Cart[]
   restaurant    Restaurant?
   Order         Order[]
+  Review        Review[]
 }
 
 model Account {
@@ -43,8 +44,8 @@ model Account {
 }
 
 model Restaurant {
-  id          String  @id @default(cuid())
-  adminId     String  @unique
+  id          String   @id @default(cuid())
+  adminId     String   @unique
   name        String
   cuisine     Cuisine
   address     String
@@ -52,7 +53,8 @@ model Restaurant {
   description String?
   carts       Cart[]
   menu        Menu?
-  admin       User    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  admin       User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  Review      Review[]
 
   @@index([cuisine, id])
 }
@@ -111,8 +113,47 @@ model Order {
   status      OrderStatus
   totalAmount Float
   createdAt   DateTime    @default(now())
+  Payment     Payment[]
 
   @@index([userId])
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  orderId           String
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount            Float
+  status            PaymentStatus
+  method            PaymentMethod
+  razorpayPaymentId String?
+  createdAt         DateTime      @default(now())
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum PaymentMethod {
+  CARD
+  CASH
+  NETBANKING
+  UPI
+  WALLET
+}
+
+model Review {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  rating       Int
+  comment      String?
+  createdAt    DateTime   @default(now())
+
+  @@index([userId, restaurantId])
 }
 
 enum UserRole {

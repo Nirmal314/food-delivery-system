@@ -41,6 +41,7 @@
     "next-themes": "^0.3.0",
     "next13-progressbar": "^1.2.1",
     "nextjs-toploader": "^1.6.6",
+    "razorpay": "^2.9.2",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.50.1",
