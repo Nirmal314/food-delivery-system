@@ -63,7 +63,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-.h-screen {
-  height: calc(100vh - 5rem) !important;
-}

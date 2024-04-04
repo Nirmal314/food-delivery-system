@@ -3,8 +3,9 @@ import React, { Suspense } from "react";
 import pizza from "@/public/home-pizza.jpg";
 import pasta from "@/public/home-pasta.jpg";
 import burger from "@/public/home-burger.jpg";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
+import NotFound from "@/app/not-found";
 
 type PageProps = {
   params: {
@@ -16,7 +17,18 @@ const CuisinePage = ({ params: { type } }: PageProps) => {
   const cuisine = type.split("%20").join(" ");
   const cuisineDb = cuisine.toUpperCase().split(" ").join("_");
 
-  console.log(cuisineDb);
+  const SearchableFoodItems = [
+    "Italian",
+    "North Indian",
+    "Punjabi",
+    "South Indian",
+    "Gujarati",
+    "Chinese",
+  ];
+
+  if (!SearchableFoodItems.includes(cuisine)) redirect("/cuisine-not-found");
+
+  console.log(cuisine);
   return (
     <>
       <div className="mt-10 min-h-screen w-full flex flex-col space-y-8 justify-center items-center">
