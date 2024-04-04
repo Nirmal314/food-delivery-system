@@ -1,10 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { MenuItem } from "@/typings";
-import { Row } from "@tanstack/react-table";
-import { Edit, ShoppingCartIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
-import React, { Suspense, useEffect } from "react";
-import Delete from "./Delete";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -13,24 +7,34 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
-import { useRef, useState } from "react";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { MenuItemSchemaWithImageString } from "@/schemas";
-import { z } from "zod";
 import FormInput from "@/components/FormInput";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import Image from "next/image";
 import EditMenuItemLoading from "@/components/LoadingSkeletons/EditMenuItemLoading";
-import { updateMenuItem } from "@/actions/admin/updatemenuitem";
+import { Button } from "@/components/ui/button";
+import { MenuItemSchemaWithImageString } from "@/schemas";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Row } from "@tanstack/react-table";
+import { MenuItem } from "@/typings";
+import { Session } from "next-auth";
+import { toast } from "sonner";
+import { z } from "zod";
+import { getMenuItemsByMenuId } from "@/actions/user/menu-items/get-menuitems-by-menuid";
+import { updateMenuItem } from "@/actions/admin/menu-items/update";
+import { Edit2 } from "lucide-react";
 
-const Action = ({ row }: { row: Row<MenuItem> }) => {
+type EditProps = {
+  row: Row<MenuItem>;
+  session: Session | null;
+};
+
+const Edit = ({ row, session }: EditProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const sheetTriggerRef = useRef<HTMLButtonElement | null>(null);
+
   const form = useForm<z.infer<typeof MenuItemSchemaWithImageString>>({
     resolver: zodResolver(MenuItemSchemaWithImageString),
     defaultValues: {
@@ -41,16 +45,6 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
   });
 
   const fileRef = form.register("image");
-
-  const extractPublicId = (url: string): string => {
-    const urlParts = url.split("/");
-
-    const fileName = urlParts[urlParts.length - 1];
-
-    return fileName.split(".")[0];
-  };
-
-  const { data: session } = useSession();
 
   const setPrevMenuItem = async () => {
     form.setValue("name", row.getValue("name"));
@@ -115,9 +109,11 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
     const index = parseInt(row.id);
 
     try {
-      const response = await fetch(`/api/menuitems/${session?.user.menuId}`);
-      const menuItems = await response.json();
-      const menuItemToEdit = menuItems.menuItems[index].id;
+      const menuItems: MenuItem[] | null = await getMenuItemsByMenuId(
+        session?.user.menuId!
+      );
+      // @ts-ignore
+      const menuItemToEdit = menuItems[index].id;
 
       const cloudinaryResponse = await fetch(
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -138,7 +134,10 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
         image,
       };
 
-      const res = await updateMenuItem(menuItemToEdit, newValuesForUpdate);
+      const res = await updateMenuItem(
+        menuItemToEdit as string,
+        newValuesForUpdate
+      );
 
       handleResponse(res);
     } catch (error) {
@@ -166,18 +165,21 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
     };
 
     const index = parseInt(row.id);
-    const response = await fetch(`/api/menuitems/${session?.user.menuId}`);
-    const menuItems = await response.json();
-    const menuItemToEdit = menuItems.menuItems[index].id;
+    const menuItems: MenuItem[] | null = await getMenuItemsByMenuId(
+      session?.user.menuId!
+    );
+    // @ts-ignore
+    const menuItemToEdit = menuItems[index].id;
 
-    const res = await updateMenuItem(menuItemToEdit, newValuesForUpdate);
+    const res = await updateMenuItem(
+      menuItemToEdit as string,
+      newValuesForUpdate
+    );
 
     handleResponse(res);
   };
 
   const handleSubmit = async (values: EditMenuItem) => {
-    // setIsSubmitting(true);
-
     if (values.description === "") {
       toast.warning("Continuing without description...", {
         position: "bottom-center",
@@ -199,9 +201,8 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
       updateWithoutImage();
     }
   };
-
   return (
-    <div className="space-y-2">
+    <>
       <Sheet>
         <Button
           className="bg-transparent w-24 flex justify-start hover:bg-[#16a34a27] rounded-sm space-x-1 px-2 py-1 text-primary border-2 border-primary transition-all duration-300 cursor-pointer"
@@ -209,7 +210,7 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
           onClick={setPrevMenuItem}
         >
           <SheetTrigger ref={sheetTriggerRef} className="!px-2 !py-1">
-            <Edit />
+            <Edit2 />
             <span>Edit</span>
           </SheetTrigger>
         </Button>
@@ -329,11 +330,8 @@ const Action = ({ row }: { row: Row<MenuItem> }) => {
           </SheetHeader>
         </SheetContent>
       </Sheet>
-
-      {/* </Button> */}
-      <Delete row={row} session={session} extractPublicId={extractPublicId} />
-    </div>
+    </>
   );
 };
 
-export default Action;
+export default Edit;

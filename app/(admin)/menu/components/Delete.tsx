@@ -15,28 +15,36 @@ import { Trash2Icon } from "lucide-react";
 import { Row } from "@tanstack/react-table";
 import { MenuItem } from "@/typings";
 import { Session } from "next-auth";
-import { deleteMenuItems } from "@/actions/admin/deletemenuitem";
 import { toast } from "sonner";
+import { deleteMenuItems } from "@/actions/admin/menu-items/delete";
+import { getMenuItemsByMenuId } from "@/actions/user/menu-items/get-menuitems-by-menuid";
 
 type DeleteProps = {
   row: Row<MenuItem>;
   session: Session | null;
-  extractPublicId: (url: string) => string;
 };
 
-const Delete = ({ row, session, extractPublicId }: DeleteProps) => {
+const extractPublicId = (url: string): string => {
+  const urlParts = url.split("/");
+
+  const fileName = urlParts[urlParts.length - 1];
+
+  return fileName.split(".")[0];
+};
+
+const Delete = ({ row, session }: DeleteProps) => {
   const [isDeleteing, setIsDeleteing] = useState(false);
 
   const handleDelete = async (id: string, public_id: string) => {
     setIsDeleteing(true);
     const index = parseInt(id);
-    console.log({ index, public_id });
-
     try {
-      const response = await fetch(`/api/menuitems/${session?.user.menuId}`);
-      const menuItems = await response.json();
-      const menuItemToDelete = menuItems.menuItems[index].id;
-
+      const menuItems: MenuItem[] | null = await getMenuItemsByMenuId(
+        session?.user.menuId!
+      );
+      //@ts-ignore
+      const menuItemToDelete = menuItems[index].id;
+      console.log(menuItemToDelete);
       if (!menuItemToDelete) {
         toast.warning(
           "No menu found associated to your restaurant, contact to EatEase"

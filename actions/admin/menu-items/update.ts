@@ -3,19 +3,19 @@
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-type EditMenuItem = {
-  name?: string;
-  description?: string;
-  price?: number;
-  image?: string;
-};
-
 const extractPublicId = (url: string): string => {
   const urlParts = url.split("/");
 
   const fileName = urlParts[urlParts.length - 1];
 
   return fileName.split(".")[0];
+};
+
+type EditMenuItem = {
+  name?: string;
+  description?: string;
+  price?: number;
+  image?: string;
 };
 
 export const updateMenuItem = async (id: string, values: EditMenuItem) => {

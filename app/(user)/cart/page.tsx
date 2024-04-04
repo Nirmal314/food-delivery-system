@@ -11,14 +11,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { getRestaurantByMenuId } from "@/actions/admin/getrestaurantbymenuid";
-import { deleteCartByUserId } from "@/actions/user/deletecartbyuserid";
+import { deleteCartByUserId } from "@/actions/user/cart/delete/delete-cart-by-userid";
 import CartRowLoading from "@/components/LoadingSkeletons/CartRowLoading";
 import Link from "next/link";
 import CartTotalLoading from "@/components/LoadingSkeletons/CartTotalLoading";
 import CartItem from "./components/CartItem";
-import { getCartByUserId } from "@/actions/user/getcartbyuserid";
+import { getCartByUserId } from "@/actions/user/cart/select/get-cart-by-userid";
 import CheckOutBtn from "./components/CheckOutBtn";
+import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
+import { getMenuItemByMenuItemId } from "@/actions/user/menu-items/get-menuitem-by-id";
+import { getRestaurantByMenuId } from "@/data/admin";
 
 type MenuItem = {
   id: string;
@@ -29,14 +31,6 @@ type MenuItem = {
   image: string;
 };
 
-type TCartItem = {
-  id: string;
-  cartId: string;
-  menuItemId: string;
-  quantity: number;
-  menuItem: MenuItem;
-};
-
 const getTotalAmount = (cart: CartItem[]) => {
   return cart.reduce((total, item) => {
     return total + item.quantity * item.menuItem.price;
@@ -45,28 +39,23 @@ const getTotalAmount = (cart: CartItem[]) => {
 
 const Cart = async () => {
   const session = await auth();
-  const res = await fetch("http://localhost:3000/api/getcart", {
-    method: "POST",
-    body: JSON.stringify({ userId: session?.user.id }),
-  });
+  const { cart } = await getCartByUserId(session?.user.id!);
+  const { cartItems } = await getCartItemsById(cart?.id!);
 
-  const { cartItems } = await res.json();
-
-  const cart: TCartItem[] = [];
+  const userCart: CartItem[] | null = [];
   let totalAmount = 0;
   let restaurant = null;
 
-  if (cartItems && cartItems.cartItems.length !== 0) {
-    for (const item of cartItems.cartItems) {
-      const itemRes = await fetch(
-        `http://localhost:3000/api/menuitem/${item.menuItemId}`
-      );
-      const { menuItem } = await itemRes.json();
-      cart.push({ ...item, menuItem });
+  if (cartItems && cartItems.length !== 0) {
+    for (const item of cartItems) {
+      //@ts-ignore
+      const menuItem: MenuItem = await getMenuItemByMenuItemId(item.menuItemId);
+      userCart.push({ ...item, menuItem });
     }
-    totalAmount = getTotalAmount(cart);
+    console.log(userCart);
+    totalAmount = getTotalAmount(userCart);
 
-    restaurant = await getRestaurantByMenuId(cart[0].menuItem.menuId);
+    restaurant = await getRestaurantByMenuId(userCart[0].menuItem.menuId);
   } else {
     await deleteCartByUserId(session?.user.id!);
   }
@@ -75,7 +64,7 @@ const Cart = async () => {
 
   return (
     <>
-      {cart.length !== 0 ? (
+      {userCart.length !== 0 ? (
         <>
           <h1 className="text-4xl font-bold text-center text-primary mt-8 mb-14">
             You are ordering from{" "}
@@ -100,13 +89,13 @@ const Cart = async () => {
                 <Suspense
                   fallback={
                     <>
-                      {Array.from({ length: cart.length }).map((_, i) => (
+                      {Array.from({ length: cartItems.length }).map((_, i) => (
                         <CartRowLoading key={i} />
                       ))}
                     </>
                   }
                 >
-                  {cart.map((item, i) => (
+                  {userCart.map((item, i) => (
                     <CartItem
                       key={i}
                       cid={cartData.cart?.id!}
@@ -143,7 +132,8 @@ const Cart = async () => {
               <div>
                 <h2 className="text-xl font-bold mb-2">Order Summary</h2>
                 <p className="text-gray-600">
-                  Total items: <span className="font-bold">{cart.length}</span>
+                  Total items:{" "}
+                  <span className="font-bold">{userCart.length}</span>
                 </p>
                 <p className="text-gray-600">
                   Total cost: <span className="font-bold">₹ {totalAmount}</span>

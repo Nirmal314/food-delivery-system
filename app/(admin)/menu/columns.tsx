@@ -8,7 +8,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDownIcon } from "lucide-react";
 import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
-import Action from "./components/Action";
+import { useSession } from "next-auth/react";
+import Edit from "./components/Edit";
+import Delete from "./components/Delete";
+import Actions from "./components/Actions";
 
 export const columns: ColumnDef<MenuItem>[] = [
   {
@@ -109,6 +112,6 @@ export const columns: ColumnDef<MenuItem>[] = [
   {
     accessorKey: "action",
     header: "Action",
-    cell: ({ row }) => <Action row={row} />,
+    cell: ({ row }) => <Actions row={row} />,
   },
 ];

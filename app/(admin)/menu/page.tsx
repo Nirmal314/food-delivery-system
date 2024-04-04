@@ -2,9 +2,9 @@ import { MenuItem } from "@/typings";
 import React from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { getMenuItemsByMenuId } from "@/data/admin";
 import { auth } from "@/auth";
 import { ColumnDef } from "@tanstack/react-table";
+import { getMenuItemsByMenuId } from "@/actions/user/menu-items/get-menuitems-by-menuid";
 
 interface AdditionalProps {
   id: string;

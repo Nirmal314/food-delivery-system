@@ -1,4 +1,4 @@
-import { deleteCartItem } from "@/actions/user/deletecartitem";
+import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
 import OptimisticFoodItemCounter from "@/components/OptimisticFoodItemCounter";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -32,7 +32,7 @@ type CartItemProps = {
 const CartItem = ({ item, totalAmount, cid }: CartItemProps) => {
   const handleDelete = async () => {
     "use server";
-    await deleteCartItem(item.id);
+    await deleteCartItemById(item.id);
   };
   return (
     <TableRow>

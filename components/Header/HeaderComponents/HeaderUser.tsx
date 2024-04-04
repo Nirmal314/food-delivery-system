@@ -1,18 +1,7 @@
-import { getCartByUserId } from "@/actions/user/getcartbyuserid";
-import { getCartItemsByCartId } from "@/actions/user/getcartitemsbycartid";
 import LogoutButton from "@/components/LogoutButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 import {
   Popover,
@@ -20,34 +9,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { getMenuItemByMenuItemId } from "@/data/admin";
-import {
   HomeIcon,
-  ListFilterIcon,
-  ListOrdered,
   ListOrderedIcon,
   ShoppingCartIcon,
   UtensilsCrossedIcon,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import React from "react";
 
 const HeaderUser = ({ session }: any) => {
   const getInitials = (name: string) => {

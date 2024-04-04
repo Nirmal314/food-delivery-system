@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export const deleteCartItem = async (id: string) => {
+export const deleteCartItemById = async (id: string) => {
   const deletedItem = await db.cartItem.delete({
     where: {
       id: id,
