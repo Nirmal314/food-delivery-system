@@ -1,11 +1,5 @@
-import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
-import React, { Suspense } from "react";
-import pizza from "@/public/home-pizza.jpg";
-import pasta from "@/public/home-pasta.jpg";
-import burger from "@/public/home-burger.jpg";
-import { redirect, useSearchParams } from "next/navigation";
-import RestaurantLoading from "@/components/LoadingSkeletons/RestaurantLoading";
-import NotFound from "@/app/not-found";
+import React from "react";
+import { redirect } from "next/navigation";
 
 type PageProps = {
   params: {
