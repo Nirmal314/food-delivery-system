@@ -75,6 +75,7 @@ const FoodItemCard = ({
             alt={name}
             width={384}
             height={320}
+            loading="lazy"
             className="rounded-t-lg hover:scale-105 transition-all duration-300 h-full w-full object-cover"
           />
           {isBestSeller && (

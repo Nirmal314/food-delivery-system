@@ -12,23 +12,31 @@ const HeaderNotLoggedIn = () => {
   return (
     <>
       <div className="flex justify-between items-center space-x-6">
-        <Link className="nav-link" href={"/"}>
+        <Link aria-label="Home" className="nav-link" href={"/"}>
           <HomeIcon />
           <span className="hidden xl:block">Home</span>
         </Link>
-        <Link className="nav-link" href={"/restaurants"}>
+        <Link
+          aria-label="Restaurants"
+          className="nav-link"
+          href={"/restaurants"}
+        >
           <UtensilsCrossedIcon />
           <span className="hidden xl:block">Restaurants</span>
         </Link>
-        <Link className="nav-link" href={"/login"}>
+        <Link aria-label="Login" className="nav-link" href={"/login"}>
           <LogInIcon />
           <span className="hidden xl:block">Login</span>
         </Link>
-        <Link className="nav-link" href={"/signup"}>
+        <Link aria-label="Signup" className="nav-link" href={"/signup"}>
           <UserRoundPlusIcon />
           <span className="hidden xl:block">Signup</span>
         </Link>
-        <Link className="nav-link" href={"/adminsignup"}>
+        <Link
+          aria-label="Register restaurant"
+          className="nav-link"
+          href={"/adminsignup"}
+        >
           <HandPlatterIcon />
           <span className="hidden xl:block">Register restaurant</span>
         </Link>
