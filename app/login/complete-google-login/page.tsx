@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import google from "@/public/google.png";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import {
   Form,
@@ -29,7 +29,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { googleLogin } from "@/actions/auth/googlelogin";
 
 const page = () => {
+  const { data: session } = useSession();
   const [googleLoggingIn, setGoogleLoggingIn] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof GoogleLoginSchema>>({
     resolver: zodResolver(GoogleLoginSchema),
     defaultValues: {
@@ -42,21 +44,29 @@ const page = () => {
     values: z.infer<typeof GoogleLoginSchema>
   ) => {
     setGoogleLoggingIn(true);
-    const response = await googleLogin(values);
-    console.log(response);
-    // router.push("/login/googlelogin");
-    // // signIn("google", {
-    // //   callbackUrl: "/",
-    // // });
-    // setGoogleLoggingIn(false);
+    const res = await googleLogin(values);
+    if (res.success) {
+      toast.success(res.success);
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    } else {
+      toast.error(res.error);
+      setGoogleLoggingIn(false);
+    }
   };
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center space-y-10">
       <Card className="w-[30%]">
         <CardHeader>
           <CardTitle>
-            <p className="text-center text-4xl font-bold text-primary">
-              Login to your account
+            <p className="text-center text-xl font-bold text-primary">
+              Welcome{" "}
+              <span className="text-secondary p-1 bg-primary">
+                {session?.user.name}
+              </span>
+              , Please provide your contact details to deliver the food to your
+              doorstep with Ease!
             </p>
           </CardTitle>
         </CardHeader>
@@ -110,10 +120,7 @@ const page = () => {
                 variant={"outline"}
                 className="w-full flex space-x-3"
               >
-                <Image src={google} width={30} height={30} alt="google" />
-                <span>
-                  {!googleLoggingIn ? "Log in with google" : "Logging in..."}
-                </span>
+                <span>{!googleLoggingIn ? "Submit" : "Submitting..."}</span>
               </Button>
             </form>
           </Form>

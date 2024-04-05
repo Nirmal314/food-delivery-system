@@ -1,5 +1,5 @@
 import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
-import OptimisticFoodItemCounter from "@/components/OptimisticFoodItemCounter";
+import OptimisticFoodItemCounter from "@/app/(user)/cart/components/OptimisticFoodItemCounter";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Trash2Icon } from "lucide-react";
@@ -30,6 +30,7 @@ type CartItemProps = {
 };
 
 const CartItem = ({ item, totalAmount, cid }: CartItemProps) => {
+  // console.log(item, cid);
   const handleDelete = async () => {
     "use server";
     await deleteCartItemById(item.id);

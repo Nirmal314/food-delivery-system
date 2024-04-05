@@ -6,6 +6,7 @@ export type ExtendedUser = DefaultSession["user"] & {
   restaurantId?: string;
   menuId?: string;
   address: string;
+  contactNumber: string;
 };
 
 declare module "next-auth" {

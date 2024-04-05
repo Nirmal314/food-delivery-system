@@ -15,9 +15,5 @@ export const deleteCartByUserId = async (userId: string) => {
         id: cart?.id,
       },
     });
-
-    console.log("cart deleted");
-  } else {
-    console.log("no cart to deleted");
   }
 };

@@ -45,8 +45,6 @@ export default async function addToCart(
         },
       },
     });
-
-    console.log("cart created");
   }
 
   if (cart?.restaurantId !== restaurantId) {
@@ -65,8 +63,6 @@ export default async function addToCart(
         cartId: cart.id,
       },
     });
-
-    console.log("existingItem", existingItem);
 
     if (existingItem) {
       const newQuantity = existingItem.quantity + Number(quantity);

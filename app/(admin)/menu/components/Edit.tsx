@@ -79,7 +79,6 @@ const Edit = ({ row, session }: EditProps) => {
       if (sheetTriggerRef.current?.attributes[4].nodeValue === "open") {
         sheetTriggerRef.current?.click();
       }
-      console.log(sheetTriggerRef.current?.attributes[4].nodeValue);
       toast.success(res.success, {
         position: "bottom-center",
       });

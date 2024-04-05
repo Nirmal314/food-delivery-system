@@ -12,15 +12,26 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { FoodItem } from "@/typings";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MinusIcon, PlusIcon, ShoppingCartIcon } from "lucide-react";
+import {
+  MapPinIcon,
+  MinusIcon,
+  PlusIcon,
+  ShoppingCartIcon,
+} from "lucide-react";
 import addToCart from "@/actions/user/cart/insert/insert";
 import { toast } from "sonner";
+import { getRestaurantByRestaurantId } from "@/data/admin";
+
+type FoodItemWithRestaurantName = FoodItem & {
+  restaurantName?: string;
+};
 
 const FoodItemCard = ({
   id,
   rid,
+  restaurantName,
   cid,
   imageUrl,
   name,
@@ -28,7 +39,7 @@ const FoodItemCard = ({
   description,
   isBestSeller,
   className,
-}: FoodItem) => {
+}: FoodItemWithRestaurantName) => {
   const [quantity, setQuantity] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -85,7 +96,13 @@ const FoodItemCard = ({
             {description}
           </CardDescription>
         </CardHeader>
-
+        {restaurantName !== "" ||
+          (restaurantName && (
+            <div className="flex pl-2 items-center space-x-2 text-gray-600">
+              <MapPinIcon className="w-4 h-4" />
+              <span>{restaurantName}</span>)
+            </div>
+          ))}
         <CardContent className="p-4 h-36">
           <p className="text-lg space-x-2 text-gray-800">
             <span className="text-sm line-through">₹ {price * 2}</span>

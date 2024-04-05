@@ -33,8 +33,10 @@ export const {
       if (token.role && session.user)
         session.user.role = token.role as UserRole;
 
-      if (token.role === UserRole.USER)
+      if (token.role === UserRole.USER) {
         session.user.address = token.address as string;
+        session.user.contactNumber = token.contactNumber as string;
+      }
 
       if (token.role === UserRole.ADMIN) {
         session.user.restaurantId = token.restaurantId as string;
@@ -58,8 +60,10 @@ export const {
 
       token.role = existingUser.role;
 
-      if (existingUser.role === UserRole.USER)
+      if (existingUser.role === UserRole.USER) {
         token.address = existingUser.address;
+        token.contactNumber = existingUser.contactNumber;
+      }
 
       if (existingUser.role === UserRole.ADMIN) {
         const restaurant = await getRestaurantByAdminId(token.sub);
@@ -74,6 +78,8 @@ export const {
     //TODO: email verification
 
     async signIn({ user, credentials, account, email, profile }) {
+      // console.log({ user, credentials, account, email, profile });
+
       // TODO: try to figure out how to use { credentials }
       // console.log("credentials: ", credentials);
       // const { address, contactNumber } = credentials || {};
@@ -84,29 +90,37 @@ export const {
       //   contactNumber: string;
       // };
 
-      const currentCookies = cookies();
-      const address = currentCookies.get("address")?.value;
-      const contactNumber = currentCookies.get("contactNumber")?.value;
+      // const currentCookies = cookies();
+      // const address = currentCookies.get("address")?.value;
+      // const contactNumber = currentCookies.get("contactNumber")?.value;
 
-      const existingUser = await getUserByEmail(user?.email as string);
-      if (!existingUser) {
-        const res = await db.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            address,
-            contactNumber,
-          },
-        });
-        console.log(res);
-        // TODO: somehow add address and contactNumber to google account
-        console.log("new user");
+      // const existingUser = await getUserByEmail(user?.email as string);
+      // console.log(profile);
 
-        if (currentCookies.get("address")) currentCookies.delete("address");
-        if (currentCookies.get("contactNumber"))
-          currentCookies.delete("contactNumber");
-      }
+      // if (!existingUser) {
+      //   // const res = await db.user.update({
+      //   // where: {
+      //   //   email: user.email!,
+      //   // },
+      //   //   data: {
+      //   //     address,
+      //   //     contactNumber,
+      //   //   },
+      //   // });
+
+      //   const res = await db.user.findUnique({
+      //     where: {
+      //       email: user.email!,
+      //     },
+      //   });
+
+      //   console.log(res);
+      //   // TODO: somehow add address and contactNumber to google account
+
+      //   if (currentCookies.get("address")) currentCookies.delete("address");
+      //   if (currentCookies.get("contactNumber"))
+      //     currentCookies.delete("contactNumber");
+      // }
       return true;
     },
   },

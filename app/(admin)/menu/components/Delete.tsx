@@ -44,7 +44,6 @@ const Delete = ({ row, session }: DeleteProps) => {
       );
       //@ts-ignore
       const menuItemToDelete = menuItems[index].id;
-      console.log(menuItemToDelete);
       if (!menuItemToDelete) {
         toast.warning(
           "No menu found associated to your restaurant, contact to EatEase"

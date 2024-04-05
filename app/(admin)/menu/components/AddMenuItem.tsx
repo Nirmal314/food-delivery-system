@@ -72,7 +72,6 @@ const InsertMenuItem = () => {
         if (sheetTriggerRef.current?.attributes[4].nodeValue === "open") {
           sheetTriggerRef.current?.click();
         }
-        console.log(sheetTriggerRef.current?.attributes[4].nodeValue);
         toast.success(insertMenuItemResponse.success, {
           position: "bottom-center",
         });

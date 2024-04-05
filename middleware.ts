@@ -11,13 +11,13 @@ import {
 } from "@/routes";
 import { UserRole } from "@prisma/client";
 import { auth } from "./auth";
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { db } from "./lib/db";
+import { getUserById } from "./data/user";
 
 // @ts-ignore
 export default auth(async (req) => {
   const session = await auth();
-  const currentCookies = cookies();
 
   const isLoggedIn = !!req.auth;
   const isAdmin = session?.user?.role === UserRole.ADMIN;
@@ -28,6 +28,8 @@ export default auth(async (req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isAdminRoute = adminRoutes.includes(nextUrl.pathname);
   const isUserRoute = userRoutes.includes(nextUrl.pathname);
+  const isCartRoute = nextUrl.pathname === "/cart";
+  const isContactRoute = nextUrl.pathname === "/login/complete-google-login";
 
   const adminRedirect = Response.redirect(
     new URL(ADMIN_DASHBOARD_ROUTE, nextUrl)
@@ -38,6 +40,21 @@ export default auth(async (req) => {
     return null;
   }
   if (isLoggedIn) {
+    if (
+      isCartRoute &&
+      (!session?.user?.address || !session?.user?.contactNumber)
+    ) {
+      return Response.redirect(
+        new URL("/login/complete-google-login", nextUrl)
+      );
+    }
+    if (
+      isContactRoute &&
+      session?.user?.address &&
+      session?.user?.contactNumber
+    ) {
+      return userRedirect;
+    }
     if (isAuthRoute) {
       if (isAdmin) {
         return adminRedirect;
@@ -60,18 +77,13 @@ export default auth(async (req) => {
     return null;
   }
 
-  if (!isLoggedIn && isAdminRoute) {
-    return userRedirect;
-  }
-
-  if (!isLoggedIn && isUserRoute) {
-    return Response.redirect(new URL("/login", nextUrl));
-  }
-
-  if (isLoggedIn) {
-    if (currentCookies.get("address")) currentCookies.delete("address");
-    if (currentCookies.get("contactNumber"))
-      currentCookies.delete("contactNumber");
+  if (!isLoggedIn) {
+    if (isAdminRoute) {
+      return userRedirect;
+    }
+    if (isUserRoute) {
+      return Response.redirect(new URL("/login", nextUrl));
+    }
   }
 
   return null;
