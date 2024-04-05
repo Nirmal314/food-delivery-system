@@ -37,9 +37,6 @@ const PerticularRestaurant = async ({ params: { rid } }: PageProps) => {
   const restaurant = await getRestaurantByRestaurantId(rid);
   let cart = await getCartByUserId(session?.user.id!);
 
-  if (!cart) {
-    cart = await createCart(session?.user.id!, restaurant?.id!);
-  }
   return (
     <>
       <p className="text-5xl my-10 text-center text-primary font-bold">

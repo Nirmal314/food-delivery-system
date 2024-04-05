@@ -12,6 +12,9 @@ export const createCart = async (userId: string, restaurantId: string) => {
           create: [],
         },
       },
+      include: {
+        items: true,
+      },
     });
   } catch (error) {
     console.log(error);
