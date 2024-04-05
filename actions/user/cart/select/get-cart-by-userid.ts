@@ -1,5 +1,6 @@
 "use server";
 
+import CartItem from "@/app/(user)/cart/components/CartItem";
 import { db } from "@/lib/db";
 
 export const getCartByUserId = async (userId: string) => {
@@ -10,10 +11,9 @@ export const getCartByUserId = async (userId: string) => {
       },
     });
 
-    if (cart) return { cart };
-    return { error: "Cart not found." };
+    return cart as CartItem | null;
   } catch (e) {
     console.log(e);
-    return { error: "Something went wrong." };
+    throw e;
   }
 };

@@ -39,7 +39,11 @@ const getTotalAmount = (cart: CartItem[]) => {
 
 const Cart = async () => {
   const session = await auth();
-  const { cart } = await getCartByUserId(session?.user.id!);
+  const cart = await getCartByUserId(session?.user.id!);
+  let isCartEmpty = false;
+
+  if (!cart) isCartEmpty = true;
+
   const { cartItems } = await getCartItemsById(cart?.id!);
 
   const userCart: CartItem[] | null = [];
@@ -52,7 +56,6 @@ const Cart = async () => {
       const menuItem: MenuItem = await getMenuItemByMenuItemId(item.menuItemId);
       userCart.push({ ...item, menuItem });
     }
-    console.log(userCart);
     totalAmount = getTotalAmount(userCart);
 
     restaurant = await getRestaurantByMenuId(userCart[0].menuItem.menuId);
@@ -64,7 +67,7 @@ const Cart = async () => {
 
   return (
     <>
-      {userCart.length !== 0 ? (
+      {userCart.length !== 0 && !isCartEmpty ? (
         <>
           <h1 className="text-4xl font-bold text-center text-primary mt-8 mb-14">
             You are ordering from{" "}
@@ -98,7 +101,7 @@ const Cart = async () => {
                   {userCart.map((item, i) => (
                     <CartItem
                       key={i}
-                      cid={cartData.cart?.id!}
+                      cid={cartData?.id!}
                       item={item}
                       totalAmount={totalAmount}
                     />

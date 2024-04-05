@@ -61,7 +61,6 @@ const Signin = () => {
         toast.success(response.success);
       } else if (response.error) {
         toast.error(response.error);
-        console.log(response.error);
         setCredentialsLoggingIn(false);
       }
     }
@@ -70,11 +69,9 @@ const Signin = () => {
   const handleGoogleLogin = () => {
     setGoogleLoggingIn(true);
 
-    router.push("/login/googlelogin");
-
-    // signIn("google", {
-    //   callbackUrl: "/",
-    // });
+    signIn("google", {
+      callbackUrl: "/login/complete-google-login",
+    });
   };
 
   return (

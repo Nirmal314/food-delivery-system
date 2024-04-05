@@ -1,3 +1,4 @@
+import { createCart } from "@/actions/user/cart/create/create";
 import { getCartByUserId } from "@/actions/user/cart/select/get-cart-by-userid";
 import { getMenuItemsByMenuId } from "@/actions/user/menu-items/get-menuitems-by-menuid";
 import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
@@ -32,9 +33,13 @@ const PerticularRestaurant = async ({ params: { rid } }: PageProps) => {
   const session = await auth();
   const menu = await getMenuByRestaurantId(rid);
   const menuId = menu?.id;
-  const menuItems = await getMenuItemsByMenuId(menuId!!);
+  const menuItems = await getMenuItemsByMenuId(menuId!);
   const restaurant = await getRestaurantByRestaurantId(rid);
-  const cartData = await getCartByUserId(session?.user.id!);
+  let cart = await getCartByUserId(session?.user.id!);
+
+  if (!cart) {
+    cart = await createCart(session?.user.id!, restaurant?.id!);
+  }
   return (
     <>
       <p className="text-5xl my-10 text-center text-primary font-bold">
@@ -56,7 +61,7 @@ const PerticularRestaurant = async ({ params: { rid } }: PageProps) => {
                   imageUrl={item.image}
                   id={item.id}
                   rid={restaurant?.id}
-                  cid={cartData.cart?.id}
+                  cid={cart?.id}
                   name={item.name}
                   description={item.description!}
                   price={item.price}

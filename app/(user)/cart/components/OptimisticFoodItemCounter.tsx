@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useEffect, useOptimistic, useState } from "react";
-import { Button } from "./ui/button";
+import React, {
+  useEffect,
+  useOptimistic,
+  useState,
+  useTransition,
+} from "react";
+import { Button } from "@/components/ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { updateCountInDb } from "@/actions/count";
 import { updateCartItemCount } from "@/actions/user/cart/update/update-cartitem-count";
 import { useSession } from "next-auth/react";
-import OptimisticTotalPrice from "./OptimisticTotalPrice";
+import OptimisticTotalPrice from "@/components/OptimisticTotalPrice";
 import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
-import { TableCell } from "./ui/table";
+import { TableCell } from "@/components/ui/table";
 
 type OptimisticProps = {
   id: string;
@@ -34,6 +38,8 @@ const OptimisticFoodItemCounter = ({
   );
   const [optimisticOverallTotal, setOptimisticOverallTotal] = useState(total);
 
+  const [isPending, startTransition] = useTransition();
+
   const updateCount = async (amount: number) => {
     if (optimisticCount + amount >= 0) {
       addOptimisticCount(amount);
@@ -50,7 +56,6 @@ const OptimisticFoodItemCounter = ({
       const res = await updateCartItemCount(id, cid, amount);
       if (res.quantity === 0) {
         const resp = await deleteCartItemById(res.id);
-        console.log(resp);
       }
     }
   };
@@ -63,18 +68,15 @@ const OptimisticFoodItemCounter = ({
             <Button
               variant={"ghost"}
               className="hover:bg-transparent"
-              onClick={() => updateCount(-1)}
+              onClick={() => startTransition(() => updateCount(-1))}
             >
               <MinusIcon className="w-4 h-4" />
             </Button>
             <div>{optimisticCount}</div>
-            {/* TODO: figure out how to use these optimistic values */}
-            {/* <div>{optimisticTotalAmount}</div> */}
-            {/* <div>{optimisticOverallTotal}</div> */}
             <Button
               variant={"ghost"}
               className="hover:bg-transparent"
-              onClick={() => updateCount(1)}
+              onClick={() => startTransition(() => updateCount(1))}
             >
               <PlusIcon className="w-4 h-4" />
             </Button>
