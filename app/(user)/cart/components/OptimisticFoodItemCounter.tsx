@@ -9,10 +9,9 @@ import React, {
 import { Button } from "@/components/ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { updateCartItemCount } from "@/actions/user/cart/update/update-cartitem-count";
-import { useSession } from "next-auth/react";
-import OptimisticTotalPrice from "@/components/OptimisticTotalPrice";
 import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
 import { TableCell } from "@/components/ui/table";
+import { useCartContext } from "../CartContext";
 
 type OptimisticProps = {
   id: string;
@@ -29,6 +28,8 @@ const OptimisticFoodItemCounter = ({
   price,
   total,
 }: OptimisticProps) => {
+  const { setTotalAmount, isDBUpdating, setIsDBUpdating } = useCartContext();
+
   const [optimisticCount, addOptimisticCount] = useOptimistic(
     count,
     (state, amount) => state + Number(amount)
@@ -38,7 +39,9 @@ const OptimisticFoodItemCounter = ({
   );
   const [optimisticOverallTotal, setOptimisticOverallTotal] = useState(total);
 
-  const [isPending, startTransition] = useTransition();
+  useEffect(() => {
+    setTotalAmount(optimisticOverallTotal);
+  }, [optimisticOverallTotal]);
 
   const updateCount = async (amount: number) => {
     if (optimisticCount + amount >= 0) {
@@ -54,8 +57,9 @@ const OptimisticFoodItemCounter = ({
 
       // ! handle db
       const res = await updateCartItemCount(id, cid, amount);
+
       if (res.quantity === 0) {
-        const resp = await deleteCartItemById(res.id);
+        await deleteCartItemById(res.id);
       }
     }
   };
@@ -66,17 +70,19 @@ const OptimisticFoodItemCounter = ({
         <div className="py-5">
           <div className="border flex items-center justify-between w-[40%] rounded-md space-x-2">
             <Button
+              disabled={isDBUpdating}
               variant={"ghost"}
               className="hover:bg-transparent"
-              onClick={() => startTransition(() => updateCount(-1))}
+              onClick={() => updateCount(-1)}
             >
               <MinusIcon className="w-4 h-4" />
             </Button>
             <div>{optimisticCount}</div>
             <Button
+              disabled={isDBUpdating}
               variant={"ghost"}
               className="hover:bg-transparent"
-              onClick={() => startTransition(() => updateCount(1))}
+              onClick={() => updateCount(1)}
             >
               <PlusIcon className="w-4 h-4" />
             </Button>

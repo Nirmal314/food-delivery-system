@@ -1,3 +1,5 @@
+"use client";
+
 import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
 import OptimisticFoodItemCounter from "@/app/(user)/cart/components/OptimisticFoodItemCounter";
 import { Button } from "@/components/ui/button";
@@ -5,6 +7,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Trash2Icon } from "lucide-react";
 import Image from "next/image";
 import React, { Suspense } from "react";
+import { useCartContext } from "../CartContext";
 
 type MenuItem = {
   id: string;
@@ -30,10 +33,11 @@ type CartItemProps = {
 };
 
 const CartItem = ({ item, totalAmount, cid }: CartItemProps) => {
-  // console.log(item, cid);
+  const { isDBUpdating, setIsDBUpdating } = useCartContext();
   const handleDelete = async () => {
-    "use server";
+    setIsDBUpdating(true);
     await deleteCartItemById(item.id);
+    setIsDBUpdating(false);
   };
   return (
     <TableRow>
@@ -62,11 +66,13 @@ const CartItem = ({ item, totalAmount, cid }: CartItemProps) => {
         total={totalAmount}
       />
       <TableCell className="text-center">
-        <form action={handleDelete}>
-          <Button variant={"destructive"}>
-            <Trash2Icon />
-          </Button>
-        </form>
+        <Button
+          disabled={isDBUpdating}
+          onClick={handleDelete}
+          variant={"destructive"}
+        >
+          <Trash2Icon />
+        </Button>
       </TableCell>
     </TableRow>
   );
