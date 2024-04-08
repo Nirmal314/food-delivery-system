@@ -31,7 +31,8 @@ export default async function addToCart(
 
   let cart = await db.cart.findFirst({
     where: {
-      userId: userId,
+      userId,
+      isActive: true,
     },
   });
 

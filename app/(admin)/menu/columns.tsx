@@ -12,21 +12,24 @@ import { useSession } from "next-auth/react";
 import Edit from "./components/Edit";
 import Delete from "./components/Delete";
 import Actions from "./components/Actions";
+import { useCartContext } from "@/app/(user)/cart/CartContext";
 
 export const columns: ColumnDef<MenuItem>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        className="text-left"
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
+    header: ({ table }) => {
+      return (
+        <Checkbox
+          className="text-left"
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      );
+    },
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}

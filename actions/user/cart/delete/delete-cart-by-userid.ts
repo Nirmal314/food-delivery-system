@@ -6,6 +6,7 @@ export const deleteCartByUserId = async (userId: string) => {
   const cart = await db.cart.findFirst({
     where: {
       userId: userId,
+      isActive: true,
     },
   });
 

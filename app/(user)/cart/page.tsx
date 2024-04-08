@@ -3,12 +3,10 @@ import React, { Suspense } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
   TableHeader,
-  TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { deleteCartByUserId } from "@/actions/user/cart/delete/delete-cart-by-userid";
@@ -21,6 +19,7 @@ import CheckOutBtn from "./components/CheckOutBtn";
 import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
 import { getMenuItemByMenuItemId } from "@/actions/user/menu-items/get-menuitem-by-id";
 import { getRestaurantByMenuId } from "@/data/admin";
+import TotalAmount from "./components/TotalAmount";
 
 type MenuItem = {
   id: string;
@@ -113,17 +112,10 @@ const Cart = async () => {
                   <tr className="bg-gray-100">
                     <TableCell colSpan={3}></TableCell>
                     <TableCell className="font-bold">Total</TableCell>
-                    <TableCell colSpan={2} className="font-bold">
-                      <Suspense
-                        fallback={
-                          <div className="text-xl font-bold">
-                            Loading.......
-                          </div>
-                        }
-                      >
-                        ₹ {totalAmount}
-                      </Suspense>
-                    </TableCell>
+                    <TotalAmount />
+                    {/* <TableCell colSpan={2} className="font-bold">
+                      ₹ {totalAmount}
+                    </TableCell> */}
                   </tr>
                 </Suspense>
               </TableFooter>
@@ -138,11 +130,8 @@ const Cart = async () => {
                   Total items:{" "}
                   <span className="font-bold">{userCart.length}</span>
                 </p>
-                <p className="text-gray-600">
-                  Total cost: <span className="font-bold">₹ {totalAmount}</span>
-                </p>
               </div>
-              <CheckOutBtn />
+              <CheckOutBtn cid={cartData?.id!} />
             </div>
             <div className="bg-white p-4 rounded-lg shadow">
               <h3 className="text-lg font-bold mb-2">Delivery Details</h3>

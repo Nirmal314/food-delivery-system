@@ -79,12 +79,11 @@ export default async function Home() {
             </Button>
           </form>
         </div>
-        {/* <Image
+        <Image
           src={welcome}
           className="w-full h-full object-cover"
           alt="Welcome spices"
-          loading="lazy"
-        /> */}
+        />
       </div>
       <div className="h-screen w-full flex flex-col justify-center items-center space-y-16 p-6">
         <p className="text-5xl text-center text-primary font-bold">
