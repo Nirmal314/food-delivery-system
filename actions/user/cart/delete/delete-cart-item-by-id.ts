@@ -10,7 +10,7 @@ export const deleteCartItemById = async (id: string) => {
     },
   });
 
-  revalidatePath("/cart");
+  // revalidatePath("/cart");
   revalidatePath("/restaurants/[rid]/page.tsx", "page");
   return { success: "Item deleted." };
 };
