@@ -38,7 +38,7 @@ const CartItem = ({
     }, 3000);
   };
   return (
-    <TableRow>
+    <TableRow key={id}>
       <TableCell>
         <Suspense
           fallback={

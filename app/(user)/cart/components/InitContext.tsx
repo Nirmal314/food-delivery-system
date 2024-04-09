@@ -8,7 +8,7 @@ type Props = {
   totalAmount: number;
 };
 
-const TestComp = ({ cartId, totalAmount }: Props) => {
+const InitContext = ({ cartId, totalAmount }: Props) => {
   const { setTotal, total, setCartId, cartId: cid } = useCartContext();
 
   useEffect(() => {
@@ -19,4 +19,4 @@ const TestComp = ({ cartId, totalAmount }: Props) => {
   return <></>;
 };
 
-export default TestComp;
+export default InitContext;

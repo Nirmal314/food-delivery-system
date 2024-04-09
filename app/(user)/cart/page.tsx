@@ -18,11 +18,15 @@ import { getCartByUserId } from "@/actions/user/cart/select/get-cart-by-userid";
 import CheckOutBtn from "./components/CheckOutBtn";
 import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
 import { getMenuItemByMenuItemId } from "@/actions/user/menu-items/get-menuitem-by-id";
-import { getRestaurantByMenuId } from "@/data/admin";
+import {
+  getRestaurantByMenuId,
+  getRestaurantByRestaurantId,
+} from "@/data/admin";
 import TotalAmount from "./components/TotalAmount";
 import { db } from "@/lib/db";
-import TestComp from "./components/TestComp";
+import TestComp from "./components/InitContext";
 import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
+import InitContext from "./components/InitContext";
 
 type CartProps = {
   id: string;
@@ -48,17 +52,21 @@ const Cart = async () => {
     },
     select: {
       id: true,
+      restaurantId: true,
     },
   });
 
   let isCartEmpty = false;
   let cartItems = null;
   let totalAmount = 0;
+  let restaurant = null;
+
   const cart: CartProps[] = [];
 
   if (!activeCart) {
     isCartEmpty = true;
   } else {
+    restaurant = await getRestaurantByRestaurantId(activeCart.restaurantId);
     cartItems = await db.cartItem.findMany({
       where: {
         cartId: activeCart?.id,
@@ -108,8 +116,8 @@ const Cart = async () => {
           <h1 className="text-4xl font-bold text-center text-primary mt-8 mb-14">
             You are ordering from{" "}
             <span className="bg-primary px-2 py-1 text-secondary">
-              {/* {restaurant?.name} */}
-              <TestComp cartId={activeCart?.id!} totalAmount={totalAmount} />
+              {restaurant?.name}
+              <InitContext cartId={activeCart?.id!} totalAmount={totalAmount} />
             </span>
           </h1>
 
@@ -139,7 +147,6 @@ const Cart = async () => {
                 >
                   {cart.map((item, i) => (
                     <CartItem
-                      key={i}
                       id={item.id}
                       menuItemId={item.menuItemId}
                       quantity={item.quantity}

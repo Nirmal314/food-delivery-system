@@ -51,7 +51,6 @@ const OptimisticFoodItemCounter = ({
         default:
           break;
       }
-
       // ! handle db
       await updateCartItemCount(id, cartId, amount);
     }
@@ -61,11 +60,11 @@ const OptimisticFoodItemCounter = ({
     <>
       <TableCell>
         <div className="py-5">
-          <div className="border flex items-center justify-between w-[40%] rounded-md space-x-2">
+          <div className="border flex items-center justify-between w-[8rem] rounded-md">
             <Button
               disabled={isDBUpdating}
               variant={"ghost"}
-              className="hover:bg-transparent"
+              className="rounded-r-none border-r"
               onClick={() => updateQuantity(-1)}
             >
               <MinusIcon className="w-4 h-4" />
@@ -74,7 +73,7 @@ const OptimisticFoodItemCounter = ({
             <Button
               disabled={isDBUpdating}
               variant={"ghost"}
-              className="hover:bg-transparent"
+              className="rounded-l-none border-l"
               onClick={() => updateQuantity(1)}
             >
               <PlusIcon className="w-4 h-4" />
