@@ -5,10 +5,10 @@ import React from "react";
 import { useCartContext } from "../CartContext";
 
 const TotalAmount = () => {
-  const { totalAmount } = useCartContext();
+  const { total } = useCartContext();
   return (
     <TableCell colSpan={2} className="font-bold">
-      ₹ {totalAmount}
+      ₹ {total}
     </TableCell>
   );
 };

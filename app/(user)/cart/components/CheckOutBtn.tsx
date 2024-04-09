@@ -8,21 +8,17 @@ import { useSession } from "next-auth/react";
 import { createOrder } from "@/actions/user/order/create";
 import { verifyPayment } from "@/actions/user/payment/verify";
 
-const CheckOutBtn = ({ cid }: { cid: string }) => {
-  const { totalAmount, isDBUpdating } = useCartContext();
+const CheckOutBtn = () => {
+  const { cartId, total, isDBUpdating } = useCartContext();
   const { data: session } = useSession();
 
   const checkout = async () => {
-    const order = await createOrder(
-      session?.user.id as string,
-      cid,
-      totalAmount
-    );
+    const order = await createOrder(session?.user.id as string, cartId, total);
 
     const options = {
       key: "rzp_test_tH0UJQrfDX5nm0",
       currency: order.currency,
-      amount: totalAmount,
+      amount: total,
       name: "Nirmal Ambasana",
       description: "Test Transaction",
       order_id: order.id,
@@ -36,7 +32,7 @@ const CheckOutBtn = ({ cid }: { cid: string }) => {
         const resp = await verifyPayment(
           order.amount,
           session?.user.id!,
-          cid,
+          cartId,
           razorpay_order_id,
           razorpay_payment_id,
           razorpay_signature

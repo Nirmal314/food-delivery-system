@@ -15,52 +15,45 @@ import { useCartContext } from "../CartContext";
 
 type OptimisticProps = {
   id: string;
-  cid: string;
-  count: number;
+  quantity: number;
   price: number;
-  total: number;
 };
 
 const OptimisticFoodItemCounter = ({
   id,
-  count,
-  cid,
+  quantity,
   price,
-  total,
 }: OptimisticProps) => {
-  const { setTotalAmount, isDBUpdating, setIsDBUpdating } = useCartContext();
+  const { cartId, total, setTotal, isDBUpdating } = useCartContext();
 
-  const [optimisticCount, addOptimisticCount] = useOptimistic(
-    count,
+  const [optimisticQuantity, addOptimisticQuantity] = useOptimistic(
+    quantity,
     (state, amount) => state + Number(amount)
   );
+
   const [optimisticTotalAmount, setOptimisticTotalAmount] = useState(
-    count * price
+    quantity * price
   );
-  const [optimisticOverallTotal, setOptimisticOverallTotal] = useState(total);
 
-  useEffect(() => {
-    setTotalAmount(optimisticOverallTotal);
-  }, [optimisticOverallTotal]);
+  const updateQuantity = async (amount: number) => {
+    if (optimisticQuantity + amount > 0) {
+      addOptimisticQuantity(amount);
 
-  const updateCount = async (amount: number) => {
-    if (optimisticCount + amount >= 0) {
-      addOptimisticCount(amount);
-
-      if (amount === 1) {
-        setOptimisticTotalAmount(optimisticTotalAmount + price);
-        setOptimisticOverallTotal(optimisticOverallTotal + price);
-      } else {
-        setOptimisticTotalAmount(optimisticTotalAmount - price);
-        setOptimisticOverallTotal(optimisticOverallTotal - price);
+      switch (amount) {
+        case 1:
+          setTotal(total + price);
+          setOptimisticTotalAmount(optimisticTotalAmount + price);
+          break;
+        case -1:
+          setTotal(total - price);
+          setOptimisticTotalAmount(optimisticTotalAmount - price);
+          break;
+        default:
+          break;
       }
 
       // ! handle db
-      const res = await updateCartItemCount(id, cid, amount);
-
-      if (res.quantity === 0) {
-        await deleteCartItemById(res.id);
-      }
+      await updateCartItemCount(id, cartId, amount);
     }
   };
 
@@ -73,16 +66,16 @@ const OptimisticFoodItemCounter = ({
               disabled={isDBUpdating}
               variant={"ghost"}
               className="hover:bg-transparent"
-              onClick={() => updateCount(-1)}
+              onClick={() => updateQuantity(-1)}
             >
               <MinusIcon className="w-4 h-4" />
             </Button>
-            <div>{optimisticCount}</div>
+            <div>{optimisticQuantity}</div>
             <Button
               disabled={isDBUpdating}
               variant={"ghost"}
               className="hover:bg-transparent"
-              onClick={() => updateCount(1)}
+              onClick={() => updateQuantity(1)}
             >
               <PlusIcon className="w-4 h-4" />
             </Button>

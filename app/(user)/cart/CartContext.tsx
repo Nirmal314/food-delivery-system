@@ -3,10 +3,12 @@
 import { createContext, useState, useContext, useMemo } from "react";
 
 type CartContextType = {
-  totalAmount: number;
-  setTotalAmount: (amount: number) => void;
+  total: number;
+  setTotal: (amount: number) => void;
   isDBUpdating: boolean;
   setIsDBUpdating: (updating: boolean) => void;
+  cartId: string;
+  setCartId: (cartId: string) => void;
 };
 
 export const CartContext = createContext<CartContextType | undefined>(
@@ -14,17 +16,20 @@ export const CartContext = createContext<CartContextType | undefined>(
 );
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [totalAmount, setTotalAmount] = useState(0);
+  const [total, setTotal] = useState(0);
   const [isDBUpdating, setIsDBUpdating] = useState(false);
+  const [cartId, setCartId] = useState("");
 
   const contextValue = useMemo(
     () => ({
-      totalAmount,
-      setTotalAmount,
+      total,
+      setTotal,
       isDBUpdating,
       setIsDBUpdating,
+      cartId,
+      setCartId,
     }),
-    [totalAmount, isDBUpdating]
+    [total, isDBUpdating, cartId]
   );
 
   return (

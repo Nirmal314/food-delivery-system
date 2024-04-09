@@ -7,6 +7,9 @@ export const getCartItemsById = async (id: string) => {
     where: {
       cartId: id,
     },
+    orderBy: {
+      quantity: "desc",
+    },
   });
 
   return { cartItems };
