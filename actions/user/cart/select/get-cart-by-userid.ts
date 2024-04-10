@@ -12,7 +12,7 @@ export const getCartByUserId = async (userId: string) => {
       },
     });
 
-    return cart as CartItem | null;
+    return cart as typeof CartItem | null;
   } catch (e) {
     console.log(e);
     throw e;
