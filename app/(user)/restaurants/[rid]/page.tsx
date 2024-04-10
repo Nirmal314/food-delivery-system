@@ -58,7 +58,6 @@ const PerticularRestaurant = async ({ params: { rid } }: PageProps) => {
                   imageUrl={item.image}
                   id={item.id}
                   rid={restaurant?.id}
-                  cid={cart?.id}
                   name={item.name}
                   description={item.description!}
                   price={item.price}
