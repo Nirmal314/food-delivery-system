@@ -14,10 +14,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-interface StatusColumnFilter extends ColumnFilter {
-  value: string[];
-}
-
 import {
   Table,
   TableBody,
@@ -79,55 +75,14 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const getColumnName = (column: string) => {
-    switch (column) {
-      case "id":
-        return "Order ID";
-      case "cart_restaurant.name":
-        return "Restaurant";
-      case "status":
-        return "Status";
-      case "totalAmount":
-        return "Total Amount";
-      case "createdAt":
-        return "Date of order";
-      default:
-        return column;
-    }
-  };
-
-  const handleStatusFilterChange = (status: string) => {
-    setColumnFilters((prev) => {
-      const existingStatusFilter = prev.find(
-        (filter): filter is StatusColumnFilter => filter.id === "status"
-      );
-      if (existingStatusFilter) {
-        // ! If there's an existing status filter, add the new value to the array
-        return [
-          { id: "status", value: [...existingStatusFilter.value, status] },
-          ...prev.filter((filter) => filter.id !== "status"),
-        ];
-      } else {
-        // ! If there's no existing status filter, create a new one
-        return [{ id: "status", value: [status] }, ...prev];
-      }
-    });
-  };
-
   return (
     <div className="w-3/4">
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter Restaurant..."
-          value={
-            (table
-              .getColumn("cart_restaurant.name")
-              ?.getFilterValue() as string) ?? ""
-          }
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table
-              .getColumn("cart_restaurant.name")
-              ?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -152,73 +107,11 @@ export function DataTable<TData, TValue>({
                         column.toggleVisibility(!!value)
                       }
                     >
-                      {getColumnName(column.id.toString())}
+                      {column.id}
+                      {/* {getColumnName(column.id.toString())} */}
                     </DropdownMenuCheckboxItem>
                   );
                 })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto focus:outline-none">
-                Status
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {Object.values(OrderStatus).map((status, i) => (
-                <DropdownMenuCheckboxItem
-                  key={i}
-                  id={status}
-                  className="capitalize"
-                  checked={columnFilters.some(
-                    (filter) =>
-                      filter.id === "status" &&
-                      (filter as StatusColumnFilter).value.includes(status)
-                  )}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      handleStatusFilterChange(status);
-                    } else {
-                      setColumnFilters((prev) => {
-                        const existingStatusFilter = prev.find(
-                          (filter): filter is StatusColumnFilter =>
-                            (filter as StatusColumnFilter).id === "status"
-                        );
-                        if (existingStatusFilter) {
-                          // TODO: remove if necessary
-
-                          if (existingStatusFilter.value.length === 1) {
-                            return [
-                              {
-                                id: "status",
-                                value: [
-                                  "PROCESSING",
-                                  "PENDING",
-                                  "COMPLETED",
-                                  "CANCELLED",
-                                ],
-                              },
-                            ];
-                          }
-                          return [
-                            {
-                              id: "status",
-                              value: existingStatusFilter.value.filter(
-                                (s) => s !== status
-                              ),
-                            },
-                            ...prev.filter((filter) => filter.id !== "status"),
-                          ];
-                        } else {
-                          return prev;
-                        }
-                      });
-                    }
-                  }}
-                >
-                  {status}
-                </DropdownMenuCheckboxItem>
-              ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -250,9 +143,6 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer"
-                  onClick={() =>
-                    router.push(`/yourorders/${row.getValue("id")}`)
-                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

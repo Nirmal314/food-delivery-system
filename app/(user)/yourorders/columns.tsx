@@ -22,27 +22,33 @@ export type Order = {
 };
 
 export const columns: ColumnDef<Order>[] = [
+  // TODO: add if required
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    id: "index",
+    header: "No.",
+    cell: ({ row }) => row.index + 1,
   },
   { header: "Order ID", accessorKey: "id" },
   {
@@ -90,12 +96,21 @@ export const columns: ColumnDef<Order>[] = [
 
       return (
         <Badge
-          className="cursor-pointer"
+          className={`cursor-pointer ${
+            row.getValue("status") === OrderStatus.PROCESSING
+              ? "animate-pulse"
+              : ""
+          }`}
           variant={getVariant(row.getValue("status") as OrderStatus)}
         >
           {row.getValue("status")}
         </Badge>
       );
+    },
+    enableColumnFilter: true,
+    filterFn: (row, columnId, filterStatuses) => {
+      const status = row.getValue(columnId);
+      return filterStatuses.includes(status);
     },
   },
   {
@@ -121,11 +136,6 @@ export const columns: ColumnDef<Order>[] = [
       return <div className="font-medium">{formatted}</div>;
     },
   },
-  //   {
-  //     header: "Items Purchased",
-  //     accessorKey: "cart.items",
-  //     cell: ({ row }) => row.getValue("cart.items"),
-  //   },
   {
     accessorKey: "createdAt",
     header: ({ column }) => {
