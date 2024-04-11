@@ -29,20 +29,6 @@ const CustomerOrders = async () => {
               name: true,
             },
           },
-          isActive: true,
-          items: {
-            select: {
-              menuItem: {
-                select: {
-                  name: true,
-                  price: true,
-                  image: true,
-                  description: true,
-                },
-              },
-              quantity: true,
-            },
-          },
         },
       },
     },
