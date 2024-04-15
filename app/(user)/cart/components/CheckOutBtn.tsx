@@ -7,10 +7,13 @@ import { useCartContext } from "../CartContext";
 import { useSession } from "next-auth/react";
 import { createOrder } from "@/actions/user/order/create";
 import { verifyPayment } from "@/actions/user/payment/verify";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const CheckOutBtn = () => {
   const { cartId, total, isDBUpdating } = useCartContext();
   const { data: session } = useSession();
+  const router = useRouter();
 
   const checkout = async () => {
     const order = await createOrder(session?.user.id as string, cartId, total);
@@ -29,6 +32,7 @@ const CheckOutBtn = () => {
       handler: async (response: any) => {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
           response;
+
         const resp = await verifyPayment(
           order.amount,
           session?.user.id!,
@@ -38,7 +42,11 @@ const CheckOutBtn = () => {
           razorpay_signature
         );
 
-        console.log(resp);
+        if (resp.success) {
+          router.push("/yourorders");
+        } else {
+          toast.error(resp.error as string);
+        }
       },
     };
     const rpay = new window.Razorpay(options);

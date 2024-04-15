@@ -1,5 +1,3 @@
-import authConfig from "./auth.config";
-import NextAuth from "next-auth";
 import {
   apiAuthPrefix,
   authRoutes,
@@ -11,9 +9,6 @@ import {
 } from "@/routes";
 import { UserRole } from "@prisma/client";
 import { auth } from "./auth";
-import { cookies } from "next/headers";
-import { db } from "./lib/db";
-import { getUserById } from "./data/user";
 
 // @ts-ignore
 export default auth(async (req) => {
@@ -27,7 +22,9 @@ export default auth(async (req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isAdminRoute = adminRoutes.includes(nextUrl.pathname);
-  const isUserRoute = userRoutes.includes(nextUrl.pathname);
+  const isUserRoute = userRoutes.some((route) =>
+    nextUrl.pathname.startsWith(route)
+  );
   const isCartRoute = nextUrl.pathname === "/cart";
   const isContactRoute = nextUrl.pathname === "/login/complete-google-login";
 

@@ -4,7 +4,11 @@ export const authRoutes = ["/login", "/signup", "/adminsignup"];
 
 export const adminRoutes = ["/dashboard", "/menu", "/orders"];
 
-export const userRoutes = ["/yourorders", "/cart"];
+export const userRoutes = [
+  "/yourorders",
+  "/cart",
+  "/login/complete-google-login",
+];
 
 export const apiAuthPrefix = "/api/auth";
 

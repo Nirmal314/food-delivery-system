@@ -6,7 +6,8 @@ import { auth } from "../auth";
 import { SessionProvider } from "next-auth/react";
 const inter = Inter({ subsets: ["latin"] });
 import { Toaster } from "@/components/ui/sonner";
-
+import { Knock } from "@knocklabs/node";
+// import { knockClient } from "@/lib/knock";
 export const metadata: Metadata = {
   title: "EatEase",
 };
@@ -17,6 +18,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
+  const knockClient = new Knock(process.env.KNOCK_SECRET_API_KEY!);
+
+  const knockUser = await knockClient.users.identify(session?.user.id!, {
+    name: session?.user.name!,
+    email: session?.user.email!,
+  });
+
+  console.log(knockUser);
 
   return (
     <html lang="en">
