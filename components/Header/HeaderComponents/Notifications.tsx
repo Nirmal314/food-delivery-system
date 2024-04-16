@@ -7,10 +7,8 @@ import {
   NotificationFeedPopover,
 } from "@knocklabs/react";
 
-// Required CSS import, unless you're overriding the styling
 import "@knocklabs/react/dist/index.css";
 import { useSession } from "next-auth/react";
-import { Bell, BellDot } from "lucide-react";
 
 const Notifications = () => {
   const { data: session } = useSession();
@@ -25,18 +23,15 @@ const Notifications = () => {
       {/* <KnockFeedProvider feedId="211cbdd0-7a3d-4448-bb99-a0b28af3746a"> */}
       <KnockFeedProvider feedId="31043d15-bb9b-4adb-9ee9-2e556fd18381">
         <>
-          <BellDot
+          <NotificationIconButton
             ref={notifButtonRef}
             onClick={(e) => setIsVisible(!isVisible)}
           />
-          {/* <NotificationIconButton
-            ref={notifButtonRef}
-            onClick={(e) => setIsVisible(!isVisible)}
-          /> */}
           <NotificationFeedPopover
             buttonRef={notifButtonRef}
             isVisible={isVisible}
             onClose={() => setIsVisible(false)}
+            placement="bottom-start"
           />
         </>
       </KnockFeedProvider>

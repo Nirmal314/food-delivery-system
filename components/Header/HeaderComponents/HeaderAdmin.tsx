@@ -18,7 +18,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import Notifications from "./notifications";
+import Notifications from "./Notifications";
+import NotificationToastProducer from "./OrderToast/Toast";
 
 const HeaderUser = ({ session }: any) => {
   const getInitials = (name: string) => {
@@ -56,6 +57,7 @@ const HeaderUser = ({ session }: any) => {
           <span className="hidden xl:block">Orders</span>
         </Link>
         <Notifications />
+        <NotificationToastProducer />
         <div className="flex items-center justify-center space-x-2">
           <Popover>
             <PopoverTrigger asChild>

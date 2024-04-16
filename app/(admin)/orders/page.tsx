@@ -4,8 +4,6 @@ import { OrderStatus } from "@prisma/client";
 import React from "react";
 import { DataTable } from "./data-table";
 import { IncomingOrder, columns } from "./columns";
-import Notifications from "./components/notifications";
-import NotificationToastProducer from "./components/toast";
 
 const OrderPage = async () => {
   const session = await auth();
@@ -56,11 +54,11 @@ const OrderPage = async () => {
     <>
       <div className="flex w-full h-screen justify-center">
         <DataTable columns={columns} data={incomingOrders} />
-        <Notifications />
-        {/* <NotificationToastProducer /> */}
       </div>
     </>
   );
 };
 
 export default OrderPage;
+
+export const revalidate = 60;
