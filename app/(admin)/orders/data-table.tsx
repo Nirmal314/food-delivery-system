@@ -32,7 +32,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { OrderStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
@@ -147,9 +146,6 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer"
-                  onClick={() =>
-                    router.push(`/yourorders/${row.getValue("id")}`)
-                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

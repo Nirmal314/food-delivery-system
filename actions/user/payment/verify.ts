@@ -38,6 +38,7 @@ export const verifyPayment = async (
           totalAmount: (amount as number) / 100,
         },
       });
+      revalidatePath("/orders");
 
       await db.payment.create({
         data: {
@@ -68,15 +69,13 @@ export const verifyPayment = async (
 
       const knockClient = new Knock(process.env.KNOCK_SECRET_API_KEY!);
 
-      const res = await knockClient.notify("orders", {
+      await knockClient.notify("orders", {
         actor: session?.user.id,
         recipients: [restaurantOwner?.id!],
+        data: {
+          amount: (amount as number) / 100,
+        },
       });
-
-      console.log(res);
-
-      revalidatePath("/orders");
-
       return { success: "Order placed" };
     } catch (e) {
       console.log(e);
