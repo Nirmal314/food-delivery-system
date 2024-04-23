@@ -9,7 +9,6 @@ import { deleteCartByUserId } from "../cart/delete/delete-cart-by-userid";
 import { deleteCartItemsByCartId } from "../cart/delete/delete-cart-items-by-cart-id";
 import { Knock } from "@knocklabs/node";
 import { auth } from "@/auth";
-import { revalidatePath } from "next/cache";
 
 export const verifyPayment = async (
   amount: number | string,
@@ -30,7 +29,7 @@ export const verifyPayment = async (
 
   if (isAuthentic) {
     try {
-      const { id } = await db.order.create({
+      const order = await db.order.create({
         data: {
           userId,
           cartId,
@@ -38,11 +37,10 @@ export const verifyPayment = async (
           totalAmount: (amount as number) / 100,
         },
       });
-      revalidatePath("/orders");
-
+      // revalidatePath("/orders");
       await db.payment.create({
         data: {
-          orderId: id,
+          orderId: order.id,
           amount: (amount as number) / 100,
           status: PaymentStatus.COMPLETED,
           razorpayPaymentId: razorpay_payment_id,
@@ -54,10 +52,11 @@ export const verifyPayment = async (
           id: cartId,
         },
         data: {
-          orderId: id,
+          orderId: order.id,
           isActive: false,
         },
       });
+      // revalidateTag(`order-${restaurantId}`);
 
       const restaurantOwner = await db.user.findFirst({
         where: {
@@ -76,7 +75,7 @@ export const verifyPayment = async (
           amount: (amount as number) / 100,
         },
       });
-      return { success: "Order placed" };
+      return { success: "Order placed", order };
     } catch (e) {
       console.log(e);
       return { error: e };

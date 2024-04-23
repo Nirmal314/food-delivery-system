@@ -9,6 +9,7 @@ import { createOrder } from "@/actions/user/order/create";
 import { verifyPayment } from "@/actions/user/payment/verify";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { socket } from "@/app/socket";
 
 const CheckOutBtn = () => {
   const { cartId, total, isDBUpdating } = useCartContext();
@@ -44,6 +45,8 @@ const CheckOutBtn = () => {
 
         if (resp.success) {
           router.push("/yourorders");
+          if (resp.order) socket.emit("new-order", resp.order);
+          else socket.emit("new-order", { hehe: "a order" });
         } else {
           toast.error(resp.error as string);
         }
@@ -52,6 +55,8 @@ const CheckOutBtn = () => {
     const rpay = new window.Razorpay(options);
     rpay.open();
   };
+
+  const emit = () => socket.emit("new-order", { hehe: "a order" });
   return (
     <>
       <Script
@@ -61,6 +66,7 @@ const CheckOutBtn = () => {
       <Button disabled={isDBUpdating} onClick={checkout}>
         Place Order
       </Button>
+      <Button onClick={emit}>Emit</Button>
     </>
   );
 };

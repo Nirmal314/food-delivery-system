@@ -4,11 +4,12 @@ import { OrderStatus } from "@prisma/client";
 import React from "react";
 import { DataTable } from "./data-table";
 import { IncomingOrder, columns } from "./columns";
+import { socket } from "@/app/socket";
 
 const OrderPage = async () => {
   const session = await auth();
 
-  const incomingOrders: IncomingOrder[] = await db.order.findMany({
+  const orders: IncomingOrder[] = await db.order.findMany({
     where: {
       cart: {
         restaurantId: session?.user.restaurantId,
@@ -49,11 +50,10 @@ const OrderPage = async () => {
     },
   });
 
-  console.log("incomingOrders: ", incomingOrders);
   return (
     <>
       <div className="flex w-full h-screen justify-center">
-        <DataTable columns={columns} data={incomingOrders} />
+        <DataTable columns={columns} data={orders} />
       </div>
     </>
   );
