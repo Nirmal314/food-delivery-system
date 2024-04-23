@@ -7,7 +7,6 @@ import { SessionProvider } from "next-auth/react";
 const inter = Inter({ subsets: ["latin"] });
 import { Toaster } from "@/components/ui/sonner";
 import { Knock } from "@knocklabs/node";
-// import { knockClient } from "@/lib/knock";
 export const metadata: Metadata = {
   title: "EatEase",
 };

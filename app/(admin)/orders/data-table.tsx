@@ -23,7 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -33,7 +33,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
-
+import { socket } from "@/app/socket";
+import { toast } from "sonner";
+import { revalidatePathClient } from "@/actions/revalidatePathClient";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -72,6 +74,12 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
   });
+
+  useEffect(() => {
+    socket.on("new-order", (order) => {
+      revalidatePathClient("/orders");
+    });
+  }, []);
 
   return (
     <div className="w-3/4">
