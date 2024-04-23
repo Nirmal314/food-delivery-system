@@ -4,7 +4,6 @@ import { OrderStatus } from "@prisma/client";
 import React from "react";
 import { DataTable } from "./data-table";
 import { IncomingOrder, columns } from "./columns";
-import { socket } from "@/app/socket";
 
 const OrderPage = async () => {
   const session = await auth();
