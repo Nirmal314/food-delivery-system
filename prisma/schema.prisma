@@ -20,8 +20,8 @@ model User {
   address       String?
   accounts      Account?
   Cart          Cart[]
-  restaurant    Restaurant?
   Order         Order[]
+  restaurant    Restaurant?
   Review        Review[]
 }
 
@@ -84,12 +84,12 @@ model MenuItem {
 model Cart {
   id           String     @id @default(cuid())
   userId       String
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  items        CartItem[]
   isActive     Boolean    @default(true)
   orderId      String?    @unique
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items        CartItem[]
   Order        Order?
 
   @@index([userId])
@@ -109,12 +109,12 @@ model CartItem {
 model Order {
   id          String      @id @default(cuid())
   userId      String
-  user        User        @relation(fields: [userId], references: [id])
   cartId      String      @unique
-  cart        Cart        @relation(fields: [cartId], references: [id])
   status      OrderStatus
   totalAmount Float
   createdAt   DateTime    @default(now())
+  cart        Cart        @relation(fields: [cartId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
   Payment     Payment[]
 
   @@index([userId])
@@ -123,30 +123,30 @@ model Order {
 model Payment {
   id                String        @id @default(cuid())
   orderId           String
-  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   amount            Float
   status            PaymentStatus
   razorpayPaymentId String?
   createdAt         DateTime      @default(now())
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id           String     @id @default(cuid())
+  userId       String
+  restaurantId String
+  rating       Int
+  comment      String?
+  createdAt    DateTime   @default(now())
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@index([userId, restaurantId])
 }
 
 enum PaymentStatus {
   PENDING
   COMPLETED
   FAILED
-}
-
-model Review {
-  id           String     @id @default(cuid())
-  userId       String
-  user         User       @relation(fields: [userId], references: [id])
-  restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  rating       Int
-  comment      String?
-  createdAt    DateTime   @default(now())
-
-  @@index([userId, restaurantId])
 }
 
 enum UserRole {

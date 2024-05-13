@@ -56,7 +56,6 @@ const CheckOutBtn = () => {
     rpay.open();
   };
 
-  const emit = () => socket.emit("new-order", { hehe: "a order" });
   return (
     <>
       <Script
@@ -66,7 +65,6 @@ const CheckOutBtn = () => {
       <Button disabled={isDBUpdating} onClick={checkout}>
         Place Order
       </Button>
-      <Button onClick={emit}>Emit</Button>
     </>
   );
 };
