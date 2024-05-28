@@ -89,6 +89,10 @@ export function DataTable<TData, TValue>({
     socket.on("order-cancelled", (order) => {
       revalidatePathClient("/yourorders");
     });
+
+    socket.on("order-done", (order) => {
+      revalidatePathClient("/yourorders");
+    });
   }, []);
 
   const getColumnName = (column: string) => {

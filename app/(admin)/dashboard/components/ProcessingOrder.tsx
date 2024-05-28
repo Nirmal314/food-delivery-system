@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Check, Mail, MapPinIcon, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { markAsDone } from "@/actions/admin/orders/markasdone";
+import { socket } from "@/app/socket";
 
 export type ProcessingOrder = {
   id: string;
@@ -112,7 +113,8 @@ const ProcessingOrder = ({ order }: { order: ProcessingOrder }) => {
               className="mt-3"
               action={async () => {
                 "use server";
-                markAsDone(order.id);
+                const res = await markAsDone(order.id);
+                socket.emit("order-done", res);
               }}
             >
               <Button variant={"outline"} type="submit">
