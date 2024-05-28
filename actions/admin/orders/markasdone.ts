@@ -14,8 +14,7 @@ export const markAsDone = async (oid: string) => {
         status: OrderStatus.COMPLETED,
       },
     });
-    revalidatePath("/dashboard", "page");
-    console.log("done!");
+    revalidatePath("/dashboard");
     return { success: "Order completed" };
   } catch (e) {
     return { error: "Something went wrong" };

@@ -8,6 +8,7 @@ import { accept } from "@/actions/admin/orders/accpet";
 import { cancel } from "@/actions/admin/orders/cancel";
 import User from "./components/User";
 import Items from "./components/Items";
+import { socket } from "@/app/socket";
 
 export type IncomingOrder = {
   id: string;
@@ -92,14 +93,31 @@ export const columns: ColumnDef<IncomingOrder>[] = [
     header: "Actions",
     accessorKey: "actions",
     cell: ({ row }) => {
+      const handleAccept = async (id: string) => {
+        const res = await accept(id);
+
+        if (res.success) socket.emit("order-accepted", res.success);
+        else socket.emit("order-accepted", res.error);
+      };
+
+      const handleCancel = async (id: string) => {
+        const res = await cancel(id);
+
+        if (res.success) socket.emit("order-cancelled", res.success);
+        else socket.emit("order-cancelled", res.error);
+      };
+
       return (
         <div className="space-x-2">
-          <Button className="px-3" onClick={() => accept(row.getValue("id"))}>
+          <Button
+            className="px-3"
+            onClick={() => handleAccept(row.getValue("id"))}
+          >
             Accept
           </Button>
           <Button
             className="px-3"
-            onClick={() => cancel(row.getValue("id"))}
+            onClick={() => handleCancel(row.getValue("id"))}
             variant={"destructive"}
           >
             Cancel

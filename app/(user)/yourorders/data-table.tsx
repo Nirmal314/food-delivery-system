@@ -39,6 +39,8 @@ import {
 import { OrderStatus } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { socket } from "@/app/socket";
+import { revalidatePathClient } from "@/actions/revalidatePathClient";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -78,6 +80,16 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
   });
+
+  useEffect(() => {
+    socket.on("order-accepted", (order) => {
+      revalidatePathClient("/yourorders");
+    });
+
+    socket.on("order-cancelled", (order) => {
+      revalidatePathClient("/yourorders");
+    });
+  }, []);
 
   const getColumnName = (column: string) => {
     switch (column) {

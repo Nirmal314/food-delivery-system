@@ -22,6 +22,16 @@ app.prepare().then(() => {
       io.emit("new-order", order);
     })
 
+    socket.on("order-accepted", (order) => {
+      console.log("Accepted order: ", order);
+      io.emit("order-accepted", order);
+    })
+
+    socket.on("order-cancelled", (order) => {
+      console.log("Rejected order: ", order);
+      io.emit("order-cancelled", order);
+    })
+
     socket.on('disconnect', () => {
       console.log('Client disconnected!');
     });

@@ -19,6 +19,7 @@ const NotificationToaster = () => {
     feedClient.on("items.received.realtime", onNotificationsReceived);
 
     mutate("/orders");
+
     // ! Cleanup
     return () =>
       feedClient.off("items.received.realtime", onNotificationsReceived);

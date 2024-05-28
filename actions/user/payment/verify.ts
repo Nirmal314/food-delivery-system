@@ -3,10 +3,6 @@
 import { db } from "@/lib/db";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
 import crypto from "crypto";
-import { redirect } from "next/navigation";
-import { deleteCartItemById } from "../cart/delete/delete-cart-item-by-id";
-import { deleteCartByUserId } from "../cart/delete/delete-cart-by-userid";
-import { deleteCartItemsByCartId } from "../cart/delete/delete-cart-items-by-cart-id";
 import { Knock } from "@knocklabs/node";
 import { auth } from "@/auth";
 
