@@ -32,6 +32,11 @@ app.prepare().then(() => {
       io.emit("order-cancelled", order);
     })
 
+    socket.on("order-done", (order) => {
+      console.log("Completed order: ", order);
+      io.emit("order-done", order);
+    })
+
     socket.on('disconnect', () => {
       console.log('Client disconnected!');
     });
