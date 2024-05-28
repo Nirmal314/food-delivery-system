@@ -45,8 +45,9 @@ const CheckOutBtn = () => {
 
         if (resp.success) {
           router.push("/yourorders");
+
           if (resp.order) socket.emit("new-order", resp.order);
-          else socket.emit("new-order", { hehe: "a order" });
+          else socket.emit("new-order", { order: "You have a new order!" });
         } else {
           toast.error(resp.error as string);
         }
