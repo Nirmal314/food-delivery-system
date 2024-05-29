@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import AddMenuItem from "@/app/(admin)/menu/components/AddMenuItem";
 import { toast } from "sonner";
+import PageNavigation from "@/components/PageNavigation";
 
 interface AdditionalProps {
   id: string;
@@ -65,7 +66,7 @@ export function DataTable<TData extends AdditionalProps, TValue>({
   const [isDeleteing, setIsDeleting] = useState(false);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
   const table = useReactTable({
     data,
     columns,
@@ -290,24 +291,11 @@ export function DataTable<TData extends AdditionalProps, TValue>({
           )}
         </div>
 
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+        <PageNavigation
+          table={table}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
     </div>
   );

@@ -35,6 +35,7 @@ import {
 import { OrderStatus } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import PageNavigation from "@/components/PageNavigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -52,6 +53,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const table = useReactTable({
     data,
@@ -175,22 +177,11 @@ export function DataTable<TData, TValue>({
           </div>
         )}
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+        <PageNavigation
+          table={table}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
     </div>
   );
