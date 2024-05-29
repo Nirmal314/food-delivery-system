@@ -12,9 +12,9 @@ const NotificationToastProducer = () => {
   return (
     <KnockProvider
       userId={session?.user.id!}
-      apiKey="pk_test_xGwhc97ykiFO7N3hctDDY43LlrSNccz_lvqX1gkTMJU"
+      apiKey={process.env.NEXT_PUBLIC_KNOCK_PUBLIC_API_KEY!}
     >
-      <KnockFeedProvider feedId="31043d15-bb9b-4adb-9ee9-2e556fd18381">
+      <KnockFeedProvider feedId={process.env.NEXT_PUBLIC_KNOCK_FEED_ID!}>
         <NotificationToaster />
       </KnockFeedProvider>
     </KnockProvider>
