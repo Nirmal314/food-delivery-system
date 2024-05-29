@@ -14,6 +14,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { renderToString } from "react-dom/server";
+import html2canvas from "html2canvas";
 interface StatusColumnFilter extends ColumnFilter {
   value: string[];
 }
@@ -27,7 +29,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -41,7 +43,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/socket";
 import { revalidatePathClient } from "@/actions/revalidatePathClient";
-
+import { jsPDF } from "jspdf";
+import { ChevronDown, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import PageNavigation from "@/components/PageNavigation";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -58,6 +62,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const table = useReactTable({
     data,
@@ -80,6 +85,8 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
   });
+
+  table.getState().pagination.pageSize = 10;
 
   useEffect(() => {
     socket.on("order-accepted", (order) => {
@@ -130,6 +137,23 @@ export function DataTable<TData, TValue>({
     });
   };
 
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+
+    const table = document.getElementsByTagName("table")[0];
+
+    html2canvas(table).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+
+      const imgWidth = 210; // A4 page width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+
+      doc.save(`yourorders.pdf`);
+    });
+  };
+
   return (
     <div className="w-3/4">
       <div className="flex items-center justify-between py-4">
@@ -148,10 +172,13 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
         <div className="space-x-2">
+          <Button variant={"outline"} onClick={exportToPDF}>
+            Export this page to PDF
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Columns
+                Columns <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -177,7 +204,7 @@ export function DataTable<TData, TValue>({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto focus:outline-none">
-                Status
+                Status <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -301,22 +328,11 @@ export function DataTable<TData, TValue>({
           </div>
         )}
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+        <PageNavigation
+          table={table}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
     </div>
   );
