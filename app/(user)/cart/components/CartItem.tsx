@@ -10,6 +10,18 @@ import { useCartContext } from "../CartContext";
 import OptimisticFoodItemCounter from "./OptimisticFoodItemCounter";
 import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
 import { db } from "@/lib/db";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type CartProps = {
   id: string;
@@ -32,10 +44,8 @@ const CartItem = ({
   const handleDelete = async () => {
     setIsDBUpdating(true);
     const res = await deleteCartItemById(id);
-    setTotal(total - price * quantity);
-    setTimeout(() => {
-      setIsDBUpdating(false);
-    }, 3000);
+
+    if (res.success) setTotal(total - price * quantity);
   };
   return (
     <TableRow key={id}>
@@ -62,13 +72,65 @@ const CartItem = ({
         price={price}
       />
       <TableCell className="text-center">
-        <Button
-          disabled={isDBUpdating}
-          onClick={handleDelete}
-          variant={"destructive"}
-        >
-          <Trash2Icon />
-        </Button>
+        <AlertDialog>
+          <Button disabled={isDBUpdating} variant={"destructive"} asChild>
+            <AlertDialogTrigger>
+              <Trash2Icon />
+            </AlertDialogTrigger>
+          </Button>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Are you sure you want remove{" "}
+                <span className="bg-destructive px-1.5 py-1 text-secondary">
+                  {name}
+                </span>{" "}
+                from cart?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                You're about to remove{" "}
+                <span className="font-bold">
+                  {name} x {quantity}
+                </span>{" "}
+                from your cart. This action cannot be undone, so take a moment
+                to double-check if you're sure you don't want it. Perhaps you
+                meant to add a different quantity, or browse similar items we
+                offer?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <Button
+                disabled={isDBUpdating}
+                onClick={() => {
+                  toast.promise(
+                    new Promise((resolve, reject) => {
+                      handleDelete()
+                        .then(() => {
+                          resolve(`${name} has been removed.`);
+                          setIsDBUpdating(false);
+                        })
+                        .catch((error) => {
+                          reject(error);
+                          setIsDBUpdating(false);
+                        });
+                    }),
+                    {
+                      loading: `Removing ${name} from cart...`,
+                      success: `${name} has been removed.`,
+                      error: `Something went wrong while removing ${name}, Please try again`,
+                    }
+                  );
+                }}
+                variant={"destructive"}
+              >
+                <AlertDialogAction className="bg-transparent hover:bg-transparent">
+                  Yes
+                </AlertDialogAction>
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </TableCell>
     </TableRow>
   );

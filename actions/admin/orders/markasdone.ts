@@ -21,7 +21,7 @@ export const markAsDone = async (oid: string) => {
 
     const knockClient = new Knock(process.env.KNOCK_SECRET_API_KEY!);
 
-    await knockClient.notify("order-accepted", {
+    await knockClient.notify("order-done", {
       actor: session?.user.id,
       recipients: [userId],
       data: {

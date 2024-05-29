@@ -18,16 +18,16 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
-  const knockClient = new Knock(process.env.KNOCK_SECRET_API_KEY!);
+  // const knockClient = new Knock(process.env.KNOCK_SECRET_API_KEY!);
 
-  if (session?.user.id) {
-    const knockUser = await knockClient.users.identify(session?.user.id, {
-      name: session?.user.name!,
-      email: session?.user.email!,
-    });
+  // if (session?.user.id) {
+  //   const knockUser = await knockClient.users.identify(session?.user.id, {
+  //     name: session?.user.name!,
+  //     email: session?.user.email!,
+  //   });
 
-    console.log(knockUser);
-  }
+  //   console.log(knockUser);
+  // }
 
   return (
     <html lang="en">
