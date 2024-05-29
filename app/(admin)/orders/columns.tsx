@@ -9,6 +9,7 @@ import { cancel } from "@/actions/admin/orders/cancel";
 import User from "./components/User";
 import Items from "./components/Items";
 import { socket } from "@/app/socket";
+import { toast } from "sonner";
 
 export type IncomingOrder = {
   id: string;
@@ -111,13 +112,53 @@ export const columns: ColumnDef<IncomingOrder>[] = [
         <div className="space-x-2">
           <Button
             className="px-3"
-            onClick={() => handleAccept(row.getValue("id"))}
+            onClick={() => {
+              toast.promise(
+                new Promise((resolve, reject) => {
+                  handleAccept(row.getValue("id"))
+                    .then(() => {
+                      resolve(`Order has been accepted.`);
+                      // setIsDBUpdating(false);
+                    })
+                    .catch((error) => {
+                      reject(error);
+                      // setIsDBUpdating(false);
+                    });
+                }),
+                {
+                  loading: `Accepting the order...`,
+                  success: `Order has been accepted.`,
+                  error: `Something went wrong while accepting the order, Please try again.`,
+                }
+              );
+            }}
+            // onClick={() => handleAccept(row.getValue("id"))}
           >
             Accept
           </Button>
           <Button
             className="px-3"
-            onClick={() => handleCancel(row.getValue("id"))}
+            onClick={() => {
+              toast.promise(
+                new Promise((resolve, reject) => {
+                  handleCancel(row.getValue("id"))
+                    .then(() => {
+                      resolve(`Order has been cancelled.`);
+                      // setIsDBUpdating(false);
+                    })
+                    .catch((error) => {
+                      reject(error);
+                      // setIsDBUpdating(false);
+                    });
+                }),
+                {
+                  loading: `Cancelling the order...`,
+                  success: `Order has been Cancelled.`,
+                  error: `Something went wrong while cancelling the order, Please try again.`,
+                }
+              );
+            }}
+            // onClick={() => handleCancel(row.getValue("id"))}
             variant={"destructive"}
           >
             Cancel

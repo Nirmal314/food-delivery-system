@@ -7,6 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { getMenuItemsByMenuId } from "@/actions/user/menu-items/get-menuitems-by-menuid";
 import { db } from "@/lib/db";
 import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
+import { OrderStatus } from "@prisma/client";
 
 const CustomerOrders = async () => {
   const session = await auth();
@@ -14,6 +15,9 @@ const CustomerOrders = async () => {
   const orders = await db.order.findMany({
     where: {
       userId: session?.user.id,
+    },
+    orderBy: {
+      createdAt: "asc",
     },
     select: {
       id: true,

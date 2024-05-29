@@ -134,18 +134,18 @@ const Cart = async () => {
                 </tr>
               </TableHeader>
               <TableBody>
-                <Suspense
-                  fallback={
-                    <>
-                      {Array.from({
-                        length: cartItems ? cartItems.length : 0,
-                      }).map((_, i) => (
-                        <CartRowLoading key={i} />
-                      ))}
-                    </>
-                  }
-                >
-                  {cart.map((item, i) => (
+                {cart.map((item, i) => (
+                  <Suspense
+                    fallback={
+                      <>
+                        {Array.from({
+                          length: cartItems ? cartItems.length : 0,
+                        }).map((_, i) => (
+                          <CartRowLoading key={i} />
+                        ))}
+                      </>
+                    }
+                  >
                     <CartItem
                       id={item.id}
                       menuItemId={item.menuItemId}
@@ -154,8 +154,8 @@ const Cart = async () => {
                       price={item.price}
                       image={item.image}
                     />
-                  ))}
-                </Suspense>
+                  </Suspense>
+                ))}
               </TableBody>
               <TableFooter>
                 <Suspense fallback={<CartTotalLoading />}>

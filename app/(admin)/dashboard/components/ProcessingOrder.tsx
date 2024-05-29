@@ -13,6 +13,7 @@ import { Check, Mail, MapPinIcon, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { markAsDone } from "@/actions/admin/orders/markasdone";
 import { socket } from "@/app/socket";
+import MarkAsCompleted from "./MarkAsCompleted";
 
 export type ProcessingOrder = {
   id: string;
@@ -109,19 +110,7 @@ const ProcessingOrder = ({ order }: { order: ProcessingOrder }) => {
             <p className="text-sm flex">
               <MapPinIcon className="mr-2" /> {order.user.address}
             </p>
-            <form
-              className="mt-3"
-              action={async () => {
-                "use server";
-                const res = await markAsDone(order.id);
-                socket.emit("order-done", res);
-              }}
-            >
-              <Button variant={"outline"} type="submit">
-                <Check className="mr-2" />
-                Mark as completed
-              </Button>
-            </form>
+            <MarkAsCompleted oid={order.id} />
           </div>
         </div>
       </Card>

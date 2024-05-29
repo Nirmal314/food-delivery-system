@@ -5,6 +5,7 @@ import { OrderStatus, PaymentStatus } from "@prisma/client";
 import crypto from "crypto";
 import { Knock } from "@knocklabs/node";
 import { auth } from "@/auth";
+import { revalidatePath } from "next/cache";
 
 export const verifyPayment = async (
   amount: number | string,
@@ -71,6 +72,8 @@ export const verifyPayment = async (
           amount: (amount as number) / 100,
         },
       });
+
+      revalidatePath("/cart");
       return { success: "Order placed", order };
     } catch (e) {
       console.log(e);

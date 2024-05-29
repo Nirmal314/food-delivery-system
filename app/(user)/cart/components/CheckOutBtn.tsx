@@ -12,11 +12,13 @@ import { toast } from "sonner";
 import { socket } from "@/app/socket";
 
 const CheckOutBtn = () => {
-  const { cartId, total, isDBUpdating } = useCartContext();
+  const { cartId, total, isDBUpdating, setIsDBUpdating } = useCartContext();
   const { data: session } = useSession();
   const router = useRouter();
 
   const checkout = async () => {
+    setIsDBUpdating(true);
+
     const order = await createOrder(session?.user.id as string, cartId, total);
 
     const options = {
@@ -63,7 +65,29 @@ const CheckOutBtn = () => {
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
       />
-      <Button disabled={isDBUpdating} onClick={checkout}>
+      <Button
+        disabled={isDBUpdating}
+        onClick={() => {
+          toast.promise(
+            new Promise((resolve, reject) => {
+              checkout()
+                .then(() => {
+                  resolve("Payment processed successfully!");
+                  setIsDBUpdating(false);
+                })
+                .catch((error) => {
+                  reject(error);
+                  setIsDBUpdating(false);
+                });
+            }),
+            {
+              loading: "Processing payment options...",
+              success: "Payment processed successfully!",
+              error: "Payment processing failed. Please try again.",
+            }
+          );
+        }}
+      >
         Place Order
       </Button>
     </>
