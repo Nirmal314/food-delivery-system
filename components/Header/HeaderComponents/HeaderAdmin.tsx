@@ -8,12 +8,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  HomeIcon,
   LayoutDashboardIcon,
-  ListOrderedIcon,
-  MenuIcon,
   ScrollTextIcon,
-  UtensilsCrossedIcon,
   UtensilsIcon,
 } from "lucide-react";
 import Link from "next/link";

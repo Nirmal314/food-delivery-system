@@ -4,7 +4,6 @@ import { KnockProvider, KnockFeedProvider } from "@knocklabs/react";
 
 import NotificationToaster from "./NotificationToaster";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 
 const NotificationToastProducer = () => {
   const { data: session } = useSession();

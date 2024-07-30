@@ -12,7 +12,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { FoodItem } from "@/typings";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   MapPinIcon,
@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import addToCart from "@/actions/user/cart/insert/insert";
 import { toast } from "sonner";
-import { getRestaurantByRestaurantId } from "@/data/admin";
 
 type FoodItemWithRestaurantName = FoodItem & {
   restaurantName?: string;
@@ -32,7 +31,6 @@ const FoodItemCard = ({
   id,
   rid,
   restaurantName,
-  cid,
   imageUrl,
   name,
   price,

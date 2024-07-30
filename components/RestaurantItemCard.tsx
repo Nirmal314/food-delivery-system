@@ -2,11 +2,9 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import { Restaurant } from "@/typings";
 import { MapPinIcon, PhoneCallIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,7 +12,6 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 const RestaurantCard = ({
   id,
-  image,
   name,
   description,
   address,

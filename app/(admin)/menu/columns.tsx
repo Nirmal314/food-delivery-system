@@ -7,12 +7,8 @@ import { MenuItem } from "@/typings";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDownIcon } from "lucide-react";
 import Image from "next/image";
-import { Suspense, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import Edit from "./components/Edit";
-import Delete from "./components/Delete";
+import { Suspense, useState } from "react";
 import Actions from "./components/Actions";
-import { useCartContext } from "@/app/(user)/cart/CartContext";
 
 export const columns: ColumnDef<MenuItem>[] = [
   {

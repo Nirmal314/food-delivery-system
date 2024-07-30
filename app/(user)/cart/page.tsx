@@ -14,18 +14,10 @@ import CartRowLoading from "@/components/LoadingSkeletons/CartRowLoading";
 import Link from "next/link";
 import CartTotalLoading from "@/components/LoadingSkeletons/CartTotalLoading";
 import CartItem from "./components/CartItem";
-import { getCartByUserId } from "@/actions/user/cart/select/get-cart-by-userid";
 import CheckOutBtn from "./components/CheckOutBtn";
-import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
-import { getMenuItemByMenuItemId } from "@/actions/user/menu-items/get-menuitem-by-id";
-import {
-  getRestaurantByMenuId,
-  getRestaurantByRestaurantId,
-} from "@/data/admin";
+import { getRestaurantByRestaurantId } from "@/data/admin";
 import TotalAmount from "./components/TotalAmount";
 import { db } from "@/lib/db";
-import TestComp from "./components/InitContext";
-import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
 import InitContext from "./components/InitContext";
 
 type CartProps = {
@@ -45,6 +37,7 @@ const getTotalAmount = (cart: CartProps[]) => {
 
 const Cart = async () => {
   const session = await auth();
+
   const activeCart = await db.cart.findFirst({
     where: {
       userId: session?.user.id!,

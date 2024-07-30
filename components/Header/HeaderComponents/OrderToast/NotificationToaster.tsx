@@ -4,7 +4,6 @@ import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import { useKnockFeed } from "@knocklabs/react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 
 const NotificationToaster = () => {

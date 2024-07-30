@@ -1,18 +1,13 @@
 import React from "react";
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import { Check, Mail, MapPinIcon, PhoneCall } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { markAsDone } from "@/actions/admin/orders/markasdone";
-import { socket } from "@/app/socket";
+import { Mail, MapPinIcon, PhoneCall } from "lucide-react";
 import MarkAsCompleted from "./MarkAsCompleted";
 
 export type ProcessingOrder = {

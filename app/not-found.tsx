@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 import error404 from "@/public/404.webp";
 import { ArrowLeftIcon } from "lucide-react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 

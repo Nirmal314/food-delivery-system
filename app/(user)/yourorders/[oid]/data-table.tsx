@@ -2,7 +2,6 @@
 
 import {
   ColumnDef,
-  ColumnFilter,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -23,18 +22,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { OrderStatus } from "@prisma/client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import PageNavigation from "@/components/PageNavigation";
 
 interface DataTableProps<TData, TValue> {
@@ -46,8 +41,6 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter();
-
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -110,7 +103,6 @@ export function DataTable<TData, TValue>({
                       }
                     >
                       {column.id}
-                      {/* {getColumnName(column.id.toString())} */}
                     </DropdownMenuCheckboxItem>
                   );
                 })}

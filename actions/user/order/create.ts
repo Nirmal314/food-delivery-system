@@ -1,8 +1,6 @@
 "use server";
 
-import { db } from "@/lib/db";
 import { instance } from "@/lib/razorpay";
-import { OrderStatus } from "@prisma/client";
 import shortid from "shortid";
 
 export const createOrder = async (

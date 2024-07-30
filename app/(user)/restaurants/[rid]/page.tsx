@@ -1,4 +1,3 @@
-import { createCart } from "@/actions/user/cart/create/create";
 import { getCartByUserId } from "@/actions/user/cart/select/get-cart-by-userid";
 import { getMenuItemsByMenuId } from "@/actions/user/menu-items/get-menuitems-by-menuid";
 import FoodItemCard from "@/app/(user)/restaurants/[rid]/FoodItemCard";
