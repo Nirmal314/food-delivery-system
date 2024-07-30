@@ -3,13 +3,13 @@
 import React, { useEffect } from "react";
 import { useCartContext } from "../CartContext";
 
-type Props = {
+type ContextProps = {
   cartId: string;
   totalAmount: number;
 };
 
-const InitContext = ({ cartId, totalAmount }: Props) => {
-  const { setTotal, total, setCartId, cartId: cid } = useCartContext();
+const InitContext = ({ cartId, totalAmount }: ContextProps) => {
+  const { setTotal, setCartId } = useCartContext();
 
   useEffect(() => {
     setTotal(totalAmount);

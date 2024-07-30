@@ -13,7 +13,6 @@ export const getTop3MenuItems = async () => {
       },
     });
 
-    // const modifiedRestaurants = restaurants.map(({ adminId, ...rest }) => rest);
     revalidatePath("/");
     return { menuItems };
   } catch (e) {

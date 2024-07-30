@@ -111,8 +111,8 @@ const Edit = ({ row, session }: EditProps) => {
       const menuItems: MenuItem[] | null = await getMenuItemsByMenuId(
         session?.user.menuId!
       );
-      // @ts-ignore
-      const menuItemToEdit = menuItems[index].id;
+
+      const menuItemToEdit = (menuItems as MenuItem[])[index].id;
 
       const cloudinaryResponse = await fetch(
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,

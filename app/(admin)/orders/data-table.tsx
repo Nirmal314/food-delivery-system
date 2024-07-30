@@ -2,7 +2,6 @@
 
 import {
   ColumnDef,
-  ColumnFilter,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -24,7 +23,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -81,20 +79,6 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-3/4">
       <div className="flex items-center justify-between py-4">
-        {/* <Input
-          placeholder="Filter Restaurant..."
-          value={
-            (table
-              .getColumn("cart_restaurant.name")
-              ?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table
-              .getColumn("cart_restaurant.name")
-              ?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        /> */}
         <div className="space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

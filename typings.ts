@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 import { type ClassValue } from "clsx";
 import { StaticImageData } from "next/image";
 
@@ -18,13 +17,6 @@ export type FoodItems = {
   foodItems: FoodItem[];
 };
 
-// export type Restaurant = {
-//   image: StaticImageData;
-//   name: string;
-//   description?: string;
-//   location: string;
-//   className?: ClassValue[];
-// };
 export type Restaurant = {
   id?: string;
   image?: StaticImageData;

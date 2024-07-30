@@ -1,15 +1,9 @@
 "use client";
 
-import React, {
-  useEffect,
-  useOptimistic,
-  useState,
-  useTransition,
-} from "react";
+import React, { useOptimistic, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { updateCartItemCount } from "@/actions/user/cart/update/update-cartitem-count";
-import { deleteCartItemById } from "@/actions/user/cart/delete/delete-cart-item-by-id";
 import { TableCell } from "@/components/ui/table";
 import { useCartContext } from "../CartContext";
 
@@ -51,7 +45,7 @@ const OptimisticFoodItemCounter = ({
         default:
           break;
       }
-      // ! handle db
+
       await updateCartItemCount(id, cartId, amount);
     }
   };

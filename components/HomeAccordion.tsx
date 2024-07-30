@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const HomeAccordion = ({ className }: any) => {

@@ -14,7 +14,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { renderToString } from "react-dom/server";
 import html2canvas from "html2canvas";
 interface StatusColumnFilter extends ColumnFilter {
   value: string[];
@@ -29,22 +28,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { OrderStatus } from "@prisma/client";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { socket } from "@/app/socket";
 import { revalidatePathClient } from "@/actions/revalidatePathClient";
 import { jsPDF } from "jspdf";
-import { ChevronDown, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import PageNavigation from "@/components/PageNavigation";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

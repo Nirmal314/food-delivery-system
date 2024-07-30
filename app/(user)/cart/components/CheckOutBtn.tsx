@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Script from "next/script";
-import React, { useTransition } from "react";
+import React from "react";
 import { useCartContext } from "../CartContext";
 import { useSession } from "next-auth/react";
 import { createOrder } from "@/actions/user/order/create";

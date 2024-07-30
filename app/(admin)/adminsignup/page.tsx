@@ -220,26 +220,6 @@ const Signup = () => {
                         );
                       }}
                     />
-                    {/* <FormField
-                      control={form.control}
-                      name="restaurantPhone"
-                      render={({ field }) => {
-                        return (
-                          <FormInput
-                            formLabel="Contact Number"
-                            isRequired={true}
-                            inputTsx={
-                              <Input
-                                disabled={creatingAccount ? true : false}
-                                placeholder="Enter restaurant contact number"
-                                type="tele"
-                                {...field}
-                              />
-                            }
-                          />
-                        );
-                      }}
-                    /> */}
 
                     <FormField
                       control={form.control}

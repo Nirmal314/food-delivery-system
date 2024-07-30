@@ -8,8 +8,6 @@ import Image from "next/image";
 import React, { Suspense } from "react";
 import { useCartContext } from "../CartContext";
 import OptimisticFoodItemCounter from "./OptimisticFoodItemCounter";
-import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
-import { db } from "@/lib/db";
 import { toast } from "sonner";
 import {
   AlertDialog,

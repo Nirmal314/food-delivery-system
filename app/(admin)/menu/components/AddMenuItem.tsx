@@ -3,7 +3,6 @@
 import React, { useRef, useState } from "react";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -65,7 +64,6 @@ const InsertMenuItem = () => {
 
       values.image = image;
 
-      // @ts-ignore
       const insertMenuItemResponse = await insertMenuItem(values);
 
       if (insertMenuItemResponse.success) {

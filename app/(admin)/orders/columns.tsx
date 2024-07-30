@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { ArrowUpDownIcon, CrossIcon, X } from "lucide-react";
+import { ArrowUpDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { accept } from "@/actions/admin/orders/accpet";
 import { cancel } from "@/actions/admin/orders/cancel";
@@ -118,11 +118,9 @@ export const columns: ColumnDef<IncomingOrder>[] = [
                   handleAccept(row.getValue("id"))
                     .then(() => {
                       resolve(`Order has been accepted.`);
-                      // setIsDBUpdating(false);
                     })
                     .catch((error) => {
                       reject(error);
-                      // setIsDBUpdating(false);
                     });
                 }),
                 {
@@ -132,7 +130,6 @@ export const columns: ColumnDef<IncomingOrder>[] = [
                 }
               );
             }}
-            // onClick={() => handleAccept(row.getValue("id"))}
           >
             Accept
           </Button>
@@ -144,11 +141,9 @@ export const columns: ColumnDef<IncomingOrder>[] = [
                   handleCancel(row.getValue("id"))
                     .then(() => {
                       resolve(`Order has been cancelled.`);
-                      // setIsDBUpdating(false);
                     })
                     .catch((error) => {
                       reject(error);
-                      // setIsDBUpdating(false);
                     });
                 }),
                 {
@@ -158,7 +153,6 @@ export const columns: ColumnDef<IncomingOrder>[] = [
                 }
               );
             }}
-            // onClick={() => handleCancel(row.getValue("id"))}
             variant={"destructive"}
           >
             Cancel

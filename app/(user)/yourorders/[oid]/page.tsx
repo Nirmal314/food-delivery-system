@@ -1,14 +1,9 @@
-import { getCartItemsById } from "@/actions/user/cart/select/get-cartitems-by-id";
 import { db } from "@/lib/db";
 import React from "react";
 import { columns } from "./columns";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import clsx from "clsx";
-import Link from "next/link";
 import { OrderStatus } from "@prisma/client";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 import { DataTable } from "./data-table";
 

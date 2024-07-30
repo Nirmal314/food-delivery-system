@@ -3,26 +3,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import google from "@/public/google.png";
 import { Button } from "@/components/ui/button";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { GoogleLoginSchema } from "@/schemas";
-import { login } from "@/actions/auth/login";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { Textarea } from "@/components/ui/textarea";
