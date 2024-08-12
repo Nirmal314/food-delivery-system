@@ -40,11 +40,7 @@
 > - [🚀 Getting Started](#-getting-started)
 >   - [⚙️ Installation](#️-installation)
 >   - [🤖 Running food-delivery-system](#-running-food-delivery-system)
->   - [🧪 Tests](#-tests)
-> - [🛠 Project Roadmap](#-project-roadmap)
 > - [🤝 Contributing](#-contributing)
-> - [📄 License](#-license)
-> - [👏 Acknowledgments](#-acknowledgments)
 
 ---
 
@@ -325,9 +321,17 @@ cd food-delivery-system
 
 ```sh
 npm install
+```
+
 or
+
+```sh
 pnpm install
+```
+
 or
+
+```sh
 yarn install
 ```
 
@@ -337,9 +341,17 @@ Use the following command to run food-delivery-system:
 
 ```sh
 npm run dev
+```
+
 or
+
+```sh
 pnpm run dev
+```
+
 or
+
+```sh
 yarn run dev
 ```
 
@@ -353,7 +365,7 @@ Contributions are welcome! Here are several ways you can contribute:
 - **[Join the Discussions](https://github.com/Nirmal314/food-delivery-system/discussions)**: Share your insights, provide feedback, or ask questions.
 - **[Report Issues](https://github.com/Nirmal314/food-delivery-system/issues)**: Submit bugs found or log feature requests for Food-delivery-system.
 
-<details closed>
+<details>
     <summary>Contributing Guidelines</summary>
 
 1. **Fork the Repository**: Start by forking the project repository to your GitHub account.
