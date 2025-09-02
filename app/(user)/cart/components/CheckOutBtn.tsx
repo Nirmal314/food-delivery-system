@@ -22,7 +22,7 @@ const CheckOutBtn = () => {
     const order = await createOrder(session?.user.id as string, cartId, total);
 
     const options = {
-      key: "rzp_test_tH0UJQrfDX5nm0",
+      key: "rzp_test_3NfiOVqPAMxOTX",
       currency: order.currency,
       amount: total,
       name: "Nirmal Ambasana",

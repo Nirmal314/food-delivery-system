@@ -101,6 +101,9 @@ const Dashboard = async () => {
       cart: {
         restaurantId: session?.user.restaurantId,
         isActive: false, // ! Ensure the cart represents a completed order
+        Order: {
+          status: OrderStatus.COMPLETED
+        }
       },
     },
     orderBy: {

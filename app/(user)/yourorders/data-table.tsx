@@ -103,7 +103,7 @@ export function DataTable<TData, TValue>({
     switch (column) {
       case "id":
         return "Order ID";
-      case "cart_restaurant.name":
+      case "cart_restaurant_name":
         return "Restaurant";
       case "status":
         return "Status";
@@ -158,12 +158,12 @@ export function DataTable<TData, TValue>({
           placeholder="Filter Restaurant..."
           value={
             (table
-              .getColumn("cart_restaurant.name")
+              .getColumn("cart_restaurant_name")
               ?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
             table
-              .getColumn("cart_restaurant.name")
+              .getColumn("cart_restaurant_name")
               ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
@@ -274,9 +274,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

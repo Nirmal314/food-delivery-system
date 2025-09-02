@@ -21,7 +21,7 @@ export type Restaurant = {
   id?: string;
   image?: StaticImageData;
   name: string;
-  description?: string;
+  description?: string | null;
   address: string;
   phone: string;
   className?: ClassValue[];

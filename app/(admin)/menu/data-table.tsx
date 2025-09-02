@@ -223,7 +223,11 @@ export function DataTable<TData extends AdditionalProps, TValue>({
                     <TableCell
                       className={`${
                         cell.id.split("_")[cell.id.split("_").length - 1] ===
-                          ("description" || "name") && "text-justify"
+                          "description" ||
+                        cell.id.split("_")[cell.id.split("_").length - 1] ===
+                          "name"
+                          ? "text-justify"
+                          : ""
                       }`}
                       key={cell.id}
                     >

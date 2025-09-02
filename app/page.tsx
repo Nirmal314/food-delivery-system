@@ -19,6 +19,7 @@ import { redirect } from "next/navigation";
 import { getTop3Restaurants } from "@/actions/user/restaurants/get-top3-restaurants";
 import { Suspense } from "react";
 import { getTop3MenuItems } from "@/actions/user/menu-items/get-top3-menuitems";
+import { MenuItem, Restaurant } from "@/typings";
 
 export default async function Home() {
   const SearchableFoodItems = [
@@ -94,14 +95,14 @@ export default async function Home() {
           of the month
         </p>
         <div className="flex justify-center items-center space-x-8">
-          {menuItems?.map((item, i) => (
+          {menuItems?.map((item: MenuItem, i: number) => (
             <>
               <Suspense fallback={<RestaurantLoading />} key={i}>
                 <FoodItemCard
                   imageUrl={item.image}
                   id={item.id}
                   name={item.name}
-                  description={item.description!!}
+                  description={item.description || ""}
                   price={item.price}
                   isBestSeller={true}
                   className={["space-y-0 w-96"]}
@@ -120,13 +121,13 @@ export default async function Home() {
           of the month
         </p>
         <div className="flex justify-center items-center space-x-8">
-          {restaurants?.map((restaurant, i) => (
+          {restaurants?.map((restaurant: Restaurant, i: number) => (
             <div key={i} className="max-w-[24rem]">
               <Suspense fallback={<RestaurantLoading />}>
                 <RestaurantItemCard
                   id={restaurant.id}
                   name={restaurant.name}
-                  description={restaurant.description!!}
+                  description={restaurant.description || ""}
                   address={restaurant.address}
                   phone={restaurant.phone}
                 />
