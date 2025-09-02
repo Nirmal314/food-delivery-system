@@ -83,7 +83,6 @@ const CheckOutBtn = () => {
             {
               loading: "Processing payment options...",
               success: "Payment processed successfully!",
-              error: "Payment processing failed. Please try again.",
             }
           );
         }}

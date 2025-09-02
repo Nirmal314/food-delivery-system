@@ -24,6 +24,9 @@ export const verifyPayment = async (
 
   const isAuthentic = expectedSignature === razorpay_signature;
 
+  console.log(expectedSignature, razorpay_signature);
+  console.log(isAuthentic);
+
   if (isAuthentic) {
     try {
       const order = await db.order.create({
